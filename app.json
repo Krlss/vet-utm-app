@@ -1,0 +1,11 @@
+{
+  "expo": {
+    "name": "vet_utm_app",
+    "slug": "vet_utm_app",
+    "version": "1.0.0",
+    "assetBundlePatterns": [
+      "**/*"
+    ]
+  },
+  "name": "vet_utm_app"
+}
