@@ -1,0 +1,48 @@
+import React from 'react';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
+import {
+    UserProfileScreen,
+    PetProfileScreen,
+    SettingsScreen,
+    Login,
+    Register,
+    ReportPetScreen
+} from '../screens';
+
+import StackReporte from './StackReporte';
+
+const MenuLastTabStack = createNativeStackNavigator();
+
+const StackMenuMain = () => {
+    return (
+        <MenuLastTabStack.Navigator
+            /* screenOptions={{
+                headerTransparent: true,
+                headerShadowVisible: false,
+                title: ''
+            }} */
+        >
+            <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
+                /* options={{ title: 'Configuraciones', headerShown: false }} */
+            />
+            <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
+                options={{ title: 'Mi perfil' }}
+            />
+            <MenuLastTabStack.Screen name='PetProfileScreen' component={PetProfileScreen}
+                options={{ title: 'Perfil de mi mascota' }}
+            />
+            <MenuLastTabStack.Screen name='Login' component={Login}
+            /* options={{ headerShown: false }} */
+            />
+            <MenuLastTabStack.Screen name='Register' component={Register}
+            /* options={{ headerShown: false }} */
+            />
+            <MenuLastTabStack.Screen name='StackReporte' component={StackReporte}
+                options={{headerShown: false }}
+            />
+        </MenuLastTabStack.Navigator>
+    );
+}
+
+export default StackMenuMain;
