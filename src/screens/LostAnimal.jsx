@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Dimensions, Animated } from 'react-native';
 import axios from 'axios';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { iconType, nameStringPrayer, birthToAge, sexAnimal, castratedAnimal } from '../core/utils';
-
+import { getOneAnimalLost } from '../core/utils-http';
 import { HeaderLostPet, Title, RowComponent, Value, Component, ViewSpacing } from '../components';
 
 const { width, height } = Dimensions.get('screen');
@@ -29,8 +29,10 @@ const PetProfile = ({
         } catch (error) { console.log(error); }
     }
 
-    useEffect(() => {
-        getPet();
+    useEffect(async () => {
+        const res = await getOneAnimalLost(petId);
+        if (res !== 500 || res != 404)
+            setPetProfile(res)
     }, [])
 
 

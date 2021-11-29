@@ -1,5 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import { View } from 'react-native';
 
 import {
     UserProfileScreen,
@@ -17,14 +18,14 @@ const MenuLastTabStack = createNativeStackNavigator();
 const StackMenuMain = () => {
     return (
         <MenuLastTabStack.Navigator
-            /* screenOptions={{
-                headerTransparent: true,
-                headerShadowVisible: false,
-                title: ''
-            }} */
+        /* screenOptions={{
+            headerTransparent: true,
+            headerShadowVisible: false,
+            title: ''
+        }} */
         >
             <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
-                /* options={{ title: 'Configuraciones', headerShown: false }} */
+            /* options={{ title: 'Configuraciones', headerShown: false }} */
             />
             <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
                 options={{ title: 'Mi perfil' }}
@@ -39,7 +40,7 @@ const StackMenuMain = () => {
             /* options={{ headerShown: false }} */
             />
             <MenuLastTabStack.Screen name='StackReporte' component={StackReporte}
-                options={{headerShown: false }}
+                options={{ headerShown: false }}
             />
         </MenuLastTabStack.Navigator>
     );

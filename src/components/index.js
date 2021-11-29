@@ -13,5 +13,6 @@ export { default as ItemList } from './ItemList';
 export { default as TitleAndButton } from './ReportPet/TitleAndButton';
 export { default as SimpleInput } from './form/SimpleInput'; 
 export { default as SimpleTitle } from './form/SimpleTitle'; 
+export { default as SimpleTextArea } from './form/SimpleTextArea'; 
 
 

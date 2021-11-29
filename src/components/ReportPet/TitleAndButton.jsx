@@ -2,15 +2,16 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-const TitleAndButton = ({ title, optional, onPress }) => {
+const TitleAndButton = ({ title, optional, onPress, children }) => {
     return (
         <View style={Styles.container}>
-            <View>
+            <View style={{ marginBottom: 10 }}>
                 <Text style={Styles.Text}>
                     {title}
                 </Text>
                 <Text>{optional}</Text>
             </View>
+            {children}
             <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity style={Styles.button} onPress={onPress}>
                     <Icon name='chevron-right' size={30} color='white' />
@@ -33,7 +34,7 @@ const Styles = StyleSheet.create({
         maxWidth: 480,
     },
     button: {
-        backgroundColor: '#333',
+        backgroundColor: '#FF8C00',
         height: 50,
         width: 150,
         borderRadius: 100,

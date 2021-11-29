@@ -7,8 +7,15 @@ export const emailValidator = (email) => {
     return '';
 };
 
+export const emailformat = (email) => {
+    const re = /\S+@\S+\.\S+/;
+    if (!re.test(email)) return 'Ooops! formato del correo incorrecto.';
+    return '';
+}
+
 export const deleteItemArr = (arr, index) => {
     arr = arr.filter(function (i) { return i.uri !== index });
+    /* console.log(arr) */
     return arr;
 }
 
@@ -26,9 +33,10 @@ export const nameValidator = (name) => {
 };
 
 export const onlyNumber = (string = '') => {
+    console.log(string)
     return string.replace(/[^0-9]/g, '');
 }
- 
+
 export const iconType = (specie) => {
     switch (specie) {
         case 'perro':
@@ -81,3 +89,8 @@ export const birthToAge = (date) => {
     return (Math.abs(age_dt.getUTCFullYear() - 1970));
 
 };
+
+
+export const deleteSpace = (string = '') => {
+    return string.trim();
+}

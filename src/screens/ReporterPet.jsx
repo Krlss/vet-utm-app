@@ -1,5 +1,6 @@
-import React, { useRef, useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
+import ReportContext from '../context/Report/ReportContext';
 
 import {
     View,
@@ -13,22 +14,14 @@ import {
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 
-import { deleteItemArr } from '../core/utils';
-import { ItemList, TitleAndButton } from '../components';
-
-const images = [
-    { uri: 'https://i.imgur.com/UYiroysl.jpg', },
-    { uri: 'https://i.imgur.com/UPrs1EWl.jpg', },
-    { uri: 'https://i.imgur.com/MABUbpDl.jpg', },
-    { uri: 'https://i.imgur.com/KZsmUi2l.jpg', },
-    { uri: 'https://i.imgur.com/2nCt3Sbl.jpg', },
-];
-const { width: screenWidth } = Dimensions.get('window');
+import { deleteItemArr, deleteSpace } from '../core/utils';
+import { ItemList, TitleAndButton, Title, Value } from '../components';
 
 
 const ReporterPet = ({ navigation }) => {
     const [data, setData] = useState([]);
-    const carouselRef = useRef(null);
+
+    const { user_data } = useContext(ReportContext);
 
     useEffect(async () => {
         if (Platform.OS !== 'web') {
@@ -40,11 +33,8 @@ const ReporterPet = ({ navigation }) => {
     })
 
     const deleteItem = (item, index) => {
-        index === 0 && carouselRef == null;
-        index === data.length - 1 && carouselRef.current.snapToNext();
         setData(deleteItemArr(data, item));
     };
-
 
     const selectImage = async () => {
         if (data.length >= 5) return alert('Solo se pueden subir 5 fotos!')
@@ -66,25 +56,67 @@ const ReporterPet = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View>
+                <TitleAndButton title='Datos del dueño' optional='Opcional' onPress={() => {
+                    navigation.navigate('userReportDATA')
+                }}>
+
+                    {/* {user_data.userID ?
+                        (<>
+                            <Title title='Cedula o RUC' />
+                            <Value value={user_data.userID} />
+                        </>) : null}
+
+                    {user_data.first_name || user_data.last_name ?
+                        (<>
+                            <Title title='Nombre' />
+                            <Value value={deleteSpace(`${user_data.last_name ? user_data.last_name : ''} ${user_data.first_name ? user_data.first_name : ''}`).toUpperCase()} />
+                        </>) : null}
+
+                    {user_data.email ?
+                        (<>
+                            <Title title='Correo electrónico' />
+                            <Value value={user_data.email} />
+                        </>) : null}
+
+                    {user_data.phone ?
+                        (<>
+                            <Title title='Número telefónico' />
+                            <Value value={user_data.phone} />
+                        </>) : null} */}
 
 
-                <TitleAndButton title='Datos del dueño' optional='Opcional' onPress={() => {navigation.navigate('userReportDATA')}} />
-                <TitleAndButton title='Datos del animal' optional='Algunos obligatorios' onPress={() => {navigation.navigate('petReportDATA')}} />
+                </TitleAndButton>
 
-                <View style={{ paddingVertical: 25, backgroundColor: '#333' }}>
-                    <FlatList
-                        keyExtractor={(item) => item.uri}
-                        data={images}
-                        horizontal
-                        renderItem={({ item }) => {
-                            return (
-                                <View style={{ marginHorizontal: 10 }}>
-                                    <Image source={{ uri: item.uri }} style={styles.Imageflat} />
-                                </View>
-                            );
-                        }}
-                    />
-                </View>
+                <TitleAndButton title='Datos del animal' optional='Algunos obligatorios' onPress={() => {
+                    navigation.navigate('petReportDATA')
+                }} />
+
+                {
+                    data.length > 0 ?
+                        <View style={{ paddingVertical: 25, backgroundColor: '#DCDCDC', marginTop: 50 }}>
+                            <FlatList
+                                keyExtractor={(item) => item.uri}
+                                data={data}
+                                horizontal
+                                renderItem={({ item }) => {
+                                    return (
+                                        <View style={{ marginHorizontal: 5 }}>
+                                            <Image source={{ uri: item.uri }} style={styles.Imageflat} />
+                                            <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                                                <TouchableOpacity onPress={() => deleteItem(item.uri)}>
+                                                    <Icon
+                                                        name='delete'
+                                                        color='tomato'
+                                                        size={25}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View>
+                                        </View>
+                                    );
+                                }}
+                            />
+                        </View> : null
+                }
             </View>
 
             <View style={styles.addImage}>
@@ -133,7 +165,7 @@ const styles = StyleSheet.create({
         left: 25
     },
     buttonAdd: {
-        backgroundColor: '#333',
+        backgroundColor: '#FF8C00',
         height: 50,
         width: 50,
         borderRadius: 100,

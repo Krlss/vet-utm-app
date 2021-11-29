@@ -8,6 +8,7 @@ import { ActivityIndicator } from 'react-native';
 import { Image } from 'react-native-elements';
 import { ImageIcon, HeaderHome } from '../components';
 import { iconType } from '../core/utils';
+import { getAnimalsLost } from '../core/utils-http';
 
 const Home = ({
     navigation
@@ -30,8 +31,9 @@ const Home = ({
         }
     }
 
-    useEffect(() => {
-        getPets();
+    useEffect(async () => {
+        const res = await getAnimalsLost();
+        if (res != 500 || res != 404) setPets(res);
     }, [])
 
     const LoadMoreItems = () => {
@@ -77,7 +79,7 @@ const Home = ({
     }
 
     return (
-        <View>
+        <View style={{ height: '100%' }}>
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
                 pets.length > 0 ?
