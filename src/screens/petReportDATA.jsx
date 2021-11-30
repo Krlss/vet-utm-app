@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react";
+import React, { useState, useContext, useEffect } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber } from '../core/utils';
@@ -11,35 +11,34 @@ const petReport = ({ navigation }) => {
     const { savePET, animal_data } = useContext(ReportContext);
 
     const [name, setName] = useState(animal_data.name);
-    const [description, setDescription] = useState(animal_data.description);
+    const [birth, setBirth] = useState(animal_data.birth);
     const [sex, setSex] = useState(animal_data.sex);
+    const [castrated, setCastrated] = useState(animal_data.castrated);
+    const [description, setDescription] = useState(animal_data.description);
     const [specie, setSpecie] = useState(animal_data.specie);
     const [race, setRace] = useState(animal_data.race);
 
-
-
     const handleSubmit = () => {
-
         savePET({
             name,
+            birth,
             description,
             sex,
+            castrated,
             specie,
             race
         });
-
-        navigation.pop()
+        navigation.pop();
     }
 
-
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
 
             <SimpleTitle title='Nombre' />
             <SimpleInput
                 placeholder='opcional'
                 length={50}
-                value={name} 
+                value={name}
                 onChangeText={text => setName(text)}
             />
 
@@ -65,19 +64,21 @@ const petReport = ({ navigation }) => {
                 length={65}
                 value={race}
                 onChangeText={text => setRace(text)}
-            /> 
+            />
 
-           <SimpleTitle title='Descripción' />
+            <SimpleTitle title='Descripción' />
             <SimpleTextArea
                 placeholder='Descripción'
                 length={255}
                 value={description}
                 numberOfLines={5}
                 onChangeText={text => setDescription(text)}
-            /> 
+            />
 
             <View style={Styles.buttonContainer}>
-                <TouchableOpacity style={Styles.button} onPress={handleSubmit}>
+                <TouchableOpacity
+                    style={Styles.button}
+                    onPress={handleSubmit}>
                     <Text style={Styles.buttonText}>TERMINAR</Text>
                 </TouchableOpacity>
             </View>

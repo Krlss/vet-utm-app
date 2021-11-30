@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, Dimensions, Animated } from 'react-native';
-import axios from 'axios';
+import { Image, View, StyleSheet, Dimensions, Animated, ActivityIndicator } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { iconType, nameStringPrayer, birthToAge, sexAnimal, castratedAnimal } from '../core/utils';
 import { getOneAnimalLost } from '../core/utils-http';
@@ -20,76 +19,65 @@ const PetProfile = ({
 
     const { petId } = route.params;
     const [petProfile, setPetProfile] = useState();
-
-    const getPet = async () => {
-        try {
-            return axios.get(`http://192.168.100.101:5000/api/pets/${petId}`).then(res => {
-                setPetProfile(res.data.pet);
-            }).catch(e => { console.log(e) })
-        } catch (error) { console.log(error); }
-    }
+    const [images, setImages] = useState([]);
 
     useEffect(async () => {
         const res = await getOneAnimalLost(petId);
-        if (res !== 500 || res != 404)
+        if (res !== 500 || res != 404) {
+            console.log(res);
             setPetProfile(res)
+            setImages(res.images);
+        }
     }, [])
-
-
-
-    const images = [
-        { id: 1, uri: 'https://cdn.pixabay.com/photo/2021/10/27/19/09/cat-6748193_960_720.jpg' },
-        { id: 2, uri: 'https://cdn.pixabay.com/photo/2017/11/09/21/41/cat-2934720_960_720.jpg' },
-        { id: 3, uri: 'https://cdn.pixabay.com/photo/2013/05/30/18/21/cat-114782_960_720.jpg' },
-        { id: 4, uri: 'https://cdn.pixabay.com/photo/2014/03/29/09/17/cat-300572_960_720.jpg' },
-        { id: 5, uri: 'https://cdn.pixabay.com/photo/2021/10/13/11/50/cat-6706393_960_720.jpg' },
-    ];
 
     const ScrollY = React.useRef(new Animated.Value(0)).current;
 
     return (
         petProfile ?
             <View style={Styles.container}>
-                <View style={Styles.ImagesContainer}>
-                    <Animated.FlatList
-                        data={images}
-                        KeyExtractor={(item) => item.id}
-                        snapToInterval={ITEM_HEIHT}
-                        decelerationRate='fast'
-                        showsVerticalScrollIndicator={false}
-                        bounces={false}
-                        onScroll={Animated.event(
-                            [{ nativeEvent: { contentOffset: { y: ScrollY } } }],
-                            { useNativeDriver: true }
-                        )}
-                        renderItem={({ item }) => {
-                            return (
-                                <View>
-                                    <Image source={{ uri: item.uri }} style={Styles.Imageflat} />
-                                </View>
-                            );
-                        }}
-                    />
-                    <View style={Styles.pagination}>
-                        {
-                            images.map((_, index) => {
-                                return (
-                                    <Animated.View
-                                        key={index}
-                                        style={Styles.dot} />
-                                );
-                            })
-                        }
-                        <Animated.View style={[Styles.dotIndicator, {
-                            transform: [{
-                                translateY: Animated.divide(ScrollY, ITEM_HEIHT).interpolate({
-                                    inputRange: [0, 1],
-                                    outputRange: [0, DOT_INDICATOR_SIZE]
-                                })
-                            }]
-                        }]} />
-                    </View>
-                </View>
+                {
+                    images.length ?
+                        <View style={Styles.ImagesContainer}>
+                            <Animated.FlatList
+                                data={images}
+                                KeyExtractor={(item) => item.id}
+                                snapToInterval={ITEM_HEIHT}
+                                decelerationRate='fast'
+                                showsVerticalScrollIndicator={false}
+                                bounces={false}
+                                onScroll={Animated.event(
+                                    [{ nativeEvent: { contentOffset: { y: ScrollY } } }],
+                                    { useNativeDriver: true }
+                                )}
+                                renderItem={({ item }) => {
+                                    return (
+                                        <View>
+                                            <Image source={{ uri: item.url }} style={Styles.Imageflat} />
+                                        </View>
+                                    );
+                                }}
+                            />
+                            <View style={Styles.pagination}>
+                                {
+                                    images.map((_, index) => {
+                                        return (
+                                            <Animated.View
+                                                key={index}
+                                                style={Styles.dot} />
+                                        );
+                                    })
+                                }
+                                <Animated.View style={[Styles.dotIndicator, {
+                                    transform: [{
+                                        translateY: Animated.divide(ScrollY, ITEM_HEIHT).interpolate({
+                                            inputRange: [0, 1],
+                                            outputRange: [0, DOT_INDICATOR_SIZE]
+                                        })
+                                    }]
+                                }]} />
+                            </View>
+                        </View> : null
+                }
                 <BottomSheet
                     initialSnapIndex={0}
                     snapPoints={[height - ITEM_HEIHT, height]}
@@ -102,43 +90,52 @@ const PetProfile = ({
                                 id={petProfile.id}
                             />
                             {/* Raza + edad (una fila) */}
-                            <RowComponent>
-                                {petProfile.specie ?
-                                    <Component
-                                        source={iconType(petProfile.specie)}
-                                        title='Raza'
-                                        truncate={true}
-                                        value='jalksdjalskdjasldkjalsdkjasldkajsdaskjdlakshdkjsd'
-                                    /> : <ViewSpacing />
-                                }
-                                {petProfile.birth ?
-                                    <Component
-                                        title='Edad'
-                                        value={birthToAge(petProfile.birth)}
-                                    /> : null
-                                }
-                            </RowComponent>
+                            {
+                                petProfile.specie || petProfile.race || petProfile.birth ?
+                                    <RowComponent>
+                                        {petProfile.specie && petProfile.race ?
+                                            <Component
+                                                flex={{ flex: 2 }}
+                                                source={iconType(petProfile.specie)}
+                                                title='Raza'
+                                                value={nameStringPrayer(petProfile.race)}
+                                            /> : <ViewSpacing />
+                                        }
+                                        {petProfile.birth ?
+                                            <Component
+                                                flex={{ flex: 1 }}
+                                                title='Edad'
+                                                value={birthToAge(petProfile.birth)}
+                                            /> : null
+                                        }
+                                    </RowComponent> : null
+                            }
 
-                            <RowComponent>
-                                {petProfile.sex ?
+                            {
+                                petProfile.sex || petProfile.castrated ?
+                                    <RowComponent>
+                                        {petProfile.sex ?
+                                            <Component
+                                                flex={{ flex: 2 }}
+                                                source={iconType(petProfile.sex)}
+                                                title='Género'
+                                                truncate={true}
+                                                value={sexAnimal(petProfile.sex)}
+                                            /> : <ViewSpacing />
+                                        }
+                                        {petProfile.castrated ?
+                                            <Component
+                                                flex={{ flex: 1 }}
+                                                title='Estado'
+                                                value={castratedAnimal(petProfile.castrated)}
+                                            /> : null
+                                        }
+                                    </RowComponent> : null
+                            }
+                            {petProfile.user ?
+                                <RowComponent>
                                     <Component
-                                        source={iconType(petProfile.sex)}
-                                        title='Género'
-                                        truncate={true}
-                                        value={sexAnimal(petProfile.sex)}
-                                    /> : <ViewSpacing />
-                                }
-                                {petProfile.castrated ?
-                                    <Component
-                                        title='Estado'
-                                        value={castratedAnimal(petProfile.castrated)}
-                                    /> : null
-                                }
-                            </RowComponent>
-
-                            <RowComponent>
-                                {petProfile.user ?
-                                    <Component
+                                        flex={{ flex: 1 }}
                                         source={iconType('owner_pet')}
                                         title='Dueño'
                                         values={[
@@ -146,13 +143,18 @@ const PetProfile = ({
                                             petProfile.user.email,
                                             nameStringPrayer(petProfile.user.canton.name)
                                         ]}
-                                    /> : null
-                                }
-                            </RowComponent>
+                                    />
+                                </RowComponent> : null
+                            }
 
 
-                            <Title title='Descripción' />
-                            <Value value={nameStringPrayer(petProfile.description)} />
+                            {
+                                petProfile.description ?
+                                    <>
+                                        <Title title='Descripción' />
+                                        <Value value={nameStringPrayer(petProfile.description)} />
+                                    </> : null
+                            }
                             <Title title='Última vez visto' />
                             <Value value={nameStringPrayer('It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).')} />
 

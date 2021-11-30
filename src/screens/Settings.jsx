@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { View, Text, Dimensions, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Text, Alert, Dimensions, Button, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons';
@@ -42,7 +42,7 @@ const Settings = ({ navigation }) => {
                         <ItemList title='Crear una cuenta' onPress={() => { navigation.navigate('Register') }}>
                             <Icon name='login' size={35} color='#333' />
                         </ItemList>
-                        <ItemList title='Hacer un reporte' onPress={() => { navigation.navigate('StackReporte') }} >
+                        <ItemList title='Hacer un reporte' onPress={() => createThreeButtonAlert(navigation)} >
                             <Ionicons name='paw' size={35} color='#333' />
                         </ItemList>
                     </View>
@@ -51,6 +51,26 @@ const Settings = ({ navigation }) => {
         </View>
     );
 }
+
+
+const createThreeButtonAlert = (navigation) =>
+    Alert.alert(
+        "¿Conoces al animal?",
+        "Si conoces todos los datos del animal y del dueño tendrás que llenar un formulario.",
+        [
+            {
+                text: "Cancelar",
+                style: "cancel"
+            },
+            {
+                text: "No",
+                onPress: () => navigation.navigate('ReporterPetUnknown')
+            },
+            { text: "Si", onPress: () => navigation.navigate('StackReporte') }
+        ]
+    );
+
+
 
 const Styles = StyleSheet.create({
     expadBottom: {

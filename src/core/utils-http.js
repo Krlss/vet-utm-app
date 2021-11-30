@@ -31,3 +31,15 @@ export const getCantonsByProvince = async (provinceID) => {
         if (res.status === 500 || res.status === 404) return res.status;
     } catch (error) { console.log(error); }
 }
+
+
+export const createLostPetunknown = async (data) => { 
+    try {
+        const res = await axios.post('http://192.168.100.101:5000/api/pets/unknownCreateLostPet', {
+            images: data
+        }); 
+
+        if (res.status === 200) return true;
+        return false;
+    } catch (error) { console.log(error); }
+}

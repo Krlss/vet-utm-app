@@ -1,13 +1,13 @@
 export const initialState = {
     user: {
-        userID: null,
+        user_id: null,
         first_name: null,
         last_name: null,
         email: null,
         phone: null
     },
     pet: {
-        id: null,
+        pet_id: null,
         name: null,
         birth: null,
         description: null,

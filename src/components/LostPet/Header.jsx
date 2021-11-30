@@ -4,18 +4,14 @@ import { View, Text, StyleSheet } from 'react-native';
 
 const HeaderLostPet = ({ name, id }) => {
     return (
-        <View style={{ marginBottom: 20 }}>
+        <View style={{ marginBottom: 20, flex: 1 }}>
             {
                 name ?
-                    <Text style={Styles.name}>
-                        {`${name}`.toUpperCase()}
-                    </Text> : null
+                    <Text style={Styles.name}>{name}</Text> : null
             }
             {
                 id ?
-                    <Text style={Styles.id}>
-                        {`#${id}`.toUpperCase()}
-                    </Text> : null
+                    <Text style={Styles.id}>#{id}</Text> : null
             }
         </View>
     );
@@ -23,13 +19,15 @@ const HeaderLostPet = ({ name, id }) => {
 
 const Styles = StyleSheet.create({
     name: {
-        fontSize: 50,
+        fontSize: 35,
         fontWeight: 'bold',
+        textTransform: 'uppercase'
     },
     id: {
         fontSize: 15,
         fontWeight: 'bold',
-        color: '#777'
+        color: '#777',
+        textTransform: 'uppercase'
     },
 });
 

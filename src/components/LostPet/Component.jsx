@@ -5,11 +5,11 @@ import Value from './Value';
 import ImageIcon from './ImageIcon';
 import Title from './Title';
 
-const Component = ({ source, title, value, truncate, values }) => {
+const Component = ({ source, title, value, truncate, values, flex }) => {
     return (
-        <View style={Styles.container} >
+        <View style={[Styles.container, flex]} >
             {source ? <ImageIcon source={source} /> : null}
-            <View>
+            <View style={{ flex: 1, }}>
                 {title ? <Title title={title} /> : null}
                 {value ? <Value truncate={truncate} value={value} /> : null}
                 {values ? values.map((e, index) => <Value key={index} value={e} />) : null}
@@ -22,9 +22,9 @@ export default Component;
 
 const Styles = StyleSheet.create({
     container: {
-        flex: 1,
         flexDirection: 'row',
-        alignItems: 'center',
-        marginBottom: 20
+        alignItems: 'flex-start',
+        marginBottom: 20,
+        marginRight: 1
     },
 });

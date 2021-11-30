@@ -2,6 +2,8 @@ import React, { useState, useEffect, useContext } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import ReportContext from '../context/Report/ReportContext';
 
+import axios from 'axios';
+
 import {
     View,
     Text,
@@ -37,62 +39,43 @@ const ReporterPet = ({ navigation }) => {
     };
 
     const selectImage = async () => {
-        if (data.length >= 5) return alert('Solo se pueden subir 5 fotos!')
+        if (data.length >= 6) return alert('Solo se pueden subir 6 fotos!')
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
+            allowsMultipleSelection: true,
+            base64: true,
+            exif: true
         });
 
-        console.log(result);
+        var arr = result.uri.split('/');
+        var namefile = arr[arr.length - 1];
 
         if (!result.cancelled) {
-            setData([...data, { uri: result.uri }]);
-        }
 
-        console.log(data)
+
+            setData([...data, { name: namefile, uri: result.uri, base64: result.base64 }]);
+
+            axios.post('http://192.168.100.101:5000/api/pets/createLostPet', {
+                images: data
+            }).then(res => {
+                console.log(res);
+            }).catch(e => {
+                console.log(e);
+            })
+        }
 
     }
 
     return (
         <View style={styles.container}>
             <View>
-                <TitleAndButton title='Datos del dueño' optional='Opcional' onPress={() => {
-                    navigation.navigate('userReportDATA')
-                }}>
+                <TitleAndButton title='Datos del dueño' onPress={() => { navigation.navigate('userReportDATA') }} />
 
-                    {/* {user_data.userID ?
-                        (<>
-                            <Title title='Cedula o RUC' />
-                            <Value value={user_data.userID} />
-                        </>) : null}
-
-                    {user_data.first_name || user_data.last_name ?
-                        (<>
-                            <Title title='Nombre' />
-                            <Value value={deleteSpace(`${user_data.last_name ? user_data.last_name : ''} ${user_data.first_name ? user_data.first_name : ''}`).toUpperCase()} />
-                        </>) : null}
-
-                    {user_data.email ?
-                        (<>
-                            <Title title='Correo electrónico' />
-                            <Value value={user_data.email} />
-                        </>) : null}
-
-                    {user_data.phone ?
-                        (<>
-                            <Title title='Número telefónico' />
-                            <Value value={user_data.phone} />
-                        </>) : null} */}
-
-
-                </TitleAndButton>
-
-                <TitleAndButton title='Datos del animal' optional='Algunos obligatorios' onPress={() => {
-                    navigation.navigate('petReportDATA')
-                }} />
+                <TitleAndButton title='Datos del animal' onPress={() => { navigation.navigate('petReportDATA') }} />
 
                 {
-                    data.length > 0 ?
+                    data.length ?
                         <View style={{ paddingVertical: 25, backgroundColor: '#DCDCDC', marginTop: 50 }}>
                             <FlatList
                                 keyExtractor={(item) => item.uri}

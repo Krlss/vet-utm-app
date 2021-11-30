@@ -8,7 +8,8 @@ import {
     SettingsScreen,
     Login,
     Register,
-    ReportPetScreen
+    ReportPetScreen,
+    ReporterPetUnknown
 } from '../screens';
 
 import StackReporte from './StackReporte';
@@ -38,6 +39,9 @@ const StackMenuMain = () => {
             />
             <MenuLastTabStack.Screen name='Register' component={Register}
             /* options={{ headerShown: false }} */
+            />
+            <MenuLastTabStack.Screen name='ReporterPetUnknown' component={ReporterPetUnknown}
+                options={{ headerShown: false }}
             />
             <MenuLastTabStack.Screen name='StackReporte' component={StackReporte}
                 options={{ headerShown: false }}

@@ -10,7 +10,7 @@ const userReport = ({ navigation }) => {
 
     const { saveUSER, user_data } = useContext(ReportContext);
 
-    const [cedula, setCedula] = useState(user_data.userID);
+    const [cedula, setCedula] = useState(user_data.user_id);
     const [first_name, setFirst_name] = useState(user_data.first_name);
     const [last_name, setLastName] = useState(user_data.last_name);
     const [email, setEmail] = useState(user_data.email);
@@ -38,7 +38,7 @@ const userReport = ({ navigation }) => {
     const handleSubmit = () => {
 
         saveUSER({
-            userID: cedula,
+            user_id: cedula,
             first_name,
             last_name,
             email,
@@ -55,7 +55,7 @@ const userReport = ({ navigation }) => {
      }, []) */
 
     return (
-        <ScrollView>
+        <ScrollView keyboardShouldPersistTaps='handled'>
 
             <SimpleTitle title='Cédula o RUC' />
             <SimpleInput

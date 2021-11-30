@@ -9,3 +9,4 @@ export { default as UserProfileScreen } from './UserProfile';
 export { default as SettingsScreen } from './Settings';
 export { default as petReportDATA } from './petReportDATA';
 export { default as userReportDATA } from './userReportDATA';
+export { default as ReporterPetUnknown } from './ReporterPetUnknown';

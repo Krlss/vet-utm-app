@@ -80,14 +80,30 @@ export const castratedAnimal = (string) => {
 }
 
 export const birthToAge = (date) => {
-
     var obs = new Date(date);
 
     var diff_ms = Date.now() - obs.getTime();
     var age_dt = new Date(diff_ms);
 
-    return (Math.abs(age_dt.getUTCFullYear() - 1970));
-
+    var age_ = Math.abs(age_dt.getUTCFullYear() - 1970)
+    var month;
+    var day_;
+    if (age_ <= 0) {
+        month = Math.abs(age_dt.getUTCMonth());
+        if (month > 1) age_ = month.toString().concat(' meses');
+        if (month === 1) age_ = month.toString().concat(' mes');
+        if (month < 1) {
+            day_ = Math.abs(age_dt.getUTCDay());
+            if (day_ => 6 && day_ <= 12) age_ = day_.toString().concat(' semana');
+            if (day_ => 13) age_ = day_.toString().concat(' semanas');
+            if (day_ => 2) age_ = day_.toString().concat(' dias');
+            age_ = day_.toString().concat(' dia');
+        }
+    } else {
+        if (age_ === 1) age_ = age_.toString().concat(' año');
+        if (age_ > 1) age_ = age_.toString().concat(' años');
+    }
+    return age_;
 };
 
 

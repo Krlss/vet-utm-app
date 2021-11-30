@@ -24,10 +24,10 @@ const StackReporte = () => {
                 }}
             />
             <ReporteStack.Screen name='userReportDATA' component={userReportDATA}
-                options={{ title: 'userReportDATA', title: 'Datos del usuario' }}
+                options={{ title: 'Datos del usuario' }}
             />
             <ReporteStack.Screen name='petReportDATA' component={petReportDATA}
-                options={{ title: 'petReportDATA', title: 'Datos del animal' }}
+                options={{ title: 'Datos del animal' }}
             />
         </ReporteStack.Navigator>
     );

@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Text, View, StyleSheet, FlatList } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from 'react-native-elements'
-import { ActivityIndicator } from 'react-native';
 import { Image } from 'react-native-elements';
 import { ImageIcon, HeaderHome } from '../components';
 import { iconType } from '../core/utils';
@@ -17,23 +16,14 @@ const Home = ({
     const [pets, setPets] = useState([]);
     const [nPets, setNpets] = useState(false);
     const [isLoading, setLoading] = useState(false);
-
-    const getPets = () => {
-        try {
-            axios.get(`http://192.168.100.101:5000/api/pets`).then(res => {
-                setNpets(res.data.count);
-                setPets(res.data.pets);
-            }).catch(e => {
-                console.log(e);
-            })
-        } catch (error) {
-            console.log(error)
-        }
-    }
+    const [res, setRes] = useState(false);
 
     useEffect(async () => {
         const res = await getAnimalsLost();
-        if (res != 500 || res != 404) setPets(res);
+        if (res != 500 || res != 404) {
+            setPets(res);
+            setRes(true);
+        };
     }, [])
 
     const LoadMoreItems = () => {
@@ -52,7 +42,7 @@ const Home = ({
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity delayLongPress={true} onPress={() =>
+            <TouchableOpacity onPress={() =>
                 navigation.navigate('LostAnimalScreen', {
                     petId: item.id,
                 })}>
@@ -64,7 +54,7 @@ const Home = ({
                             PlaceholderContent={<ActivityIndicator />}
                         />
                         <View style={styles.containerInternal}>
-                            <Text style={styles.name}>{`${item.name}`}</Text>
+                            <Text style={styles.name}>{item.name}</Text>
                             <Text style={styles.id}>#{item.id}</Text>
                         </View>
                     </View>
@@ -79,23 +69,28 @@ const Home = ({
     }
 
     return (
-        <View style={{ height: '100%' }}>
+        <View style={{ backgroundColor: 'white' }}>
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
-                pets.length > 0 ?
-                    <FlatList
-                        data={pets}
-                        renderItem={renderItem}
-                        keyExtractor={item => item.id}
-                        ListFooterComponent={renderLoader}
-                        onEndReached={LoadMoreItems}
-                        onEndReachedThreshold={0}
-                    /> :
-                    <View style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
-                        <Text style={{ fontSize: 50, fontWeight: '700', textAlign: 'center' }}>
-                            NO HAY ANIMALES PERDIDOS
-                        </Text>
-                        <ImageIcon source={iconType(`affection`)} styles={{ width: 100, height: 100 }} />
+                res ?
+                    pets ?
+                        pets.length > 0 ?
+                            <FlatList
+                                data={pets}
+                                renderItem={renderItem}
+                                keyExtractor={item => item.id}
+                                ListFooterComponent={renderLoader}
+                                onEndReached={LoadMoreItems}
+                                onEndReachedThreshold={0}
+                            /> :
+                            <View style={{ height: '100%', alignItems: 'center', justifyContent: 'center' }}>
+                                <Text style={{ fontSize: 50, fontWeight: '700', textAlign: 'center' }}>
+                                    NO HAY ANIMALES PERDIDOS
+                                </Text>
+                                <ImageIcon source={iconType(`affection`)} styles={{ width: 100, height: 100 }} />
+                            </View> : null
+                    : <View style={{ justifyContent: 'center', height: '90%' }}>
+                        <ActivityIndicator size="large" color="#333" />
                     </View>
             }
         </View>
@@ -127,11 +122,13 @@ const styles = StyleSheet.create({
     },
     name: {
         fontSize: 16,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        textTransform: 'uppercase'
     },
     id: {
         color: '#777',
         fontSize: 13,
+        textTransform: 'uppercase'
     },
     Loader: {
         marginVertical: 15,
