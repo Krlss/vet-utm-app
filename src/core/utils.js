@@ -57,6 +57,8 @@ export const iconType = (specie) => {
             return require('../assets/img/affection.png')
         case 'logo-utm':
             return require('../assets/img/logo-utm.png')
+        case 'logo':
+            return require('../assets/img/logo.png')
 
         default:
             return '';

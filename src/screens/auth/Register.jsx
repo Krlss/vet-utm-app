@@ -47,7 +47,7 @@ const Register = ({ navigation }) => {
 
             <Logo />
 
-            <Header>Crear una cuenta</Header>
+            <Header>Sistema de identificación de mascotas</Header>
 
 
             <TextInput

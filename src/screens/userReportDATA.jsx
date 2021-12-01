@@ -5,7 +5,7 @@ import { SimpleInput, SimpleTitle } from '../components';
 import { onlyNumber } from '../core/utils';
 
 import ReportContext from "../context/Report/ReportContext";
-
+import { theme } from '../core/theme';
 const userReport = ({ navigation }) => {
 
     const { saveUSER, user_data } = useContext(ReportContext);
@@ -43,7 +43,7 @@ const userReport = ({ navigation }) => {
             last_name,
             email,
             phone
-        }); 
+        });
         navigation.pop()
     }
 
@@ -138,7 +138,7 @@ const userReport = ({ navigation }) => {
 
 const Styles = StyleSheet.create({
     button: {
-        backgroundColor: '#FFDD00',
+        backgroundColor: theme.colors.All,
         padding: 10,
         width: '100%',
         borderRadius: 10

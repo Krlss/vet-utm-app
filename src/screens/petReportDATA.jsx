@@ -4,7 +4,7 @@ import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber } from '../core/utils';
 import ReportContext from "../context/Report/ReportContext";
 import { Picker } from "@react-native-picker/picker";
-
+import { theme } from '../core/theme';
 const petReport = ({ navigation }) => {
 
 
@@ -76,7 +76,7 @@ const petReport = ({ navigation }) => {
                 length={65}
                 value={race}
                 onChangeText={text => setRace(text)}
-            /> 
+            />
 
             <SimpleTitle title='Descripción' />
             <SimpleTextArea
@@ -103,7 +103,7 @@ const petReport = ({ navigation }) => {
 
 const Styles = StyleSheet.create({
     button: {
-        backgroundColor: '#FFDD00',
+        backgroundColor: theme.colors.All,
         padding: 10,
         width: '100%',
         borderRadius: 10

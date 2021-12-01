@@ -3,16 +3,16 @@ import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { iconType } from '../core/utils';
 import ImageIcon from '../components/LostPet/ImageIcon';
-
+import { theme } from '../core/theme';
 const HeaderHome = ({ Touch, back }) => {
-  
+
     return (
         <View style={back ? Styles.containerBack : Styles.container} >
             <View style={Styles.containerLogo}>
-                <ImageIcon source={iconType('logo-utm')} styles={Styles.Logo} />
-                <Text style={Styles.textLogo}>
+                <ImageIcon source={iconType('logo')} styles={Styles.Logo} />
+                {/* <Text style={Styles.textLogo}>
                     Clínica Veterinaria
-                </Text>
+                </Text> */}
             </View>
 
             {
@@ -37,9 +37,10 @@ const HeaderHome = ({ Touch, back }) => {
 const Styles = StyleSheet.create({
     container: {
         paddingHorizontal: 25,
-        paddingVertical: 25,
+        paddingTop: 25,
+        paddingBottom: 10,
         flexDirection: 'row',
-        backgroundColor: '#FFDD00',
+        backgroundColor: theme.colors.All,
         justifyContent: 'space-between',
         alignItems: 'center',
         elevation: 3

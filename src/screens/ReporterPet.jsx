@@ -15,6 +15,7 @@ import {
     Image
 } from 'react-native';
 import { Icon } from 'react-native-elements'
+import { theme } from '../core/theme';
 
 import { deleteItemArr, deleteSpace } from '../core/utils';
 import { ItemList, TitleAndButton, Title, Value } from '../components';
@@ -151,7 +152,7 @@ const styles = StyleSheet.create({
         left: 25
     },
     buttonAdd: {
-        backgroundColor: '#FFDD00',
+        backgroundColor: theme.colors.All,
         height: 50,
         width: 50,
         borderRadius: 100,

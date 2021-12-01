@@ -1,7 +1,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
-
+import { theme } from '../../core/theme';
 const TitleAndButton = ({ title, optional, onPress, children }) => {
     return (
         <View style={Styles.container}>
@@ -34,7 +34,7 @@ const Styles = StyleSheet.create({
         maxWidth: 480,
     },
     button: {
-        backgroundColor: '#FFDD00',
+        backgroundColor: theme.colors.All,
         height: 50,
         width: 150,
         borderRadius: 10,

@@ -8,7 +8,7 @@ import { createLostPetunknown } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-
+import { theme } from '../core/theme';
 const { width, height } = Dimensions.get('screen');
 const DOT_SIZE = 8;
 const DOT_SPACING = 8;
@@ -107,7 +107,7 @@ const ReporterPetUnknown = ({ navigation }) => {
                                                     <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
                                                         <Icon
                                                             name='delete'
-                                                            color='#DC143C'
+                                                            color={theme.colors.error}
                                                             size={20}
                                                         />
                                                     </TouchableOpacity> : null
@@ -156,7 +156,7 @@ const ReporterPetUnknown = ({ navigation }) => {
                     {
                         images.length > 0 ?
                             < TouchableOpacity disabled={disabled ? true : false}
-                                style={[Styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? '#333' : '#FF8C00' }]}
+                                style={[Styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? '#333' : theme.colors.All }]}
                                 onPress={handleSubmit}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={Styles.text}>
@@ -188,7 +188,7 @@ const Styles = StyleSheet.create({
     button: {
         padding: 10,
         borderRadius: 100,
-        backgroundColor: '#FF8C00'
+        backgroundColor: theme.colors.All
     },
     buttonSend: {
         marginLeft: 10,

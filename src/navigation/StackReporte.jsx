@@ -1,6 +1,6 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-
+import { theme } from '../core/theme';
 import {
     ReportPetScreen,
     userReportDATA,
@@ -14,7 +14,7 @@ const StackReporte = () => {
         <ReporteStack.Navigator
             screenOptions={{
                 headerTintColor: '#333',
-                headerStyle: { backgroundColor: '#FFDD00' }
+                headerStyle: { backgroundColor: theme.colors.All }
             }}
         >
             <ReporteStack.Screen name='ReportPetScreen' component={ReportPetScreen}

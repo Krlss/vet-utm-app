@@ -13,7 +13,7 @@ import {
 } from '../screens';
 
 import StackReporte from './StackReporte';
-
+import { theme } from '../core/theme';
 const MenuLastTabStack = createNativeStackNavigator();
 
 const StackMenuMain = () => {
@@ -26,7 +26,7 @@ const StackMenuMain = () => {
         }} */
         >
             <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
-                options={{ title: 'Configuraciones', headerStyle: { backgroundColor: '#FFDD00' } }}
+                options={{ title: 'Configuraciones', headerStyle: { backgroundColor: theme.colors.All } }}
             />
             <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
                 options={{ title: 'Mi perfil' }}

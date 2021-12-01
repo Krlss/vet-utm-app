@@ -44,14 +44,14 @@ const Login = ({ navigation }) => {
 
             <Logo />
 
-            <Header>Welcome back</Header>
+            <Header>Sistema de identificación de mascotas</Header>
 
 
             <TextInput
                 label="Correo"
                 returnKeyType="next"
                 value={email.value}
-                onChangeText={text => setEmail({ value: text, error: '' })} 
+                onChangeText={text => setEmail({ value: text, error: '' })}
                 errorText={email.error}
                 autoCapitalize="none"
                 autoCompleteType="email"
@@ -63,7 +63,7 @@ const Login = ({ navigation }) => {
                 label="Contraseña"
                 returnKeyType="done"
                 value={password.value}
-                onChangeText={text => setPassword({ value: text, error: '' })} 
+                onChangeText={text => setPassword({ value: text, error: '' })}
                 errorText={password.error}
                 secureTextEntry
             />

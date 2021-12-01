@@ -8,10 +8,11 @@ const Header = ({ children }) => (
 
 const styles = StyleSheet.create({
     header: {
-        fontSize: 30,
+        fontSize: 20,
         color: theme.colors.primary,
         fontWeight: 'bold',
         paddingVertical: 14,
+        textAlign: 'center'
     },
 });
 
