@@ -37,7 +37,7 @@ const HeaderHome = ({ Touch, back }) => {
 const Styles = StyleSheet.create({
     container: {
         paddingHorizontal: 25,
-        paddingTop: 25,
+        paddingTop: 10,
         paddingBottom: 10,
         flexDirection: 'row',
         backgroundColor: theme.colors.All,

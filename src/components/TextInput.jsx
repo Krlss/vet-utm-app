@@ -6,11 +6,9 @@ import { theme } from '../core/theme';
 const TextInput = ({ errorText, ...props }) => (
     <View style={styles.container}>
         <Input
-            style={styles.input}
-            selectionColor='#333'
-            underlineColor="transparent"
-            mode="outlined"
-            blurOnSubmit={true}
+            style={styles.input} 
+            activeUnderlineColor='black'
+            mode="flat" 
             {...props}
         />
         {errorText ? <Text style={styles.error}>{errorText}</Text> : null}
@@ -24,6 +22,7 @@ const styles = StyleSheet.create({
     },
     input: {
         backgroundColor: theme.colors.surface,
+        borderColor: 'green'
     },
     error: {
         fontSize: 14,

@@ -1,12 +1,11 @@
 import React, { useRef } from 'react';
-import { View, Text, Alert, Dimensions, Button, TouchableOpacity, StyleSheet } from 'react-native';
+import { View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 
-const { width, height } = Dimensions.get('screen');
-
-import { ImageIcon, HeaderHome, ItemList } from '../components';
+import { ItemList } from '../components';
+import UserProfile from './UserProfile';
 
 const Settings = ({ navigation }) => {
     const bottomSheetRef = useRef('bottomSheetRef');
@@ -15,14 +14,7 @@ const Settings = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-
-            {/* <View style={{ position: 'absolute', top: 35, left: 20 }}>
-                <TouchableOpacity onPress={() => navigation.navigate('HomeScreen')}>
-                    <Ionicons name='ios-arrow-back-outline' size={25} color='#333' />
-                </TouchableOpacity>
-            </View> */}
-
-
+            <UserProfile />
             <View style={Styles.expadBottom}>
                 <TouchableOpacity onPress={expand} >
                     <Ionicons name='ios-caret-up-circle' size={35} color='#333' />

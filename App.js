@@ -1,6 +1,5 @@
-import { StatusBar } from 'expo-status-bar';
 import React from 'react';
-import { View, SafeAreaView } from 'react-native';
+import { View, SafeAreaView, StatusBar } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { Provider as PaperProvider } from 'react-native-paper';
 import ReportState from './src/context/Report/ReportState';
@@ -12,6 +11,7 @@ export default function App() {
       <ReportState>
         <NavigationContainer>
           <StackMain />
+          <StatusBar color='black' />
         </NavigationContainer>
       </ReportState>
     </PaperProvider>

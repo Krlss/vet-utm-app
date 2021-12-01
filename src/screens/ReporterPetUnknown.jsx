@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator, FlatList, StatusBar, Modal } from 'react-native';
+import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator, FlatList, Modal } from 'react-native';
 import ImageViewer from 'react-native-image-zoom-viewer';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteItemArr } from '../core/utils';
@@ -156,19 +156,18 @@ const ReporterPetUnknown = ({ navigation }) => {
                     {
                         images.length > 0 ?
                             < TouchableOpacity disabled={disabled ? true : false}
-                                style={[Styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? '#333' : theme.colors.All }]}
+                                style={[Styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? 'transparent' : theme.colors.All }]}
                                 onPress={handleSubmit}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={Styles.text}>
                                         {disabled ? 'Enviando las fotos' : <Ionicons name='ios-send' size={20} color='#333' />}
                                     </Text>
-                                    {disabled ? <ActivityIndicator style={{ marginLeft: 5 }} size="small" color="#fff" /> : null}
+                                    {disabled ? <ActivityIndicator style={{ marginLeft: 5 }} size="small" color="#333" /> : null}
                                 </View>
                             </TouchableOpacity> : null
                     }
                 </View>
             </View>
-            <StatusBar />
         </View >
     );
 }
@@ -200,7 +199,7 @@ const Styles = StyleSheet.create({
         fontSize: 20,
         fontWeight: '700',
         textAlign: 'center',
-        color: 'white',
+        color: '#333',
         justifyContent: 'center',
         alignItems: 'center'
     },

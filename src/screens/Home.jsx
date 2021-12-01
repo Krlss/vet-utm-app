@@ -69,7 +69,7 @@ const Home = ({
     }
 
     return (
-        <View style={{ backgroundColor: 'white' }}>
+        <View style={{ backgroundColor: 'white' }}> 
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
                 res ?
