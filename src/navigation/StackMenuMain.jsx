@@ -26,7 +26,7 @@ const StackMenuMain = () => {
         }} */
         >
             <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
-            /* options={{ title: 'Configuraciones', headerShown: false }} */
+                options={{ title: 'Configuraciones', headerStyle: { backgroundColor: '#FFDD00' } }}
             />
             <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
                 options={{ title: 'Mi perfil' }}
@@ -35,10 +35,10 @@ const StackMenuMain = () => {
                 options={{ title: 'Perfil de mi mascota' }}
             />
             <MenuLastTabStack.Screen name='Login' component={Login}
-            /* options={{ headerShown: false }} */
+                options={{ headerTransparent: true, headerShadowVisible: false, title: '' }}
             />
             <MenuLastTabStack.Screen name='Register' component={Register}
-            /* options={{ headerShown: false }} */
+                options={{ headerTransparent: true, headerShadowVisible: false, title: '' }}
             />
             <MenuLastTabStack.Screen name='ReporterPetUnknown' component={ReporterPetUnknown}
                 options={{ headerShown: false }}

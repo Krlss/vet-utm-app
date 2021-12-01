@@ -55,7 +55,6 @@ const Register = ({ navigation }) => {
                 returnKeyType="next"
                 value={name.value}
                 onChangeText={text => setName({ value: text, error: '' })}
-                error={!!name.error}
                 errorText={name.error}
             />
 
@@ -64,7 +63,6 @@ const Register = ({ navigation }) => {
                 returnKeyType="next"
                 value={email.value}
                 onChangeText={text => setEmail({ value: text, error: '' })}
-                error={!!email.error}
                 errorText={email.error}
                 autoCapitalize="none"
                 autoCompleteType="email"
@@ -77,7 +75,6 @@ const Register = ({ navigation }) => {
                 returnKeyType="done"
                 value={password.value}
                 onChangeText={text => setPassword({ value: text, error: '' })}
-                error={!!password.error}
                 errorText={password.error}
                 secureTextEntry
             />

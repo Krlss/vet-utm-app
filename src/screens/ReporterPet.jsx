@@ -50,11 +50,11 @@ const ReporterPet = ({ navigation }) => {
             exif: true
         });
 
-        var arr = result.uri.split('/');
-        var namefile = arr[arr.length - 1];
-
+        
         if (!result.cancelled) {
-
+            
+            var arr = result.uri.split('/');
+            var namefile = arr[arr.length - 1];
 
             setData([...data, { name: namefile, url: result.uri, base64: result.base64 }]);
 
@@ -109,7 +109,7 @@ const ReporterPet = ({ navigation }) => {
                 <TouchableOpacity style={styles.buttonAdd} onPress={selectImage} >
                     <Icon
                         name='image'
-                        color='white'
+                        color='#333'
                         size={25}
                     />
                 </TouchableOpacity>
@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
         left: 25
     },
     buttonAdd: {
-        backgroundColor: '#FF8C00',
+        backgroundColor: '#FFDD00',
         height: 50,
         width: 50,
         borderRadius: 100,

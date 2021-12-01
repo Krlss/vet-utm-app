@@ -14,7 +14,7 @@ const TitleAndButton = ({ title, optional, onPress, children }) => {
             {children}
             <View style={{ alignItems: 'flex-end' }}>
                 <TouchableOpacity style={Styles.button} onPress={onPress}>
-                    <Icon name='chevron-right' size={30} color='white' />
+                    <Icon name='chevron-right' size={30} color='#333' />
                 </TouchableOpacity>
             </View>
         </View >
@@ -34,10 +34,10 @@ const Styles = StyleSheet.create({
         maxWidth: 480,
     },
     button: {
-        backgroundColor: '#FF8C00',
+        backgroundColor: '#FFDD00',
         height: 50,
         width: 150,
-        borderRadius: 100,
+        borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 10

@@ -71,10 +71,13 @@ const ReporterPetUnknown = ({ navigation }) => {
         <View style={Styles.container}>
 
 
-            <TouchableOpacity onPress={() => { navigation.pop() }}
-                style={{ position: 'absolute', top: height * .02, left: width * .04, zIndex: 1 }} >
-                <Ionicons name='md-arrow-back-sharp' size={25} color='#333' />
-            </TouchableOpacity>
+            {
+                !disabled ?
+                    <TouchableOpacity onPress={() => { navigation.pop() }}
+                        style={{ position: 'absolute', top: height * .02, left: width * .04, zIndex: 1 }} >
+                        <Ionicons name='md-arrow-back-sharp' size={25} color='#333' />
+                    </TouchableOpacity> : null
+            }
 
             {
                 images.length ?
@@ -84,7 +87,7 @@ const ReporterPetUnknown = ({ navigation }) => {
                             keyExtractor={(item, index) => item.url.toString()}
                             snapToInterval={width}
                             decelerationRate='fast'
-                            pagingEnabled={true} 
+                            pagingEnabled={true}
                             legacyImplementation={false}
                             showsHorizontalScrollIndicator={false}
                             horizontal
@@ -114,31 +117,34 @@ const ReporterPetUnknown = ({ navigation }) => {
                                 );
                             }}
                         />
-                        <View style={[Styles.pagination, { left: width / 2 - (images.length * images.length) }]}>
-                            {
-                                images.map((_, index) => {
-                                    return (
-                                        <Animated.View
-                                            key={index}
-                                            style={Styles.dot} />
-                                    );
-                                })
-                            }
-                            <Animated.View style={[Styles.dotIndicator, {
-                                transform: [{
-                                    translateX: Animated.divide(ScrollX, width).interpolate({
-                                        inputRange: [0, 1],
-                                        outputRange: [0, DOT_INDICATOR_SIZE]
-                                    })
-                                }]
-                            }]} />
-                        </View>
+                        {
+                            images.length > 1 ?
+                                <View style={[Styles.pagination, { left: width / 2 - (images.length * images.length) }]}>
+                                    {
+                                        images.map((_, index) => {
+                                            return (
+                                                <Animated.View
+                                                    key={index}
+                                                    style={Styles.dot} />
+                                            );
+                                        })
+                                    }
+                                    <Animated.View style={[Styles.dotIndicator, {
+                                        transform: [{
+                                            translateX: Animated.divide(ScrollX, width).interpolate({
+                                                inputRange: [0, 1],
+                                                outputRange: [0, DOT_INDICATOR_SIZE]
+                                            })
+                                        }]
+                                    }]} />
+                                </View> : null
+                        }
                     </View> : null
             }
 
 
 
-            <View style={Styles.containerButton}>
+            <View style={[Styles.containerButton, { alignItems: disabled ? 'center' : null, left: disabled ? 0 : 10 }]}>
                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                     {
                         !disabled ?
@@ -154,7 +160,7 @@ const ReporterPetUnknown = ({ navigation }) => {
                                 onPress={handleSubmit}>
                                 <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                                     <Text style={Styles.text}>
-                                        {disabled ? 'Enviando las fotos' : 'Enviar'}
+                                        {disabled ? 'Enviando las fotos' : <Ionicons name='ios-send' size={20} color='#333' />}
                                     </Text>
                                     {disabled ? <ActivityIndicator style={{ marginLeft: 5 }} size="small" color="#fff" /> : null}
                                 </View>
@@ -176,7 +182,6 @@ const Styles = StyleSheet.create({
         bottom: 20,
         paddingHorizontal: 20,
         position: 'absolute',
-        left: 10,
         elevation: 5,
         zIndex: 1
     },

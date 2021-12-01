@@ -103,7 +103,7 @@ const petReport = ({ navigation }) => {
 
 const Styles = StyleSheet.create({
     button: {
-        backgroundColor: '#FF8C00',
+        backgroundColor: '#FFDD00',
         padding: 10,
         width: '100%',
         borderRadius: 10
@@ -115,7 +115,7 @@ const Styles = StyleSheet.create({
         alignItems: 'center'
     },
     buttonText: {
-        color: 'white',
+        color: '#333',
         fontSize: 25,
         textAlign: 'center',
         fontWeight: '700'

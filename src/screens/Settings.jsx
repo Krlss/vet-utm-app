@@ -24,7 +24,7 @@ const Settings = ({ navigation }) => {
 
 
             <View style={Styles.expadBottom}>
-                <TouchableOpacity onPress={expand}  >
+                <TouchableOpacity onPress={expand} >
                     <Ionicons name='ios-caret-up-circle' size={35} color='#333' />
                 </TouchableOpacity>
             </View>

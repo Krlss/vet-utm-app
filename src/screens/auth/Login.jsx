@@ -44,15 +44,14 @@ const Login = ({ navigation }) => {
 
             <Logo />
 
-            <Header>Iniciar sesión</Header>
+            <Header>Welcome back</Header>
 
 
             <TextInput
                 label="Correo"
                 returnKeyType="next"
                 value={email.value}
-                onChangeText={text => setEmail({ value: text, error: '' })}
-                error={!!email.error}
+                onChangeText={text => setEmail({ value: text, error: '' })} 
                 errorText={email.error}
                 autoCapitalize="none"
                 autoCompleteType="email"
@@ -64,8 +63,7 @@ const Login = ({ navigation }) => {
                 label="Contraseña"
                 returnKeyType="done"
                 value={password.value}
-                onChangeText={text => setPassword({ value: text, error: '' })}
-                error={!!password.error}
+                onChangeText={text => setPassword({ value: text, error: '' })} 
                 errorText={password.error}
                 secureTextEntry
             />

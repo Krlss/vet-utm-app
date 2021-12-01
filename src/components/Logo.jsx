@@ -1,10 +1,8 @@
 import React, { memo } from 'react';
 import { Image, StyleSheet } from 'react-native';
-
+import { iconType } from '../core/utils';
 const Logo = () => (
-    <Image source={{
-        uri: 'https://i.pinimg.com/originals/96/de/6f/96de6fd0e1a27ce1840eaf5430b7155c.png'
-    }} style={styles.image} />
+    <Image source={iconType('logo-utm')} style={styles.image} />
 );
 
 const styles = StyleSheet.create({

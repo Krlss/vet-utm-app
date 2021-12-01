@@ -1,4 +1,5 @@
 import axios from 'axios';
+import { BackHandler } from 'react-native';
 
 export const getAnimalsLost = async () => {
     try {
@@ -33,12 +34,13 @@ export const getCantonsByProvince = async (provinceID) => {
 }
 
 
-export const createLostPetunknown = async (data) => { 
+export const createLostPetunknown = async (data) => {
     try {
+        BackHandler.addEventListener('hardwareBackPress', () => true)
         const res = await axios.post('http://192.168.100.101:5000/api/pets/unknownCreateLostPet', {
             images: data
-        }); 
-
+        });
+        BackHandler.removeEventListener('hardwareBackPress', () => true)
         if (res.status === 200) return true;
         return false;
     } catch (error) { console.log(error); }

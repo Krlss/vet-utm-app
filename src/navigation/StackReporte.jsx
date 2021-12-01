@@ -13,8 +13,8 @@ const StackReporte = () => {
     return (
         <ReporteStack.Navigator
             screenOptions={{
-                headerTintColor: 'white',
-                headerStyle: { backgroundColor: '#FF8C00' }
+                headerTintColor: '#333',
+                headerStyle: { backgroundColor: '#FFDD00' }
             }}
         >
             <ReporteStack.Screen name='ReportPetScreen' component={ReportPetScreen}

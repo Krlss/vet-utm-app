@@ -39,9 +39,10 @@ const Styles = StyleSheet.create({
         paddingHorizontal: 25,
         paddingVertical: 25,
         flexDirection: 'row',
-        backgroundColor: '#FFA500',
+        backgroundColor: '#FFDD00',
         justifyContent: 'space-between',
         alignItems: 'center',
+        elevation: 3
     },
     containerBack: {
         paddingRight: 25,
