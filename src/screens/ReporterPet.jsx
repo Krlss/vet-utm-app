@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useRef } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import ReportContext from '../context/Report/ReportContext';
 
@@ -24,6 +24,7 @@ const ReporterPet = ({ navigation }) => {
     const [data, setData] = useState([]);
 
     const { user_data } = useContext(ReportContext);
+    const imagesRef = useRef('images');
 
     useEffect(async () => {
         if (Platform.OS !== 'web') {
@@ -35,6 +36,7 @@ const ReporterPet = ({ navigation }) => {
     })
 
     const deleteItem = (item, index) => {
+        if (index === data.length - 1) imagesRef.current.scrollToIndex({ Animated: false, index: data.length - 1 });
         setData(deleteItemArr(data, item));
     };
 
@@ -54,7 +56,7 @@ const ReporterPet = ({ navigation }) => {
         if (!result.cancelled) {
 
 
-            setData([...data, { name: namefile, uri: result.uri, base64: result.base64 }]);
+            setData([...data, { name: namefile, url: result.uri, base64: result.base64 }]);
 
             axios.post('http://192.168.100.101:5000/api/pets/createLostPet', {
                 images: data
@@ -72,21 +74,22 @@ const ReporterPet = ({ navigation }) => {
             <View>
                 <TitleAndButton title='Datos del dueño' onPress={() => { navigation.navigate('userReportDATA') }} />
 
-                <TitleAndButton title='Datos del animal' onPress={() => { navigation.navigate('petReportDATA') }} />
+                <TitleAndButton title='Datos de la mascota' onPress={() => { navigation.navigate('petReportDATA') }} />
 
                 {
                     data.length ?
                         <View style={{ paddingVertical: 25, backgroundColor: '#DCDCDC', marginTop: 50 }}>
                             <FlatList
-                                keyExtractor={(item) => item.uri}
+                                keyExtractor={(item) => item.url}
                                 data={data}
                                 horizontal
-                                renderItem={({ item }) => {
+                                ref={imagesRef}
+                                renderItem={({ item, index }) => {
                                     return (
                                         <View style={{ marginHorizontal: 5 }}>
-                                            <Image source={{ uri: item.uri }} style={styles.Imageflat} />
+                                            <Image source={{ uri: item.url }} style={styles.Imageflat} />
                                             <View style={{ position: 'absolute', top: 10, right: 10 }}>
-                                                <TouchableOpacity onPress={() => deleteItem(item.uri)}>
+                                                <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
                                                     <Icon
                                                         name='delete'
                                                         color='tomato'

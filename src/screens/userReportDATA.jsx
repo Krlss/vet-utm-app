@@ -43,9 +43,7 @@ const userReport = ({ navigation }) => {
             last_name,
             email,
             phone
-        });
-
-        console.log('ya le díiiiiiiiii')
+        }); 
         navigation.pop()
     }
 

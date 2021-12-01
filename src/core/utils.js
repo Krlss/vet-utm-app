@@ -14,7 +14,7 @@ export const emailformat = (email) => {
 }
 
 export const deleteItemArr = (arr, index) => {
-    arr = arr.filter(function (i) { return i.uri !== index });
+    arr = arr.filter(function (i) { return i.url !== index });
     /* console.log(arr) */
     return arr;
 }

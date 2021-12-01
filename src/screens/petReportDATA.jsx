@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-nati
 import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber } from '../core/utils';
 import ReportContext from "../context/Report/ReportContext";
-
+import { Picker } from "@react-native-picker/picker";
 
 const petReport = ({ navigation }) => {
 
@@ -43,12 +43,16 @@ const petReport = ({ navigation }) => {
             />
 
             <SimpleTitle title='Sexo' />
-            <SimpleInput
-                placeholder='Sexo'
-                length={5}
-                value={sex}
-                onChangeText={text => setSex(text)}
-            />
+
+            <View style={{ paddingHorizontal: 13 }}>
+                <Picker
+                    selectedValue={sex}
+                    onValueChange={(itemValue, itemIndex) => setSex(itemValue)}
+                >
+                    <Picker.Item label='Hembra' value='H' />
+                    <Picker.Item label='Macho' value='M' />
+                </Picker>
+            </View>
 
             <SimpleTitle title='Especie' />
             <SimpleInput
@@ -66,6 +70,14 @@ const petReport = ({ navigation }) => {
                 onChangeText={text => setRace(text)}
             />
 
+            <SimpleTitle title='Última vez visto' />
+            <SimpleInput
+                placeholder='Última vez visto'
+                length={65}
+                value={race}
+                onChangeText={text => setRace(text)}
+            /> 
+
             <SimpleTitle title='Descripción' />
             <SimpleTextArea
                 placeholder='Descripción'
@@ -75,6 +87,7 @@ const petReport = ({ navigation }) => {
                 onChangeText={text => setDescription(text)}
             />
 
+
             <View style={Styles.buttonContainer}>
                 <TouchableOpacity
                     style={Styles.button}
@@ -82,6 +95,7 @@ const petReport = ({ navigation }) => {
                     <Text style={Styles.buttonText}>TERMINAR</Text>
                 </TouchableOpacity>
             </View>
+
 
         </ScrollView>
     );
@@ -124,15 +138,3 @@ export default petReport;
     </Picker>
 </View> */}
 
-{/* <View style={{ paddingHorizontal: 13 }}>
-    <Picker
-        selectedValue={canton}
-        onValueChange={(itemValue, itemIndex) => setCanton(itemValue)}
-    >
-        {
-            apiCantons ?
-                apiCantons.map((e, index) =>
-                    <Picker.Item key={index} label={e.name} value={e.id} />) : null
-        }
-    </Picker>
-</View> */}
