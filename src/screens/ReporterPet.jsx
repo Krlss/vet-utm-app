@@ -27,14 +27,14 @@ const ReporterPet = ({ navigation }) => {
     const { user_data } = useContext(ReportContext);
     const imagesRef = useRef('images');
 
-    useEffect(async () => {
+    /* useEffect(async () => {
         if (Platform.OS !== 'web') {
             const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
             if (status !== 'granted') {
                 alert('Lo siento, necesitas dar permisos para que esto funcione!');
             }
         }
-    })
+    }) */
 
     const deleteItem = (item, index) => {
         if (index === data.length - 1) imagesRef.current.scrollToIndex({ Animated: false, index: data.length - 1 });

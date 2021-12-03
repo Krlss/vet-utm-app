@@ -1,8 +1,9 @@
 {
   "expo": {
-    "name": "vet_utm_app",
-    "slug": "vet_utm_app",
+    "name": "SIM",
+    "slug": "SIM",
     "version": "1.0.0",
+    "orientation": "portrait",
     "assetBundlePatterns": [
       "**/*"
     ],
@@ -10,10 +11,10 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends."
+          "photosPermission": "La aplicación necesita acceder a tus fotos."
         }
       ]
     ]
   },
-  "name": "vet_utm_app"
+  "name": "SIM"
 }

@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from "react";
 import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator, FlatList, Modal } from 'react-native';
-import ImageViewer from 'react-native-image-zoom-viewer';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteItemArr } from '../core/utils';
 import { Icon } from 'react-native-elements'
@@ -19,14 +18,6 @@ const ReporterPetUnknown = ({ navigation }) => {
     const [images, setImages] = useState([]);
     const [disabled, setDisable] = useState(false);
 
-    useEffect(async () => {
-        if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Lo siento, necesitas dar permisos para que esto funcione!');
-            }
-        }
-    })
 
     const deleteItem = (item, index) => {
         if (index === images.length - 1) refImage.current.scrollToIndex({ animated: true, index: images.length - 1 })
@@ -50,6 +41,7 @@ const ReporterPetUnknown = ({ navigation }) => {
 
 
     const selectImage = async () => {
+  
         if (images.length >= 6) return alert('Solo se pueden subir 6 fotos!')
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,

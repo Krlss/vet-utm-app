@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Text, View, StyleSheet, FlatList, ActivityIndicator } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
 
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from 'react-native-elements'
@@ -17,14 +17,16 @@ const Home = ({
     const [nPets, setNpets] = useState(false);
     const [isLoading, setLoading] = useState(false);
     const [res, setRes] = useState(false);
+    const [refreshing, setRefreshing] = React.useState(false);
 
     useEffect(async () => {
         const res = await getAnimalsLost();
         if (res != 500 || res != 404) {
             setPets(res);
             setRes(true);
+            setRefreshing(false);
         };
-    }, [])
+    }, [refreshing])
 
     const LoadMoreItems = () => {
         console.log('Load more')
@@ -69,13 +71,14 @@ const Home = ({
     }
 
     return (
-        <View style={{ backgroundColor: 'white' }}> 
+        <View style={{ backgroundColor: 'white' }}>
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
                 res ?
                     pets ?
                         pets.length > 0 ?
                             <FlatList
+                                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
                                 data={pets}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.id}

@@ -14,7 +14,7 @@ const Settings = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            <UserProfile />
+            {/* <UserProfile /> */}
             <View style={Styles.expadBottom}>
                 <TouchableOpacity onPress={expand} >
                     <Ionicons name='ios-caret-up-circle' size={35} color='#333' />
