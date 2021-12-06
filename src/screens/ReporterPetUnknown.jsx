@@ -47,7 +47,7 @@ const ReporterPetUnknown = ({ navigation }) => {
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
             allowsMultipleSelection: true,
-            base64: true,
+            /* base64: true, */
             exif: true
         });
         if (!result.cancelled) {

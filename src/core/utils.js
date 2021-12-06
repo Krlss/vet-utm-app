@@ -40,9 +40,13 @@ export const onlyNumber = (string = '') => {
 export const iconType = (specie) => {
     switch (specie) {
         case 'perro':
+        case 'Perro':
         case 'dog':
+        case 'Dog':
             return require('../assets/img/dog.png')
         case 'gato':
+        case 'Gato':
+        case 'Cat':
         case 'cat':
             return require('../assets/img/cat.png')
         case 'm':

@@ -1,4 +1,5 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     View,
     StyleSheet,
@@ -15,28 +16,63 @@ import Button from '../../components/Button';
 import { theme } from '../../core/theme';
 
 import { emailValidator, passwordValidator } from '../../core/utils';
+import { Login as login } from '../../core/utils-http';
+import AuthContext from '../../context/auth/AuthContext';
 
 
 const Login = ({ navigation }) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
+    const [loading, setLoading] = useState(false);
+    const { saveUSER, user_data } = useContext(AuthContext);
 
-    console.log(email, password);
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
+        setLoading(true);
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
 
         if (emailError || passwordError) {
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
+            setLoading(false);
             return;
         }
 
+        const res = await login({ email: email.value, password: password.value });
 
-        /* 
-            Aquí pasa las validaciones...
-            Enviar al homepage
-        */
+        if (res) {
+            setLoading(false);
+
+            if (res !== 401 || res !== 404 || res !== 500) {
+                /* Data user */
+                const { address, email, email_verified_at,
+                    id_canton, last_name1, last_name2,
+                    name, phone, profile_photo_url,
+                    profile_photo_path, user_id } = res.data;
+
+                /* Save in context state */
+                saveUSER({
+                    address, email, email_verified_at,
+                    id_canton, last_name1, last_name2,
+                    name, phone, profile_photo_url,
+                    profile_photo_path, user_id
+                });
+
+                try {
+                    const jsonValue = JSON.stringify({
+                        address, email, email_verified_at,
+                        id_canton, last_name1, last_name2,
+                        name, phone, profile_photo_url,
+                        profile_photo_path, user_id
+                    });
+                    await AsyncStorage.setItem('@auth_vet.utm', jsonValue);
+                } catch (error) {
+                    console.log(error);
+                }
+
+                navigation.pop();
+            }
+        }
     }
     return (
 
@@ -45,7 +81,6 @@ const Login = ({ navigation }) => {
             <Logo />
 
             <Header>Sistema de identificación de mascotas</Header>
-
 
             <TextInput
                 label="Correo"
@@ -76,8 +111,8 @@ const Login = ({ navigation }) => {
                 </TouchableOpacity>
             </View>
 
-            <Button mode="contained" onPress={handleSubmit}>
-                Acceder
+            <Button loading={loading} mode="contained" onPress={handleSubmit}>
+                {loading ? 'Ingresando...' : 'Acceder'}
             </Button>
 
             <View style={styles.row}>

@@ -24,9 +24,8 @@ const PetProfile = ({
     useEffect(async () => {
         const res = await getOneAnimalLost(petId);
         if (res !== 500 || res != 404) {
-            console.log(res);
-            setPetProfile(res)
-            setImages(res.images);
+            setPetProfile(res.data)
+            /* setImages(res.images); */
         }
     }, [])
 
@@ -87,7 +86,7 @@ const PetProfile = ({
 
                             <HeaderLostPet
                                 name={petProfile.name}
-                                id={petProfile.id}
+                                id={petProfile.pet_id}
                             />
                             {/* Raza + edad (una fila) */}
                             {

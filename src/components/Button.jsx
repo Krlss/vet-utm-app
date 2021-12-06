@@ -3,8 +3,9 @@ import { StyleSheet } from 'react-native';
 import { Button as PaperButton } from 'react-native-paper';
 import { theme } from '../core/theme';
 
-const Button = ({ mode, style, children, ...props }) => (
+const Button = ({ mode, style, children, loading, ...props }) => (
     <PaperButton
+        disabled={loading ? loading : false}
         style={[styles.button]}
         labelStyle={styles.text}
         mode={mode}

@@ -21,8 +21,9 @@ const Home = ({
 
     useEffect(async () => {
         const res = await getAnimalsLost();
-        if (res != 500 || res != 404) {
-            setPets(res);
+        if (res !== 500 || res !== 404) {
+            console.log(res);
+            setPets(res.data);
             setRes(true);
             setRefreshing(false);
         };
@@ -46,7 +47,7 @@ const Home = ({
         return (
             <TouchableOpacity onPress={() =>
                 navigation.navigate('LostAnimalScreen', {
-                    petId: item.id,
+                    petId: item.pet_id,
                 })}>
                 <View style={styles.containerParent}>
                     <View style={styles.container} >
@@ -57,7 +58,7 @@ const Home = ({
                         />
                         <View style={styles.containerInternal}>
                             <Text style={styles.name}>{item.name}</Text>
-                            <Text style={styles.id}>#{item.id}</Text>
+                            <Text style={styles.id}>#{item.pet_id}</Text>
                         </View>
                     </View>
                     <Icon

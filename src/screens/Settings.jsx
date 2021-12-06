@@ -1,8 +1,10 @@
-import React, { useRef } from 'react';
+import React, { useRef, useContext, useEffect, useState } from 'react';
 import { View, Alert, TouchableOpacity, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import AuthContext from '../context/auth/AuthContext';
 
 import { ItemList } from '../components';
 import UserProfile from './UserProfile';
@@ -11,6 +13,19 @@ const Settings = ({ navigation }) => {
     const bottomSheetRef = useRef('bottomSheetRef');
 
     const expand = () => { return bottomSheetRef.current.expand() }
+    const { user_data } = useContext(AuthContext);
+    const [dataStorage, setDataStorage] = useState();
+
+    useEffect(async () => {
+        try {
+            const jsonValue = await AsyncStorage.getItem('@auth_vet.utm');
+            setDataStorage(jsonValue != null ? JSON.parse(jsonValue) : null);
+        } catch (error) {
+            console.log(error);
+        }
+    }, [])
+
+
 
     return (
         <View style={{ flex: 1 }}>
@@ -28,12 +43,19 @@ const Settings = ({ navigation }) => {
             >
                 <BottomSheetScrollView >
                     <View>
-                        <ItemList title='Iniciar sesión' onPress={() => { navigation.navigate('Login') }}>
-                            <Icon name='login' size={35} color='#333' />
-                        </ItemList>
-                        <ItemList title='Crear una cuenta' onPress={() => { navigation.navigate('Register') }}>
-                            <Icon name='login' size={35} color='#333' />
-                        </ItemList>
+                        {/* logged in... */}
+                        {
+                            dataStorage ? null :
+                                <>
+                                    <ItemList title='Iniciar sesión' onPress={() => { navigation.navigate('Login') }}>
+                                        <Icon name='login' size={35} color='#333' />
+                                    </ItemList>
+                                    <ItemList title='Crear una cuenta' onPress={() => { navigation.navigate('Register') }}>
+                                        <Icon name='login' size={35} color='#333' />
+                                    </ItemList>
+                                </>
+                        }
+
                         <ItemList title='Hacer un reporte' onPress={() => createThreeButtonAlert(navigation)} >
                             <Ionicons name='paw' size={35} color='#333' />
                         </ItemList>
