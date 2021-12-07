@@ -14,7 +14,7 @@ const DOT_SPACING = 8;
 const DOT_INDICATOR_SIZE = DOT_SIZE + DOT_SPACING;
 
 const ReporterPetUnknown = ({ navigation }) => {
-
+    let fromdata = new FormData();
     const [images, setImages] = useState([]);
     const [disabled, setDisable] = useState(false);
 
@@ -41,24 +41,27 @@ const ReporterPetUnknown = ({ navigation }) => {
 
 
     const selectImage = async () => {
-  
+
         if (images.length >= 6) return alert('Solo se pueden subir 6 fotos!')
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
             allowsMultipleSelection: true,
-            /* base64: true, */
+            base64: true,
             exif: true
         });
         if (!result.cancelled) {
             var arr = result.uri.split('/');
             var namefile = arr[arr.length - 1];
-            setImages([...images, { name: namefile, url: result.uri, base64: result.base64 }]);
+            var arrType = namefile.split('.');
+            var type = arrType[arrType.length - 1]; 
+            setImages([...images, { name: namefile, url: result.uri, base64: result.base64, type }]);
         }
     }
     const ScrollX = React.useRef(new Animated.Value(0)).current;
     const refImage = React.useRef('refImage');
 
+    console.log(images);
     return (
         <View style={Styles.container}>
 
