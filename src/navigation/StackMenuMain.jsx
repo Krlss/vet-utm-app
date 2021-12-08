@@ -26,7 +26,7 @@ const StackMenuMain = () => {
         }} */
         >
             <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
-                options={{ title: '', headerTransparent: true, headerShadowVisible: false }}
+                options={{ headerShown: false }}
             />
             <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
                 options={{ title: 'Mi perfil' }}

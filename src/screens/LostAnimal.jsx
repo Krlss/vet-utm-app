@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { Image, View, StyleSheet, Dimensions, Animated, ActivityIndicator } from 'react-native';
+import { Image, View, StyleSheet, Dimensions, Animated, ActivityIndicator, Text } from 'react-native';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { iconType, nameStringPrayer, birthToAge, sexAnimal, castratedAnimal } from '../core/utils';
 import { getOneAnimalLost } from '../core/utils-http';
@@ -76,7 +76,13 @@ const PetProfile = ({
                                     }]
                                 }]} />
                             </View>
-                        </View> : null
+                        </View>
+                        :
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                            <Text style={{ fontSize: 30, textTransform: 'uppercase', textAlign: 'center', fontWeight: '700' }}>
+                                No tiene fotos
+                            </Text>
+                        </View>
                 }
                 <BottomSheet
                     initialSnapIndex={0}
@@ -155,9 +161,6 @@ const PetProfile = ({
                                         <Value value={nameStringPrayer(petProfile.description)} />
                                     </> : null
                             }
-                            <Title title='Última vez visto' />
-                            <Value value={nameStringPrayer('It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using Content here, content here, making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for lorem ipsum will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).')} />
-
                         </View>
                     </BottomSheetScrollView>
                 </BottomSheet>

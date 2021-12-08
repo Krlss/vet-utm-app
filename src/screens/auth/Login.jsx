@@ -24,7 +24,8 @@ const Login = ({ navigation }) => {
     const [email, setEmail] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
     const [loading, setLoading] = useState(false);
-    const { saveUSER, user_data } = useContext(AuthContext);
+    const { saveUSER } = useContext(AuthContext);
+    const [errormsg, setErrormsg] = useState();
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -39,31 +40,28 @@ const Login = ({ navigation }) => {
         }
 
         const res = await login({ email: email.value, password: password.value });
-
+        setLoading(false);
         if (res) {
-            setLoading(false);
-
-            if (res !== 401 || res !== 404 || res !== 500) {
+            if (res.data) {
                 /* Data user */
                 const { address, email, email_verified_at,
                     id_canton, last_name1, last_name2,
-                    name, phone, profile_photo_url,
-                    profile_photo_path, user_id } = res.data;
+                    name, phone, profile_photo_url, api_token,
+                    profile_photo_path, user_id, canton, province, pet } = res.data;
 
                 /* Save in context state */
                 saveUSER({
                     address, email, email_verified_at,
                     id_canton, last_name1, last_name2,
                     name, phone, profile_photo_url,
-                    profile_photo_path, user_id
+                    profile_photo_path, user_id,
+                    canton, province, pet
                 });
 
                 try {
                     const jsonValue = JSON.stringify({
-                        address, email, email_verified_at,
-                        id_canton, last_name1, last_name2,
-                        name, phone, profile_photo_url,
-                        profile_photo_path, user_id
+                        api_token,
+                        user_id
                     });
                     await AsyncStorage.setItem('@auth_vet.utm', jsonValue);
                 } catch (error) {
@@ -71,7 +69,12 @@ const Login = ({ navigation }) => {
                 }
 
                 navigation.navigate('HomeScreen');
-            }
+            } else if (res === 401) {
+                setErrormsg('Correo o contraseña incorrecta!')
+            } else if (res === 500) {
+                setErrormsg('Ocurrio un error en el servidor, intentalo más tarde')
+            } else if (res === 301)
+                setErrormsg('Revisa tu correo electrónico para activar tu cuenta')
         }
     }
     return (
@@ -81,6 +84,10 @@ const Login = ({ navigation }) => {
             <Logo />
 
             <Header>Sistema de identificación de mascotas</Header>
+
+            {
+                errormsg ? <Text style={{ color: 'red' }} >{errormsg}</Text> : null
+            }
 
             <TextInput
                 label="Correo"

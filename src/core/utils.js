@@ -72,11 +72,13 @@ export const iconType = (specie) => {
         case 'Perro':
         case 'dog':
         case 'Dog':
+        case 'canine':
             return require('../assets/img/dog.png')
         case 'gato':
         case 'Gato':
         case 'Cat':
         case 'cat':
+        case 'feline':
             return require('../assets/img/cat.png')
         case 'm':
         case 'M':

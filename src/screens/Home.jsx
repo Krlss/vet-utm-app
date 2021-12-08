@@ -21,6 +21,7 @@ const Home = ({
 
     useEffect(async () => {
         const res = await getAnimalsLost();
+        console.log(res);
         if (res !== 500 || res !== 404) {
             console.log(res);
             setPets(res.data);
@@ -52,7 +53,7 @@ const Home = ({
                 <View style={styles.containerParent}>
                     <View style={styles.container} >
                         <Image
-                            source={{ uri: 'https://hips.hearstapps.com/hmg-prod.s3.amazonaws.com/images/puddin-animals-to-follow-on-instagram-1568303702.jpg' }}
+                            source={iconType(item.specie)}
                             style={styles.image}
                             PlaceholderContent={<ActivityIndicator />}
                         />

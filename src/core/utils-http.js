@@ -66,12 +66,15 @@ export const Register = async (data) => {
     } catch (error) {
         console.log(error);
     }
-} 
+}
 
 export const getUserProfile = async (data) => {
+    console.log(data);
     try {
-        return await axios.post(api_url + `/users/${data.user_id}`, {
-            data
+        return await axios.get(api_url + `/users/${data.user_id}`, {
+            headers: {
+                'Authorization': `${data.api_token}`
+            }
         }).then(e => e.data).
             catch(e => e.response.status);
     } catch (error) {

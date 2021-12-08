@@ -37,6 +37,7 @@ const Register = ({ navigation }) => {
     const [password, setPassword] = useState({ value: '', error: '' });
 
     const [errorApi, setErrorApi] = useState();
+    const [loading, setLoading] = useState(false);
 
     const { saveUSER } = useContext(AuthContext);
 
@@ -60,7 +61,7 @@ const Register = ({ navigation }) => {
 
 
         var last_name_arr = last_name.value.split(' ');
-
+        setLoading(true);
         const res = await RegisterApi({
             user_id: cedula.value,
             name: name.value,
@@ -70,31 +71,17 @@ const Register = ({ navigation }) => {
             email: email.value,
             password: password.value
         });
-
+        console.log(res);
+        setLoading(false);
         if (res !== 401 || res !== 500) {
+            setEmail({ value: '', error: '' });
+            setPassword({ value: '', error: '' });
+            setName({ value: '', error: '' });
+            setCedula({ value: '', error: '' });
+            setLast_name({ value: '', error: '' });
+            setPhone({ value: '', error: '' });
 
-            console.log('tu madre');
-
-            saveUSER({
-                address: null, email: email.value, email_verified_at: null,
-                id_canton: null, last_name1: last_name_arr[0], last_name2: last_name_arr[1],
-                name: name.value, phone: phone.value, profile_photo_url: null,
-                profile_photo_path: null, user_id: cedula.value, api_token: res.data.api_token
-            });
-
-            try {
-                const jsonValue = JSON.stringify({
-                    address: null, email: email.value, email_verified_at: null,
-                    id_canton: null, last_name1: last_name_arr[0], last_name2: last_name_arr[1],
-                    name: name.value, phone: phone.value, profile_photo_url: null,
-                    profile_photo_path: null, user_id: cedula.value, api_token: res.data.api_token
-                });
-                await AsyncStorage.setItem('@auth_vet.utm', jsonValue);
-            } catch (error) {
-                console.log(error);
-            }
-
-            navigation.navigate('HomeScreen');
+            navigation.navigate('Login');
         } else if (res === 500) {
             setErrorApi('Ocurrió un error en el servidor');
         }
@@ -172,8 +159,8 @@ const Register = ({ navigation }) => {
                 secureTextEntry
             />
 
-            <Button mode="contained" onPress={handleSubmit}>
-                Registrame
+            <Button loading={loading} mode="contained" onPress={handleSubmit}>
+                {loading ? 'Registrandote...' : 'Registrame'}
             </Button>
 
             <View style={styles.row}>
