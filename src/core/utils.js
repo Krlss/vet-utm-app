@@ -21,6 +21,7 @@ export const deleteItemArr = (arr, index) => {
 
 
 export const passwordValidator = (password) => {
+    if (!password || password.length < 8) return 'La contraseña debe tener mínimo 8 carácteres.';
     if (!password || password.length <= 0) return 'Contraseña es requerida.';
 
     return '';
@@ -31,6 +32,34 @@ export const nameValidator = (name) => {
 
     return '';
 };
+
+export const requiredValidator = (string, countryside) => {
+    if (!string || string.length <= 0) return `${countryside} es requerido.`;
+    return '';
+}
+
+export const last_nameValidator = (string) => {
+    const arr = string.split(' '); 
+    if (!string || string.length <= 0) return `Apellidos es requerido.`;
+    if (arr.length === 1) return 'Son dos apellidos.';
+    if (arr.length > 2) return 'Son solo dos apellidos.';
+    return '';
+}
+
+export const CedulaValidator = (string) => {
+    const te = /[^0-9]/g;
+    if (!string || string.length < 10) return `La cedula o RUC debe tener mínimo 10 carácteres.`;
+    if (!string || string.length <= 0) return `La cedula es requerido.`;
+    if (te.test(string)) return 'Cedula incorrecta';
+    return '';
+}
+
+export const phoneValidator = (string) => {
+    const te = /[^0-9]/g;
+    if (!string || string.length <= 0) return `El télefono es requerido.`;
+    if (te.test(string)) return 'télefono incorrecta';
+    return '';
+}
 
 export const onlyNumber = (string = '') => {
     console.log(string)
@@ -51,9 +80,13 @@ export const iconType = (specie) => {
             return require('../assets/img/cat.png')
         case 'm':
         case 'M':
+        case 'Macho':
+        case 'macho':
             return require('../assets/img/men.png')
-        case 'M':
+        case 'H':
         case 'h':
+        case 'Hembra':
+        case 'hembra':
             return require('../assets/img/woman.png')
         case 'owner_pet':
             return require('../assets/img/owner_pet.png')
@@ -65,14 +98,14 @@ export const iconType = (specie) => {
             return require('../assets/img/logo.png')
         case 'user-default':
             return require('../assets/img/user-default.png')
+        case 'bg-image':
+            return require('../assets/img/bg_auth.png')
 
         default:
             return '';
     }
 }
 
-//carlos pico
-//no lo se xd
 
 export const nameStringPrayer = (string) => {
     return string.charAt(0).toUpperCase() + string.substr(1).toLowerCase();

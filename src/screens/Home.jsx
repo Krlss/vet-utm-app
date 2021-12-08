@@ -82,7 +82,7 @@ const Home = ({
                                 refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
                                 data={pets}
                                 renderItem={renderItem}
-                                keyExtractor={item => item.id}
+                                keyExtractor={item => item.pet_id}
                                 ListFooterComponent={renderLoader}
                                 onEndReached={LoadMoreItems}
                                 onEndReachedThreshold={0}

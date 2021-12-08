@@ -8,6 +8,7 @@ import AuthContext from '../context/auth/AuthContext';
 
 import { ItemList } from '../components';
 import UserProfile from './UserProfile';
+import { getUserProfile } from '../core/utils-http';
 
 const Settings = ({ navigation }) => {
     const bottomSheetRef = useRef('bottomSheetRef');
@@ -16,10 +17,21 @@ const Settings = ({ navigation }) => {
     const { user_data } = useContext(AuthContext);
     const [dataStorage, setDataStorage] = useState();
 
+
     useEffect(async () => {
         try {
             const jsonValue = await AsyncStorage.getItem('@auth_vet.utm');
             setDataStorage(jsonValue != null ? JSON.parse(jsonValue) : null);
+
+            if (jsonValue) {
+                const valueSession = JSON.parse(jsonValue);
+                const res = await getUserProfile(valueSession);
+                if (res === 404 || 500) {
+                    const removeStorage = await AsyncStorage.removeItem('@auth_vet.utm');
+                }
+            }
+
+
         } catch (error) {
             console.log(error);
         }
@@ -29,7 +41,7 @@ const Settings = ({ navigation }) => {
 
     return (
         <View style={{ flex: 1 }}>
-            {/* <UserProfile /> */}
+            <UserProfile />
             <View style={Styles.expadBottom}>
                 <TouchableOpacity onPress={expand} >
                     <Ionicons name='ios-caret-up-circle' size={35} color='#333' />

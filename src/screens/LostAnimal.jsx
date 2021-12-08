@@ -23,9 +23,10 @@ const PetProfile = ({
 
     useEffect(async () => {
         const res = await getOneAnimalLost(petId);
+        console.log(res);
         if (res !== 500 || res != 404) {
-            setPetProfile(res.data)
-            /* setImages(res.images); */
+            setPetProfile(res.data.pet)
+            setImages(res.data.images);
         }
     }, [])
 

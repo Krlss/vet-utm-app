@@ -70,7 +70,7 @@ const Login = ({ navigation }) => {
                     console.log(error);
                 }
 
-                navigation.pop();
+                navigation.navigate('HomeScreen');
             }
         }
     }

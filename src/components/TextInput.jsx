@@ -3,12 +3,14 @@ import { View, StyleSheet, Text } from 'react-native';
 import { TextInput as Input } from 'react-native-paper';
 import { theme } from '../core/theme';
 
-const TextInput = ({ errorText, ...props }) => (
+const TextInput = ({ errorText, maxLength, keyboardType, ...props }) => (
     <View style={styles.container}>
         <Input
-            style={styles.input} 
+            style={styles.input}
             activeUnderlineColor='black'
-            mode="flat" 
+            mode="flat"
+            keyboardType={keyboardType ? keyboardType : null}
+            maxLength={maxLength}
             {...props}
         />
         {errorText ? <Text style={styles.error}>{errorText}</Text> : null}

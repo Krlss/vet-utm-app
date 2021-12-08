@@ -2,7 +2,8 @@ import React, { memo } from 'react';
 import {
     StyleSheet,
     KeyboardAvoidingView,
-    View
+    View,
+    ScrollView
 } from 'react-native';
 
 

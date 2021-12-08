@@ -1,9 +1,11 @@
-import React, { memo, useState } from 'react';
+import React, { memo, useState, useContext } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     View,
     StyleSheet,
     TouchableOpacity,
     Text,
+    KeyboardAvoidingView
 } from 'react-native';
 
 import Background from '../../components/Background';
@@ -14,33 +16,90 @@ import Button from '../../components/Button';
 
 import { theme } from '../../core/theme';
 
-import { emailValidator, passwordValidator, nameValidator } from '../../core/utils';
-
+import {
+    emailValidator,
+    passwordValidator,
+    nameValidator,
+    requiredValidator,
+    CedulaValidator,
+    phoneValidator,
+    last_nameValidator
+} from '../../core/utils';
+import { Register as RegisterApi } from '../../core/utils-http';
+import AuthContext from '../../context/auth/AuthContext';
 
 const Register = ({ navigation }) => {
     const [name, setName] = useState({ value: '', error: '' });
     const [email, setEmail] = useState({ value: '', error: '' });
+    const [cedula, setCedula] = useState({ value: '', error: '' });
+    const [last_name, setLast_name] = useState({ value: '', error: '' });
+    const [phone, setPhone] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
 
-    console.log(email, password);
-    const handleSubmit = () => {
+    const [errorApi, setErrorApi] = useState();
+
+    const { saveUSER } = useContext(AuthContext);
+
+    const handleSubmit = async () => {
         const nameError = nameValidator(name.value);
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
+        const cedulaError = CedulaValidator(cedula.value);
+        const last_nameError = last_nameValidator(last_name.value);
+        const phoneError = phoneValidator(phone.value);
 
-        if (emailError || passwordError || nameError) {
+        if (emailError || passwordError || nameError || cedulaError || last_nameError || phoneError) {
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });
             setName({ ...name, error: nameError });
+            setCedula({ ...cedula, error: cedulaError });
+            setLast_name({ ...last_name, error: last_nameError });
+            setPhone({ ...phone, error: phoneError });
             return;
         }
 
 
-        /* 
-            Aquí pasa las validaciones...
-            Enviar al homepage
-        */
+        var last_name_arr = last_name.value.split(' ');
+
+        const res = await RegisterApi({
+            user_id: cedula.value,
+            name: name.value,
+            last_name1: last_name_arr[0],
+            last_name2: last_name_arr[1],
+            phone: phone.value,
+            email: email.value,
+            password: password.value
+        });
+
+        if (res !== 401 || res !== 500) {
+
+            console.log('tu madre');
+
+            saveUSER({
+                address: null, email: email.value, email_verified_at: null,
+                id_canton: null, last_name1: last_name_arr[0], last_name2: last_name_arr[1],
+                name: name.value, phone: phone.value, profile_photo_url: null,
+                profile_photo_path: null, user_id: cedula.value, api_token: res.data.api_token
+            });
+
+            try {
+                const jsonValue = JSON.stringify({
+                    address: null, email: email.value, email_verified_at: null,
+                    id_canton: null, last_name1: last_name_arr[0], last_name2: last_name_arr[1],
+                    name: name.value, phone: phone.value, profile_photo_url: null,
+                    profile_photo_path: null, user_id: cedula.value, api_token: res.data.api_token
+                });
+                await AsyncStorage.setItem('@auth_vet.utm', jsonValue);
+            } catch (error) {
+                console.log(error);
+            }
+
+            navigation.navigate('HomeScreen');
+        } else if (res === 500) {
+            setErrorApi('Ocurrió un error en el servidor');
+        }
     }
+
     return (
 
         <Background>
@@ -49,9 +108,23 @@ const Register = ({ navigation }) => {
 
             <Header>Sistema de identificación de mascotas</Header>
 
+            {
+                errorApi ? <Text style={{ color: 'red' }} >{errorApi}</Text> : null
+            }
 
             <TextInput
-                label="Nombre"
+                label="Cedula o RUC"
+                maxLength={13}
+                keyboardType='numeric'
+                returnKeyType="next"
+                value={cedula.value}
+                onChangeText={text => setCedula({ value: text, error: '' })}
+                errorText={cedula.error}
+            />
+
+            <TextInput
+                label="Nombres"
+                maxLength={30}
                 returnKeyType="next"
                 value={name.value}
                 onChangeText={text => setName({ value: text, error: '' })}
@@ -59,7 +132,27 @@ const Register = ({ navigation }) => {
             />
 
             <TextInput
+                label="Apellidos"
+                maxLength={30}
+                returnKeyType="next"
+                value={last_name.value}
+                onChangeText={text => setLast_name({ value: text, error: '' })}
+                errorText={last_name.error}
+            />
+
+            <TextInput
+                label="Telefono celular"
+                maxLength={10}
+                returnKeyType="next"
+                keyboardType='numeric'
+                value={phone.value}
+                onChangeText={text => setPhone({ value: text, error: '' })}
+                errorText={phone.error}
+            />
+
+            <TextInput
                 label="Correo"
+                maxLength={50}
                 returnKeyType="next"
                 value={email.value}
                 onChangeText={text => setEmail({ value: text, error: '' })}

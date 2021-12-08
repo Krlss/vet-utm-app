@@ -11,6 +11,7 @@ export const initialState = {
         profile_photo_url: null,
         profile_photo_path: null,
         user_id: null,
+        api_token: null
     },
     pet: {
         pet_id: null,

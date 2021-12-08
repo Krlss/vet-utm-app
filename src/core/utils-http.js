@@ -57,3 +57,24 @@ export const Login = async (data) => {
         console.log(error);
     }
 }
+
+export const Register = async (data) => {
+    try {
+        return await axios.post(api_url + '/register', data).
+            then(e => e.data).
+            catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+} 
+
+export const getUserProfile = async (data) => {
+    try {
+        return await axios.post(api_url + `/users/${data.user_id}`, {
+            data
+        }).then(e => e.data).
+            catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+}
