@@ -1,12 +1,15 @@
 import React from "react";
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
 
 
-const SimpleInput = ({ placeholder, onChangeText, value, keyboardType, length }) => {
+const SimpleInput = ({ placeholder, onChangeText, value, keyboardType, error, length }) => {
     return (
         <View style={{ paddingHorizontal: 20 }}>
             <View >
-                <TextInput maxLength={length} keyboardType={`${keyboardType ? keyboardType : 'default'}`} onChangeText={onChangeText} value={value} style={Styles.Input} placeholder={placeholder} />
+                <TextInput maxLength={length} keyboardType={`${keyboardType ? keyboardType : 'default'}`} onChangeText={onChangeText} value={value} style={[Styles.Input, { borderColor: error ? 'red' : 'gray' }]} placeholder={placeholder} />
+                {
+                    error ? <Text style={{ fontSize: 13, color: 'red' }}>{error}</Text> : null
+                }
             </View>
         </View>
     );
@@ -20,7 +23,6 @@ const Styles = StyleSheet.create({
         padding: 5,
         width: '100%',
         borderWidth: .5,
-        borderColor: 'grey',
         borderRadius: 5,
         marginTop: 5
     }

@@ -1,7 +1,5 @@
 import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { View } from 'react-native';
-
 import {
     UserProfileScreen,
     PetProfileScreen,
@@ -13,27 +11,21 @@ import {
 } from '../screens';
 
 import StackReporte from './StackReporte';
-import { theme } from '../core/theme';
+import ProfileStack from './StackProfile';
 const MenuLastTabStack = createNativeStackNavigator();
 
 const StackMenuMain = () => {
     return (
-        <MenuLastTabStack.Navigator
-        /* screenOptions={{
-            headerTransparent: true,
-            headerShadowVisible: false,
-            title: ''
-        }} */
-        >
-            <MenuLastTabStack.Screen name='SettingsScreen' component={SettingsScreen}
+        <MenuLastTabStack.Navigator >
+            <MenuLastTabStack.Screen name='ProfileStack' component={ProfileStack}
                 options={{ headerShown: false }}
             />
-            <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
+            {/* <MenuLastTabStack.Screen name='UserProfileScreen' component={UserProfileScreen}
                 options={{ title: 'Mi perfil' }}
             />
             <MenuLastTabStack.Screen name='PetProfileScreen' component={PetProfileScreen}
                 options={{ title: 'Perfil de mi mascota' }}
-            />
+            /> */}
             <MenuLastTabStack.Screen name='Login' component={Login}
                 options={{ headerTransparent: true, headerShadowVisible: false, title: '' }}
             />

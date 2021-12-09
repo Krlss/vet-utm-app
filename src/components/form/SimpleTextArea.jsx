@@ -2,7 +2,7 @@ import React from "react";
 import { View, StyleSheet, TextInput } from 'react-native';
 
 
-const SimpleTextArea = ({ onChangeText, value, length, placeholder, numberOfLines }) => {
+const SimpleTextArea = ({ onChangeText, value, length, placeholder, numberOfLines }) => { 
     return (
         <View style={{ paddingHorizontal: 20 }}>
             <View >

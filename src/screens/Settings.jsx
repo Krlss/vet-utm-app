@@ -67,7 +67,7 @@ const Settings = ({ navigation }) => {
         <View style={{ flex: 1 }}>
             {
                 dataStorage ?
-                    <UserProfile /> :
+                    <UserProfile navigation={navigation} /> :
                     <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: '100%' }}>
                         <Text style={{ fontSize: 30, textTransform: 'uppercase', textAlign: 'center', fontWeight: '700' }}>
                             Inicia sesión para ver tu perfil

@@ -29,7 +29,7 @@ export const getProvinces = async () => {
 
 export const getCantonsByProvince = async (provinceID) => {
     try {
-        const res = await axios.get(`${api_url}/provinces/${provinceID}`);
+        const res = await axios.get(`${api_url}/provinces/cantons/${provinceID}`);
         if (res.status === 200) return res.data;
         if (res.status === 500 || res.status === 404) return res.status;
     } catch (error) { console.log(error); }
@@ -76,6 +76,22 @@ export const getUserProfile = async (data) => {
                 'Authorization': `${data.api_token}`
             }
         }).then(e => e.data).
+            catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updatedDataUser = async (data, token) => {
+    console.log(data);
+    let config = {
+        headers: {
+            'Authorization': token
+        }
+    }
+    try {
+        return await axios.put(api_url + `/updatedUser`, data, config)
+            .then(e => e.data).
             catch(e => e.response.status);
     } catch (error) {
         console.log(error);

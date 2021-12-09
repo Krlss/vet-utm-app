@@ -1,26 +1,21 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, Image, StyleSheet, Dimensions, ImageBackground, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, ImageBackground, FlatList, TouchableOpacity, ActivityIndicator } from 'react-native';
 import { theme } from '../core/theme';
-import { nameStringPrayer, iconType } from '../core/utils';
+import { iconType } from '../core/utils';
 import AuthContext from '../context/auth/AuthContext';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Icon } from 'react-native-elements'
 
-const { height, width } = Dimensions.get('window');
 
-const UserProfile = () => {
+const UserProfile = ({ navigation }) => {
     const { user_data } = useContext(AuthContext);
-    const [name, setName] = useState();
-
-
 
     const renderItem = ({ item }) => {
         return (
-            <TouchableOpacity /* onPress={() =>
-                navigation.navigate('LostAnimalScreen', {
-                    petId: item.pet_id,
-                })} */>
+            <TouchableOpacity onPress={() =>
+                navigation.navigate('PetProfileScreen')}>
                 <View style={Styles.containerParent}>
                     <View style={Styles.container} >
                         <Image
@@ -54,6 +49,10 @@ const UserProfile = () => {
                 <View style={Styles.cardData}>
                     <Text numberOfLines={1} style={Styles.nameF}>{`${user_data.name} ${user_data.last_name1} ${user_data.last_name2}`}</Text>
                 </View>
+
+                <TouchableOpacity style={Styles.edit} onPress={() => { navigation.navigate('EditUserProfile') }} >
+                    <FontAwesome5 name='user-edit' size={20} color='#333' />
+                </TouchableOpacity>
             </View>
 
             <View style={Styles.card2}>
@@ -182,6 +181,11 @@ const Styles = StyleSheet.create({
         fontSize: 13,
         textTransform: 'uppercase'
     },
+    edit: {
+        position: 'absolute',
+        top: 10,
+        right: 7
+    }
 });
 
 
