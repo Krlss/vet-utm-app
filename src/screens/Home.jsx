@@ -21,9 +21,9 @@ const Home = ({
 
     useEffect(async () => {
         const res = await getAnimalsLost();
-        console.log(res);
+
         if (res !== 500 || res !== 404) {
-            console.log(res);
+            
             setPets(res.data);
             setRes(true);
             setRefreshing(false);

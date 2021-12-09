@@ -52,7 +52,7 @@ const EditUserProfile = ({ navigation }) => {
         setLoading(false);
         if (res !== 404 || res !== 500 || res !== 401) {
             saveUSER(res.data)
-            navigation.pop();
+            navigation.navigate('HomeScreen');
         }
     }
 

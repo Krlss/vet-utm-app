@@ -15,7 +15,9 @@ const UserProfile = ({ navigation }) => {
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity onPress={() =>
-                navigation.navigate('PetProfileScreen')}>
+                navigation.navigate('StackPetProfile', {
+                    pet: item
+                })}>
                 <View style={Styles.containerParent}>
                     <View style={Styles.container} >
                         <Image

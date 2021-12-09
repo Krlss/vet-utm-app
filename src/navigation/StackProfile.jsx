@@ -6,6 +6,8 @@ import {
     SettingsScreen
 } from '../screens';
 
+import StackPetProfile from './StackProfilePet';
+
 import { theme } from '../core/theme';
 
 const ProfileStack = createNativeStackNavigator();
@@ -19,8 +21,8 @@ const StackProfile = () => {
             <ProfileStack.Screen name='EditUserProfile' component={EditUserProfile}
                 options={{ title: 'Editar datos', headerStyle: { backgroundColor: theme.colors.All } }}
             />
-            <ProfileStack.Screen name='PetProfileScreen' component={PetProfileScreen}
-                options={{ title: 'Perfil de mi mascota' }}
+            <ProfileStack.Screen name='StackPetProfile' component={StackPetProfile}
+                options={{ headerShown: false }}
             />
         </ProfileStack.Navigator>
     );

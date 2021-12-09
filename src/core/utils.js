@@ -39,7 +39,7 @@ export const requiredValidator = (string, countryside) => {
 }
 
 export const last_nameValidator = (string) => {
-    const arr = string.split(' '); 
+    const arr = string.split(' ');
     if (!string || string.length <= 0) return `Apellidos es requerido.`;
     if (arr.length === 1) return 'Son dos apellidos.';
     if (arr.length > 2) return 'Son solo dos apellidos.';
@@ -85,8 +85,8 @@ export const iconType = (specie) => {
         case 'Macho':
         case 'macho':
             return require('../assets/img/men.png')
-        case 'H':
-        case 'h':
+        case 'F':
+        case 'f':
         case 'Hembra':
         case 'hembra':
             return require('../assets/img/woman.png')
@@ -102,9 +102,11 @@ export const iconType = (specie) => {
             return require('../assets/img/user-default.png')
         case 'bg-image':
             return require('../assets/img/bg_auth.png')
+        case 'lost':
+            return require('../assets/img/lost.png')
 
         default:
-            return '';
+            return require('../assets/img/unknown.png');
     }
 }
 
@@ -114,11 +116,11 @@ export const nameStringPrayer = (string) => {
 }
 
 export const sexAnimal = (string) => {
+    if (!string) return 'unknown'
     return string === 'M' ? 'Macho' : 'Hembra'
 }
 
 export const castratedAnimal = (string) => {
-    console.log(string)
     return string ? 'Castrado' : 'Sin castrar';
 }
 
