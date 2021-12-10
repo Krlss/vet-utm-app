@@ -1,16 +1,18 @@
+import moment from 'moment';
+
 export const emailValidator = (email) => {
     const re = /\S+@\S+\.\S+/;
 
     if (!email || email.length <= 0) return 'Correo es requerido.';
     if (!re.test(email)) return 'Ooops! formato del correo incorrecto.';
 
-    return '';
+    return false
 };
 
 export const emailformat = (email) => {
     const re = /\S+@\S+\.\S+/;
     if (!re.test(email)) return 'Ooops! formato del correo incorrecto.';
-    return '';
+    return false
 }
 
 export const deleteItemArr = (arr, index) => {
@@ -24,18 +26,18 @@ export const passwordValidator = (password) => {
     if (!password || password.length < 8) return 'La contraseña debe tener mínimo 8 carácteres.';
     if (!password || password.length <= 0) return 'Contraseña es requerida.';
 
-    return '';
+    return false
 };
 
 export const nameValidator = (name) => {
     if (!name || name.length <= 0) return 'Nombre es requerido.';
 
-    return '';
+    return false
 };
 
 export const requiredValidator = (string, countryside) => {
     if (!string || string.length <= 0) return `${countryside} es requerido.`;
-    return '';
+    return false
 }
 
 export const last_nameValidator = (string) => {
@@ -43,7 +45,7 @@ export const last_nameValidator = (string) => {
     if (!string || string.length <= 0) return `Apellidos es requerido.`;
     if (arr.length === 1) return 'Son dos apellidos.';
     if (arr.length > 2) return 'Son solo dos apellidos.';
-    return '';
+    return false
 }
 
 export const CedulaValidator = (string) => {
@@ -51,18 +53,17 @@ export const CedulaValidator = (string) => {
     if (!string || string.length < 10) return `La cedula o RUC debe tener mínimo 10 carácteres.`;
     if (!string || string.length <= 0) return `La cedula es requerido.`;
     if (te.test(string)) return 'Cedula incorrecta';
-    return '';
+    return false
 }
 
 export const phoneValidator = (string) => {
     const te = /[^0-9]/g;
     if (!string || string.length <= 0) return `El télefono es requerido.`;
     if (te.test(string)) return 'télefono incorrecta';
-    return '';
+    return false
 }
 
 export const onlyNumber = (string = '') => {
-    console.log(string)
     return string.replace(/[^0-9]/g, '');
 }
 
@@ -125,33 +126,63 @@ export const castratedAnimal = (string) => {
 }
 
 export const birthToAge = (date) => {
-    var obs = new Date(date);
 
-    var diff_ms = Date.now() - obs.getTime();
-    var age_dt = new Date(diff_ms);
-
-    var age_ = Math.abs(age_dt.getUTCFullYear() - 1970)
-    var month;
-    var day_;
-    if (age_ <= 0) {
-        month = Math.abs(age_dt.getUTCMonth());
-        if (month > 1) age_ = month.toString().concat(' meses');
-        if (month === 1) age_ = month.toString().concat(' mes');
-        if (month < 1) {
-            day_ = Math.abs(age_dt.getUTCDay());
-            if (day_ => 6 && day_ <= 12) age_ = day_.toString().concat(' semana');
-            if (day_ => 13) age_ = day_.toString().concat(' semanas');
-            if (day_ => 2) age_ = day_.toString().concat(' dias');
-            age_ = day_.toString().concat(' dia');
-        }
-    } else {
-        if (age_ === 1) age_ = age_.toString().concat(' año');
-        if (age_ > 1) age_ = age_.toString().concat(' años');
-    }
-    return age_;
+    return moment(date, "YYYYMMDD").fromNow();
 };
 
 
 export const deleteSpace = (string = '') => {
     return string.trim();
+}
+
+export const namePet = (string) => {
+    if (!string || string.length <= 0) return `El nombre de la mascota es requerido.`;
+    return false
+}
+export const race = (string) => {
+    if (!string || string.length <= 0) return `La raza de la mascota es requerido.`;
+    return false
+}
+
+export const birthPet = (string) => {
+    if (!string || string.length <= 0) return `La fecha de la mascota es requerido.`;
+
+    var re = /^\d{4}[-]\d{2}[-]\d{2}$/
+    if (!re.test(string)) return 'El formato no es válido';
+
+    let result = moment(string, 'YYYY-MM-DD', false).isValid();
+    if (!result) return 'El formato no es válido';
+
+    let birth = moment(string);
+    let toDay = moment(new Date());
+    if (birth.diff(toDay, 'days') >= 0) return 'Fecha incorrecta';
+    return false;
+
+    /* try {
+        var fechaf = string.split("-");
+        if (fechaf.length < 3) return 'El formato no es correcto';
+        if (!fechaf[0] || !fechaf[1] || !fechaf[2]) return 'El formato no es correcto'
+
+        var year = fechaf[0];
+        var month = fechaf[1];
+        var day = fechaf[2];
+
+        var now = new Date(Date.now());
+        var nowYear = now.getFullYear();
+        var nowDay = now.getDay() + 5;
+        var nowMonth = now.getMonth() + 1;
+
+        if (month > 12 ||
+            month == 0 ||
+            day == 0 ||
+            (day > nowDay && year >= nowYear && month >= nowMonth) ||
+            year == 0 ||
+            year > nowYear)
+            return 'Fecha no válida'
+
+        return false
+    } catch (error) {
+        console.log(error);
+        return 'El formato no es correcto.'
+    } */
 }

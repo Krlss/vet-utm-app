@@ -12,3 +12,5 @@ export { default as userReportDATA } from './userReportDATA';
 export { default as ReporterPetUnknown } from './ReporterPetUnknown';
 export { default as EditUserProfile } from './EditUserProfile'; 
 export { default as EditPetProfile } from './EditPetProfile'; 
+export { default as AddPet } from './AddPet'; 
+export { default as ChangeOwner } from './ChangeOwner'; 

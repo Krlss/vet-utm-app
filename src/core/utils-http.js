@@ -83,7 +83,6 @@ export const getUserProfile = async (data) => {
 }
 
 export const updatedDataUser = async (data, token) => {
-    console.log(data);
     let config = {
         headers: {
             'Authorization': token
@@ -91,6 +90,37 @@ export const updatedDataUser = async (data, token) => {
     }
     try {
         return await axios.put(api_url + `/updatedUser`, data, config)
+            .then(e => e.data).
+            catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updatedDataPet = async (data, token) => {
+    let config = {
+        headers: {
+            'Authorization': token
+        }
+    }
+    try {
+        return await axios.put(api_url + `/updatedPet`, data, config)
+            .then(e => e.data).
+            catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const CreatedNewPet = async (data, token) => {
+    console.log(data);
+    let config = {
+        headers: {
+            'Authorization': token
+        }
+    }
+    try {
+        return await axios.post(api_url + `/createdPet`, data, config)
             .then(e => e.data).
             catch(e => e.response.status);
     } catch (error) {

@@ -3,6 +3,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     PetProfileScreen,
     EditPetProfile,
+    ChangeOwner
 } from '../screens';
 
 import { theme } from '../core/theme';
@@ -18,6 +19,10 @@ const StackPetProfile = ({ route }) => {
             />
             <PetProfileStack.Screen name='EditPetProfile' component={EditPetProfile}
                 options={{ title: 'Datos de tu mascota', headerStyle: { backgroundColor: theme.colors.All } }}
+            />
+
+            <PetProfileStack.Screen name='ChangeOwner' component={ChangeOwner}
+                options={{ title: 'Cambiar de dueño', headerStyle: { backgroundColor: theme.colors.All } }}
             />
         </PetProfileStack.Navigator>
     );

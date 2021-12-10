@@ -86,7 +86,7 @@ const PetProfile = ({
                 }
                 <BottomSheet
                     initialSnapIndex={0}
-                    snapPoints={[height - ITEM_HEIHT, height]}
+                    snapPoints={[height - ITEM_HEIHT, height * .65]}
                 >
                     <BottomSheetScrollView>
                         <View style={{ flexDirection: 'column', padding: 40 }}>
@@ -145,7 +145,7 @@ const PetProfile = ({
                                         source={iconType('owner_pet')}
                                         title='Dueño'
                                         values={[
-                                            `${nameStringPrayer(petProfile.user.first_name)} ${nameStringPrayer(petProfile.user.last_name)}`,
+                                            `${nameStringPrayer(petProfile.user.name)} ${nameStringPrayer(petProfile.user.last_name1)} ${nameStringPrayer(petProfile.user.last_name2)}`,
                                             petProfile.user.email,
                                             nameStringPrayer(petProfile.user.canton.name)
                                         ]}

@@ -9,14 +9,15 @@ import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Icon } from 'react-native-elements'
 
 
-const UserProfile = ({ navigation }) => {
+const UserProfile = ({ navigation, loading }) => {
     const { user_data } = useContext(AuthContext);
 
     const renderItem = ({ item }) => {
         return (
             <TouchableOpacity onPress={() =>
                 navigation.navigate('StackPetProfile', {
-                    pet: item
+                    pet: item,
+                    api_token: user_data.api_token
                 })}>
                 <View style={Styles.containerParent}>
                     <View style={Styles.container} >
@@ -101,8 +102,6 @@ const UserProfile = ({ navigation }) => {
                         <Text style={{ textAlign: 'center', fontSize: 20, fontWeight: '700' }}>No tienes mascotas</Text>
                 }
             </View>
-
-
         </View>
     );
 }
@@ -187,7 +186,7 @@ const Styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 7
-    }
+    },
 });
 
 

@@ -7,8 +7,11 @@ import {
     Login,
     Register,
     ReportPetScreen,
-    ReporterPetUnknown
+    ReporterPetUnknown,
+    AddPet
 } from '../screens';
+
+import { theme } from '../core/theme';
 
 import StackReporte from './StackReporte';
 import ProfileStack from './StackProfile';
@@ -31,6 +34,9 @@ const StackMenuMain = () => {
             />
             <MenuLastTabStack.Screen name='Register' component={Register}
                 options={{ headerTransparent: true, headerShadowVisible: false, title: '' }}
+            />
+            <MenuLastTabStack.Screen name='AddPet' component={AddPet}
+                options={{ title: 'Registrar nueva mascota', headerStyle: { backgroundColor: theme.colors.All } }}
             />
             <MenuLastTabStack.Screen name='ReporterPetUnknown' component={ReporterPetUnknown}
                 options={{ headerShown: false }}

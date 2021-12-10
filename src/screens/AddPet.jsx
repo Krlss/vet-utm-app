@@ -3,23 +3,24 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-nati
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet } from '../core/utils';
-import { updatedDataPet } from '../core/utils-http';
+import { CreatedNewPet } from '../core/utils-http';
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
 
-const EditUserProfile = ({ navigation, route }) => {
-    const { data, api_token } = route.params;
+const AddPet = ({ navigation, route }) => {
 
-    const { user_data, saveUSER } = useContext(AuthContext);
+    const { api_token } = route.params;
 
-    const [name, setName] = useState(data.name);
-    const [specie, setSpecie] = useState(data.specie);
-    const [race, setRace] = useState(data.race);
-    const [sex, setSex] = useState(data.sex);
-    const [birth, setBirth] = useState(data.birth);
-    const [castrated, setCastrated] = useState(data.castrated);
-    const [lost, setLost] = useState(data.lost);
+    const { saveUSER } = useContext(AuthContext);
+
+    const [name, setName] = useState();
+    const [specie, setSpecie] = useState('canine');
+    const [race, setRace] = useState();
+    const [sex, setSex] = useState('M');
+    const [birth, setBirth] = useState();
+    const [castrated, setCastrated] = useState(true);
+    const [lost, setLost] = useState(false);
 
     const [loading, setLoading] = useState(false);
 
@@ -32,19 +33,19 @@ const EditUserProfile = ({ navigation, route }) => {
         const resn = namePet(name);
         const resr = RacePet(race);
         const resb = birthPet(birth);
-        setNameError(resn);
+        setNameError(resn); 
         setRaceError(resr);
         SetBirthError(resb);
-
+        
         if (resn || resr || resb) return;
 
         setLoading(true);
-        const res = await updatedDataPet({
-            name, specie, race, birth, sex, castrated, lost, pet_id: data.pet_id
+        const res = await CreatedNewPet({
+            name, specie, race, birth, sex, castrated, lost
         }, api_token);
-
+        console.log(res);
         setLoading(false);
-        if (res !== 404 || res !== 500 || res !== 401) {
+        if (res != 404 || res != 500 || res != 401 || res != 405) {
             saveUSER(res.data)
             navigation.navigate('HomeScreen');
         }
@@ -59,7 +60,10 @@ const EditUserProfile = ({ navigation, route }) => {
                 length={25}
                 value={name}
                 error={nameError}
-                onChangeText={text => setName(text)}
+                onChangeText={text => {
+                    setNameError('')
+                    setName(text)
+                }}
             />
 
             <SimpleTitle title='Especie' />
@@ -81,7 +85,10 @@ const EditUserProfile = ({ navigation, route }) => {
                 length={65}
                 value={race}
                 error={raceError}
-                onChangeText={text => setRace(text)}
+                onChangeText={text => {
+                    setRaceError('')
+                    setRace(text)
+                }}
             />
 
             <SimpleTitle title='Fecha de nacimiento' />
@@ -90,7 +97,10 @@ const EditUserProfile = ({ navigation, route }) => {
                 length={10}
                 value={birth}
                 error={birthError}
-                onChangeText={text => setBirth(text)}
+                onChangeText={text => {
+                    SetBirthError('')
+                    setBirth(text)
+                }}
             />
 
             <SimpleTitle title='Sexo' />
@@ -131,7 +141,7 @@ const EditUserProfile = ({ navigation, route }) => {
 
             <View style={Styles.buttonContainer}>
                 <TouchableOpacity disabled={loading} style={Styles.button} onPress={handleSubmit}>
-                    <Text style={Styles.buttonText}>{!loading ? 'GUARDAR' : 'GUARDANDO...'}</Text>
+                    <Text style={Styles.buttonText}>{!loading ? 'AGREGAR' : 'AGREGANDO...'}</Text>
                 </TouchableOpacity>
             </View>
 
@@ -139,7 +149,7 @@ const EditUserProfile = ({ navigation, route }) => {
     );
 }
 
-export default EditUserProfile;
+export default AddPet;
 
 const Styles = StyleSheet.create({
     button: {

@@ -1,5 +1,5 @@
 import React, { useRef, useContext, useEffect, useState } from 'react';
-import { View, Alert, TouchableOpacity, StyleSheet, Text, Dimensions } from 'react-native';
+import { View, Alert, TouchableOpacity, StyleSheet, Text, Dimensions, ActivityIndicator } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'react-native-elements'
@@ -19,6 +19,7 @@ const Settings = ({ navigation }) => {
     const expand = () => { return bottomSheetRef.current.expand() }
     const { saveUSER } = useContext(AuthContext);
     const [dataStorage, setDataStorage] = useState();
+    const [loading, setLoading] = useState(true);
 
     const logout = async () => {
         try {
@@ -55,24 +56,30 @@ const Settings = ({ navigation }) => {
                         canton, province, pet, api_token
                     });
                 }
+                setLoading(false);
             }
+            setLoading(false);
         } catch (error) {
             console.log(error);
         }
     }, [])
 
-
-
     return (
         <View style={{ flex: 1 }}>
             {
-                dataStorage ?
-                    <UserProfile navigation={navigation} /> :
-                    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                        <Text style={{ fontSize: 30, textTransform: 'uppercase', textAlign: 'center', fontWeight: '700' }}>
-                            Inicia sesión para ver tu perfil
-                        </Text>
-                    </View>
+                loading ?
+                    <View style={{ justifyContent: 'center', height: '90%' }}>
+                        <ActivityIndicator size="large" color="#333" />
+                    </View> :
+                    dataStorage ?
+                        < UserProfile navigation={navigation} /> :
+                        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                            <Text style={{ fontSize: 30, textTransform: 'uppercase', textAlign: 'center', fontWeight: '700' }}>
+                                Inicia sesión para ver tu perfil
+                            </Text>
+                        </View>
+
+
             }
 
             <View style={Styles.backButton}>
@@ -112,9 +119,16 @@ const Settings = ({ navigation }) => {
                         </ItemList>
                         {
                             dataStorage ?
-                                <ItemList title='Cerrar sesión' onPress={logout} >
-                                    <Icon name='logout' size={35} color='#333' />
-                                </ItemList> : null
+                                <>
+                                    <ItemList title='Registrar nueva mascota' onPress={() => {
+                                        navigation.navigate('AddPet', { api_token: dataStorage.api_token })
+                                    }} >
+                                        <Ionicons name='paw' size={35} color='#333' />
+                                    </ItemList>
+                                    <ItemList title='Cerrar sesión' onPress={logout} >
+                                        <Icon name='logout' size={35} color='#333' />
+                                    </ItemList>
+                                </> : null
                         }
                     </View>
                 </BottomSheetScrollView>

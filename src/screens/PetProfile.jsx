@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, Dimensions, TouchableOpacity } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, Image, StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { theme } from '../core/theme';
 import { iconType, birthToAge, nameStringPrayer, sexAnimal, castratedAnimal } from '../core/utils';
-import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { HeaderLostPet, Title, RowComponent, Value, Component, ViewSpacing } from '../components';
+import { RowComponent, Component, ViewSpacing } from '../components';
+
+import { updatedDataPet } from '../core/utils-http';
 
 const { width, height } = Dimensions.get('screen');
 
@@ -14,30 +16,89 @@ const PetProfile = ({ navigation, route }) => {
     const { pet_id, name, birth, sex, specie,
         castrated, race, lost, n_lost } = route.params.pet;
 
+    const [loading, setLoading] = useState(false);
+
+    const deletePet = (data, token, navigation) =>
+        Alert.alert(
+            "¿Estás seguro que deseas eliminar a tu mascota de tu perfil?",
+            "Una vez eliminada la mascota de tu perfil, si deseas recuperarla deberás ponerte en contacto con la clínica veterinaria de la universidad técnica de manabí.",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Si", onPress: async () => {
+                        setLoading(true);
+                        const res = await updatedDataPet(data, token);
+                        if (res !== 400 || res !== 500 || res !== 401) navigation.navigate('HomeScreen');
+                        if (res === 400 || res === 500 || res === 401) setLoading(false);
+                    }
+                }
+            ]
+        );
+
+    const changeOwner = (data, token, navigation) =>
+        Alert.alert(
+            "¿Estás seguro que deseas cambiar de dueño a tu mascota?",
+            "Una vez cambies de dueño a tu mascota, solo te la puede devolver el dueño destinario o puedes ponerte en contacto con la clínica veterinaria de la universidad técnica de manabí.",
+            [
+                {
+                    text: "Cancelar",
+                    style: "cancel"
+                },
+                {
+                    text: "Si", onPress: () => {
+                        navigation.navigate('ChangeOwner', {
+                            data,
+                            token
+                        });
+                    }
+                }
+            ]
+        );
+
     return (
         <View style={{ height: '100%' }}>
 
             <View style={Styles.backButton}>
-                <TouchableOpacity onPress={() => { navigation.pop() }} >
+                <TouchableOpacity disabled={loading} onPress={() => { navigation.pop() }} >
                     <Ionicons name='ios-arrow-back-sharp' size={25} color='#333' />
                 </TouchableOpacity>
             </View>
 
             <ImageBackground source={iconType('bg-image')} style={Styles.imageBg}></ImageBackground >
             <View style={Styles.card}>
-                <Image
-                    source={iconType(specie)}
-                    style={Styles.imgUser}
-                />
+                {
+                    loading ?
+                        <ActivityIndicator style={Styles.imgUser} size='large' /> :
+                        <Image
+                            source={iconType(specie)}
+                            style={Styles.imgUser}
+                        />
+                }
                 <View style={Styles.cardData}>
                     <Text numberOfLines={1} style={Styles.nameF}>{name}</Text>
                     <Text numberOfLines={1} style={Styles.id}>{pet_id}</Text>
                 </View>
 
-                <TouchableOpacity style={Styles.edit} onPress={() => { navigation.navigate('EditPetProfile', {
-                    data: route.params.pet
-                }) }}>
+                <TouchableOpacity disabled={loading} style={Styles.edit} onPress={() => {
+                    navigation.navigate('EditPetProfile', {
+                        data: route.params.pet,
+                        api_token: route.params.api_token
+                    })
+                }}>
                     <FontAwesome5 name='user-edit' size={20} color='#333' />
+                </TouchableOpacity>
+
+                <TouchableOpacity disabled={loading} style={Styles.changeOwner} onPress={() =>
+                    changeOwner({ pet_id, name }, route.params.api_token, navigation)}>
+                    <FontAwesome5 name='exchange-alt' size={25} color='#333' />
+                </TouchableOpacity>
+
+                <TouchableOpacity disabled={loading} style={Styles.deletePet} onPress={() =>
+                    deletePet({ pet_id, user_id: null }, route.params.api_token, navigation)}>
+                    <MaterialCommunityIcons name='delete-alert-outline' size={25} color='#333' />
                 </TouchableOpacity>
             </View>
 
@@ -94,7 +155,7 @@ const PetProfile = ({ navigation, route }) => {
                     <Component
                         flex={{ flex: 1 }}
                         title='Cantidad de veces perdido'
-                        value={n_lost}
+                        value={n_lost ? n_lost : 'Ninguna'}
                     />
                 </RowComponent>
 
@@ -185,6 +246,16 @@ const Styles = StyleSheet.create({
         top: height * .02,
         left: width * .04,
         zIndex: 10
+    },
+    deletePet: {
+        position: 'absolute',
+        bottom: 10,
+        right: 7
+    },
+    changeOwner: {
+        position: 'absolute',
+        bottom: 50,
+        right: 7
     }
 });
 
