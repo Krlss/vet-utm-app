@@ -3,18 +3,12 @@ import {
     StyleSheet,
     KeyboardAvoidingView,
     View,
-    ScrollView
-} from 'react-native';
-
+} from 'react-native'; 
 
 const Background = ({ children }) => {
     return (
-        /* Contenedor padre */
-        <View
-            style={styles.background}
-        >
-            {/* Formulario */}
-            <KeyboardAvoidingView style={styles.container} behavior="padding">
+        <View style={styles.background}>
+            <KeyboardAvoidingView style={styles.container} behavior="height">
                 {children}
             </KeyboardAvoidingView>
         </View>

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { View, Text, Image, StyleSheet, ImageBackground, Dimensions, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, ScrollView, ImageBackground, Dimensions, TouchableOpacity, Alert, ActivityIndicator } from 'react-native';
 import { theme } from '../core/theme';
 import { iconType, birthToAge, nameStringPrayer, sexAnimal, castratedAnimal } from '../core/utils';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
@@ -14,7 +14,7 @@ const { width, height } = Dimensions.get('screen');
 const PetProfile = ({ navigation, route }) => {
 
     const { pet_id, name, birth, sex, specie,
-        castrated, race, lost, n_lost } = route.params.pet;
+        castrated, race, lost, n_lost, images } = route.params.pet;
 
     const [loading, setLoading] = useState(false);
 
@@ -102,7 +102,8 @@ const PetProfile = ({ navigation, route }) => {
                 </TouchableOpacity>
             </View>
 
-            <View style={Styles.card2}>
+
+            <ScrollView style={Styles.card2} showsVerticalScrollIndicator={false}>
 
                 {
                     specie || race || birth ?
@@ -159,7 +160,34 @@ const PetProfile = ({ navigation, route }) => {
                     />
                 </RowComponent>
 
-            </View>
+                {
+                    images.length ?
+                        <View style={{ paddingVertical: 10 }}>
+                            <Component
+                                flex={{ flex: 1 }}
+                                title='Fotos de tu mascota'
+                            />
+                            <FlatList
+                                keyExtractor={(item) => item.url}
+                                data={images}
+                                horizontal
+                                renderItem={({ item, index }) => {
+                                    return (
+                                        <View style={{ marginHorizontal: 5 }}>
+                                            <Image source={{ uri: item.url }} style={Styles.Imageflat} />
+                                        </View>
+                                    );
+                                }}
+                            />
+                        </View> : <Component
+                            flex={{ flex: 1 }}
+                            title='Tu mascota no tiene fotos'
+                            value='Edita su perfil para agregar fotos, solo se pueden 6'
+                        />
+                }
+
+
+            </ScrollView>
 
 
         </View>
@@ -256,7 +284,12 @@ const Styles = StyleSheet.create({
         position: 'absolute',
         bottom: 50,
         right: 7
-    }
+    },
+    Imageflat: {
+        width: 200,
+        height: 300,
+        resizeMode: 'cover'
+    },
 });
 
 export default PetProfile;

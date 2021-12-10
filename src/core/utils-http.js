@@ -47,6 +47,18 @@ export const createLostPetunknown = async (data) => {
     } catch (error) { console.log(error); }
 }
 
+export const reportPet = async (data) => {
+    console.log(data);
+    try {
+        // BackHandler.addEventListener('hardwareBackPress', () => true) //Bloquea el botón para ir hacía atras
+        const res = await axios.post(`${api_url}/reportPet`, data);
+        console.log(res);
+        //BackHandler.removeEventListener('hardwareBackPress', () => true) //Lo activa de nuevo.
+        if (res.status === 200) return true;
+        return false;
+    } catch (error) { console.log(error); }
+}
+
 export const Login = async (data) => {
     try {
         return await axios.post(api_url + '/login', data).

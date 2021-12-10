@@ -1,11 +1,10 @@
 import React, { memo, useState, useContext } from 'react';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import {
     View,
     StyleSheet,
     TouchableOpacity,
     Text,
-    KeyboardAvoidingView
+    Keyboard
 } from 'react-native';
 
 import Background from '../../components/Background';
@@ -20,7 +19,6 @@ import {
     emailValidator,
     passwordValidator,
     nameValidator,
-    requiredValidator,
     CedulaValidator,
     phoneValidator,
     last_nameValidator
@@ -165,7 +163,10 @@ const Register = ({ navigation }) => {
 
             <View style={styles.row}>
                 <Text style={styles.label}>¿Ya tienes cuenta? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Login')}>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate('Login')
+                    Keyboard.dismiss()
+                }}>
                     <Text style={styles.link}>Iniciar sesión</Text>
                 </TouchableOpacity>
             </View>

@@ -1,22 +1,22 @@
 export const initialState = {
     user: {
         user_id: null,
-        first_name: null,
-        last_name: null,
+        name: null,
+        last_name1: '',
+        last_name2: '',
         email: null,
-        phone: null
+        phone: null,
+        id_province: null,
+        id_canton: null,
+        address: null
     },
     pet: {
-        pet_id: null,
         name: null,
         birth: null,
-        description: null,
         sex: null,
         castrated: null,
         specie: null,
-        race: null, 
-        id_pet_pather: null,
-        id_pet_mother: null,
-        photes: []
-    }
+        race: null,
+    },
+    photes: []
 };

@@ -56,6 +56,11 @@ export const CedulaValidator = (string) => {
     return false
 }
 
+export const addressValidator = (string) => {
+    if (!string || string.length <= 0) return `La dirección es requerida.`;
+    return false
+}
+
 export const phoneValidator = (string) => {
     const te = /[^0-9]/g;
     if (!string || string.length <= 0) return `El télefono es requerido.`;

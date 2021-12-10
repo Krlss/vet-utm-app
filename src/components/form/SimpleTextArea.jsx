@@ -1,8 +1,8 @@
 import React from "react";
-import { View, StyleSheet, TextInput } from 'react-native';
+import { View, StyleSheet, TextInput, Text } from 'react-native';
 
 
-const SimpleTextArea = ({ onChangeText, value, length, placeholder, numberOfLines }) => { 
+const SimpleTextArea = ({ onChangeText, value, length, placeholder, numberOfLines, error }) => {
     return (
         <View style={{ paddingHorizontal: 20 }}>
             <View >
@@ -11,10 +11,13 @@ const SimpleTextArea = ({ onChangeText, value, length, placeholder, numberOfLine
                     maxLength={length}
                     onChangeText={onChangeText}
                     value={value}
-                    style={Styles.Input}
+                    style={[Styles.Input, { borderColor: error ? 'red' : 'gray' }]}
                     multiline={true}
                     numberOfLines={numberOfLines}
                 />
+                {
+                    error ? <Text style={{ fontSize: 13, color: 'red' }}>{error}</Text> : null
+                }
             </View>
         </View>
     );

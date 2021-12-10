@@ -123,7 +123,7 @@ const Settings = ({ navigation }) => {
                                     <ItemList title='Registrar nueva mascota' onPress={() => {
                                         navigation.navigate('AddPet', { api_token: dataStorage.api_token })
                                     }} >
-                                        <Ionicons name='paw' size={35} color='#333' />
+                                        <Ionicons name='ios-add-outline' size={35} color='#333' />
                                     </ItemList>
                                     <ItemList title='Cerrar sesión' onPress={logout} >
                                         <Icon name='logout' size={35} color='#333' />

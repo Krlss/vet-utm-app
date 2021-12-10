@@ -10,7 +10,7 @@ const ReportState = (props) => {
 
     const [state, dispatch] = useReducer(ReportReducer, initialState);
 
-    const saveUSER = (data) => {
+    const rsaveUSER = (data) => {
 
         try {
             dispatch({
@@ -22,7 +22,7 @@ const ReportState = (props) => {
         }
     }
 
-    const savePET = (data) => {
+    const rsavePET = (data) => {
         try {
             dispatch({
                 type: GET_DATA_ANIMAL_REPORT,
@@ -36,10 +36,10 @@ const ReportState = (props) => {
     return (
         <ReportContext.Provider
             value={{
-                user_data: state.user,
-                animal_data: state.pet,
-                saveUSER,
-                savePET,
+                ruser_data: state.user,
+                ranimal_data: state.pet,
+                rsaveUSER,
+                rsavePET,
             }}
         >
             {props.children}

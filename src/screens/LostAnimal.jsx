@@ -138,7 +138,7 @@ const PetProfile = ({
                                         }
                                     </RowComponent> : null
                             }
-                            {petProfile.user ?
+                            {petProfile.user_id ?
                                 <RowComponent>
                                     <Component
                                         flex={{ flex: 1 }}
@@ -150,7 +150,10 @@ const PetProfile = ({
                                             nameStringPrayer(petProfile.user.canton.name)
                                         ]}
                                     />
-                                </RowComponent> : null
+                                </RowComponent> :
+                                <View style={{ alignItems: 'center', marginTop: 10 }}>
+                                    <Text style={{ fontWeight: '700', fontSize: 20 }}>Sin dueño</Text>
+                                </View>
                             }
 
 

@@ -1,40 +1,41 @@
 import React, { useState, useEffect, useContext, useRef } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import ReportContext from '../context/Report/ReportContext';
+import Ionicons from 'react-native-vector-icons/Ionicons';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import axios from 'axios';
 
 import {
     View,
     Text,
-    Dimensions,
     StyleSheet,
     TouchableOpacity,
     Platform,
     FlatList,
-    Image
+    Image,
+    Alert,
+    ActivityIndicator
 } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { theme } from '../core/theme';
 
-import { deleteItemArr, deleteSpace } from '../core/utils';
-import { ItemList, TitleAndButton, Title, Value } from '../components';
+import { deleteItemArr } from '../core/utils';
+import { reportPet } from '../core/utils-http';
+import { TitleAndButton } from '../components';
 
 
 const ReporterPet = ({ navigation }) => {
     const [data, setData] = useState([]);
+    const [disabled, setDisable] = useState(false);
 
-    const { user_data } = useContext(ReportContext);
+    const { ruser_data, ranimal_data, rsaveUSER, rsavePET } = useContext(ReportContext);
+
+    const { name, user_id, last_name1, last_name2, email, phone, id_province, id_canton, address } = ruser_data;
+    const { birth, sex, castrated, specie, race } = ranimal_data;
+
+
     const imagesRef = useRef('images');
-
-    /* useEffect(async () => {
-        if (Platform.OS !== 'web') {
-            const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-            if (status !== 'granted') {
-                alert('Lo siento, necesitas dar permisos para que esto funcione!');
-            }
-        }
-    }) */
 
     const deleteItem = (item, index) => {
         if (index === data.length - 1) imagesRef.current.scrollToIndex({ Animated: false, index: data.length - 1 });
@@ -51,9 +52,9 @@ const ReporterPet = ({ navigation }) => {
             exif: true
         });
 
-        
+
         if (!result.cancelled) {
-            
+
             var arr = result.uri.split('/');
             var namefile = arr[arr.length - 1];
 
@@ -70,16 +71,63 @@ const ReporterPet = ({ navigation }) => {
 
     }
 
+
+    const handleSubmit = async ({ navigation }) => {
+        setDisable(true);
+
+
+        const res = await reportPet({
+            user: {
+                name, user_id, last_name1,
+                last_name2, email, phone,
+                id_province, id_canton, address
+            },
+            birth, sex, castrated, specie, race,
+            namepet: ranimal_data.name, images: data
+        });
+        setDisable(false);
+
+        if (res) {
+            Alert.alert('ENVIADO!', 'El reporte fué enviado a un administrador, será revisado para ser publicadas.', [{ text: 'Ok' }])
+            setData([]);
+            setDisable(false);
+            rsaveUSER({
+                user_id: null,
+                name: null,
+                last_name1: '',
+                last_name2: '',
+                email: null,
+                phone: null,
+                id_province: null,
+                id_canton: null,
+                address: null
+            });
+            rsavePET({
+                name: null,
+                birth: null,
+                sex: null,
+                castrated: null,
+                specie: null,
+                race: null,
+            });
+        } else {
+            Alert.alert('ERROR!', 'Al parecer hubo un error de conexión, intentalo más tarde.', [{ text: 'Ok' }])
+            setDisable(false);
+        }
+
+    }
+
+
     return (
         <View style={styles.container}>
             <View>
-                <TitleAndButton title='Datos del dueño' onPress={() => { navigation.navigate('userReportDATA') }} />
+                <TitleAndButton disabled={disabled} title='Datos del dueño' onPress={() => { navigation.navigate('userReportDATA') }} />
 
-                <TitleAndButton title='Datos de la mascota' onPress={() => { navigation.navigate('petReportDATA') }} />
+                <TitleAndButton disabled={disabled} title='Datos de la mascota' onPress={() => { navigation.navigate('petReportDATA') }} />
 
                 {
                     data.length ?
-                        <View style={{ paddingVertical: 25, backgroundColor: '#DCDCDC', marginTop: 50 }}>
+                        <View style={{ paddingVertical: 25, marginTop: 15 }}>
                             <FlatList
                                 keyExtractor={(item) => item.url}
                                 data={data}
@@ -89,15 +137,19 @@ const ReporterPet = ({ navigation }) => {
                                     return (
                                         <View style={{ marginHorizontal: 5 }}>
                                             <Image source={{ uri: item.url }} style={styles.Imageflat} />
-                                            <View style={{ position: 'absolute', top: 10, right: 10 }}>
-                                                <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
-                                                    <Icon
-                                                        name='delete'
-                                                        color='tomato'
-                                                        size={25}
-                                                    />
-                                                </TouchableOpacity>
-                                            </View>
+                                            {
+                                                !disabled ?
+                                                    <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                                                        <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
+                                                            <Icon
+                                                                name='delete'
+                                                                color='tomato'
+                                                                size={25}
+                                                            />
+                                                        </TouchableOpacity>
+                                                    </View> : null
+                                            }
+
                                         </View>
                                     );
                                 }}
@@ -106,14 +158,32 @@ const ReporterPet = ({ navigation }) => {
                 }
             </View>
 
-            <View style={styles.addImage}>
-                <TouchableOpacity style={styles.buttonAdd} onPress={selectImage} >
-                    <Icon
-                        name='image'
-                        color='#333'
-                        size={25}
-                    />
-                </TouchableOpacity>
+            <View style={[styles.containerButton, { alignItems: disabled ? 'center' : null, left: disabled ? 0 : 10 }]}>
+                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                    {
+                        !disabled ?
+                            <TouchableOpacity style={styles.button} onPress={() => { selectImage() }}>
+                                <MaterialIcon name='image-plus' size={25} color='#333' />
+                            </TouchableOpacity> : null
+                    }
+
+                    {
+                        data.length > 0 &&
+                            name && user_id && last_name1 && last_name2 &&
+                            email && phone && id_province && id_canton && address && birth && sex && castrated && specie && race && ranimal_data.name
+                            ?
+                            < TouchableOpacity disabled={disabled ? true : false}
+                                style={[styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? 'transparent' : theme.colors.All }]}
+                                onPress={handleSubmit}>
+                                <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                                    <Text style={styles.text}>
+                                        {disabled ? 'Enviando el reporte' : <Ionicons name='ios-send' size={20} color='#333' />}
+                                    </Text>
+                                    {disabled ? <ActivityIndicator style={{ marginLeft: 5 }} size="small" color="#333" /> : null}
+                                </View>
+                            </TouchableOpacity> : null
+                    }
+                </View>
             </View>
 
         </View >
@@ -123,6 +193,19 @@ const ReporterPet = ({ navigation }) => {
 export default ReporterPet;
 
 const styles = StyleSheet.create({
+    button: {
+        padding: 10,
+        borderRadius: 100,
+        backgroundColor: theme.colors.All
+    },
+    containerButton: {
+        width: '100%',
+        bottom: 20,
+        paddingHorizontal: 20,
+        position: 'absolute',
+        elevation: 5,
+        zIndex: 1
+    },
     container: {
         height: '100%'
     },
@@ -163,5 +246,11 @@ const styles = StyleSheet.create({
         width: 200,
         height: 300,
         resizeMode: 'cover'
+    },
+    buttonSend: {
+        marginLeft: 10,
+        padding: 10,
+        paddingHorizontal: 30,
+        borderRadius: 20
     },
 });

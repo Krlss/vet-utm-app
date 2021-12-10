@@ -2,7 +2,7 @@ import React from 'react';
 import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon } from 'react-native-elements'
 import { theme } from '../../core/theme';
-const TitleAndButton = ({ title, optional, onPress, children }) => {
+const TitleAndButton = ({ title, optional, onPress, children, disabled }) => {
     return (
         <View style={Styles.container}>
             <View style={{ marginBottom: 10 }}>
@@ -13,7 +13,7 @@ const TitleAndButton = ({ title, optional, onPress, children }) => {
             </View>
             {children}
             <View style={{ alignItems: 'flex-end' }}>
-                <TouchableOpacity style={Styles.button} onPress={onPress}>
+                <TouchableOpacity disabled={disabled} style={Styles.button} onPress={onPress}>
                     <Icon name='chevron-right' size={30} color='#333' />
                 </TouchableOpacity>
             </View>

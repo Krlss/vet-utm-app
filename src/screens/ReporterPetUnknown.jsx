@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from "react";
-import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator, FlatList, Modal } from 'react-native';
+import React, { useState } from "react";
+import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteItemArr } from '../core/utils';
 import { Icon } from 'react-native-elements'
@@ -54,7 +54,7 @@ const ReporterPetUnknown = ({ navigation }) => {
             var arr = result.uri.split('/');
             var namefile = arr[arr.length - 1];
             var arrType = namefile.split('.');
-            var type = arrType[arrType.length - 1]; 
+            var type = arrType[arrType.length - 1];
             setImages([...images, { name: namefile, url: result.uri, base64: result.base64, type }]);
         }
     }
