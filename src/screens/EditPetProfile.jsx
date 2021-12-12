@@ -1,16 +1,18 @@
-import React, { useState, useContext } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useContext, useRef } from "react";
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle } from '../components';
-import { namePet, race as RacePet, birthPet } from '../core/utils';
+import { SimpleInput, SimpleTitle, Component } from '../components';
+import { namePet, race as RacePet, birthPet, deleteItemArr } from '../core/utils';
 import { updatedDataPet } from '../core/utils-http';
+import { Icon } from 'react-native-elements'
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import * as ImagePicker from 'expo-image-picker';
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
 
 const EditUserProfile = ({ navigation, route }) => {
-    const { data, api_token } = route.params;
-
+    const { data, api_token } = route.params; 
     const { user_data, saveUSER } = useContext(AuthContext);
 
     const [name, setName] = useState(data.name);
@@ -21,11 +23,14 @@ const EditUserProfile = ({ navigation, route }) => {
     const [castrated, setCastrated] = useState(data.castrated);
     const [lost, setLost] = useState(data.lost);
 
+    const [images, setImages] = useState(data.images);
+
     const [loading, setLoading] = useState(false);
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
     const [birthError, SetBirthError] = useState('');
+    const imagesRef = useRef('images');
 
     const handleSubmit = async () => {
 
@@ -40,7 +45,7 @@ const EditUserProfile = ({ navigation, route }) => {
 
         setLoading(true);
         const res = await updatedDataPet({
-            name, specie, race, birth, sex, castrated, lost, pet_id: data.pet_id
+            name, specie, race, birth, sex, castrated, lost, pet_id: data.pet_id, images
         }, api_token);
 
         setLoading(false);
@@ -48,6 +53,32 @@ const EditUserProfile = ({ navigation, route }) => {
             saveUSER(res.data)
             navigation.navigate('HomeScreen');
         }
+    }
+
+    const deleteItem = (item, index) => {
+        if (index === images.length - 1) imagesRef.current.scrollToIndex({ Animated: false, index: images.length - 1 });
+        setImages(deleteItemArr(images, item));
+    };
+
+    const selectImage = async () => {
+        if (images.length >= 6) return alert('Solo se pueden subir 6 fotos!')
+        let result = await ImagePicker.launchImageLibraryAsync({
+            mediaTypes: ImagePicker.MediaTypeOptions.All,
+            quality: 1,
+            allowsMultipleSelection: true,
+            base64: true,
+            exif: true
+        });
+
+
+        if (!result.cancelled) {
+
+            var arr = result.uri.split('/');
+            var namefile = arr[arr.length - 1];
+
+            setImages([...images, { name: namefile, url: result.uri, base64: result.base64 }]);
+        }
+
     }
 
     return (
@@ -129,8 +160,44 @@ const EditUserProfile = ({ navigation, route }) => {
                 </Picker>
             </View>
 
+            <SimpleTitle title='Fotos de tu mascota' />
+            <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
+                <FlatList
+                    style={{ marginTop: 10 }}
+                    keyExtractor={(item) => item.url}
+                    data={images}
+                    horizontal
+                    ref={imagesRef}
+                    renderItem={({ item, index }) => {
+                        return (
+                            <View style={{ marginHorizontal: 5 }}>
+                                <Image source={{ uri: item.url }} style={Styles.Imageflat} />
+                                {
+                                    !loading ?
+                                        <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                                            <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
+                                                <Icon
+                                                    name='delete'
+                                                    color='tomato'
+                                                    size={25}
+                                                />
+                                            </TouchableOpacity>
+                                        </View> : null
+                                }
+                            </View>
+                        );
+                    }}
+                />
+                {
+                    !loading ?
+                        <TouchableOpacity style={Styles.button} onPress={() => { selectImage() }}>
+                            <MaterialIcon name='image-plus' size={25} color='#333' />
+                        </TouchableOpacity> : null
+                }
+            </View>
+
             <View style={Styles.buttonContainer}>
-                <TouchableOpacity disabled={loading} style={Styles.button} onPress={handleSubmit}>
+                <TouchableOpacity disabled={loading} style={Styles.buttonSend} onPress={handleSubmit}>
                     <Text style={Styles.buttonText}>{!loading ? 'GUARDAR' : 'GUARDANDO...'}</Text>
                 </TouchableOpacity>
             </View>
@@ -142,7 +209,7 @@ const EditUserProfile = ({ navigation, route }) => {
 export default EditUserProfile;
 
 const Styles = StyleSheet.create({
-    button: {
+    buttonSend: {
         backgroundColor: theme.colors.All,
         padding: 10,
         width: '100%',
@@ -150,7 +217,7 @@ const Styles = StyleSheet.create({
     },
     buttonContainer: {
         paddingHorizontal: 20,
-        marginTop: 30,
+        marginTop: 5,
         marginBottom: 50,
         alignItems: 'center'
     },
@@ -159,5 +226,17 @@ const Styles = StyleSheet.create({
         fontSize: 20,
         textAlign: 'center',
         fontWeight: '700'
-    }
+    },
+    Imageflat: {
+        width: 200,
+        height: 300,
+        resizeMode: 'cover'
+    },
+    button: {
+        padding: 10,
+        borderRadius: 100,
+        backgroundColor: theme.colors.All,
+        width: 45,
+        marginTop: 20
+    },
 });

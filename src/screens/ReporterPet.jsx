@@ -59,14 +59,6 @@ const ReporterPet = ({ navigation }) => {
             var namefile = arr[arr.length - 1];
 
             setData([...data, { name: namefile, url: result.uri, base64: result.base64 }]);
-
-            axios.post('http://192.168.100.101:5000/api/pets/createLostPet', {
-                images: data
-            }).then(res => {
-                console.log(res);
-            }).catch(e => {
-                console.log(e);
-            })
         }
 
     }

@@ -147,7 +147,7 @@ const PetProfile = ({
                                         values={[
                                             `${nameStringPrayer(petProfile.user.name)} ${nameStringPrayer(petProfile.user.last_name1)} ${nameStringPrayer(petProfile.user.last_name2)}`,
                                             petProfile.user.email,
-                                            nameStringPrayer(petProfile.user.canton.name)
+                                            petProfile.user.canton ? nameStringPrayer(petProfile.user.canton.name) : null
                                         ]}
                                     />
                                 </RowComponent> :

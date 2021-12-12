@@ -6,8 +6,8 @@ export { default as Value } from './LostPet/Value';
 export { default as Component } from './LostPet/Component';
 export { default as ViewSpacing } from './LostPet/ViewSpacing';
 export { default as FabReport } from './ReportPet/FAB';
-export { default as PaginationSnapC } from './PaginationSnapC';
-export { default as SlideReportImage } from './SlideReportImage';
+/* export { default as PaginationSnapC } from './PaginationSnapC'; */
+/* export { default as SlideReportImage } from './SlideReportImage'; */
 export { default as HeaderHome } from './HeaderHome';
 export { default as ItemList } from './ItemList';
 export { default as TitleAndButton } from './ReportPet/TitleAndButton';

@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 import Pagination from 'react-native-snap-carousel';
 
 const PaginationSnapC = ({ entries, activeSlide }) => {
@@ -23,4 +23,4 @@ const PaginationSnapC = ({ entries, activeSlide }) => {
     );
 }
 
-export default PaginationSnapC;
+export default PaginationSnapC; */

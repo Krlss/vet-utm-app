@@ -1,4 +1,4 @@
-import React from 'react';
+/* import React from 'react';
 import { ParallaxImage } from 'react-native-snap-carousel';
 
 import {
@@ -41,4 +41,4 @@ const styles = StyleSheet.create({
         ...StyleSheet.absoluteFillObject,
         resizeMode: 'cover',
     },
-});
+}); */
