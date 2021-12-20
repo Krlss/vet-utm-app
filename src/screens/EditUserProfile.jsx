@@ -59,16 +59,23 @@ const EditUserProfile = ({ navigation }) => {
 
         setLoading(false);
 
-        if (res === 404) {
-            setMsg('Usuario no encontrado')
-        } else if (res === 500) {
+        console.log(res.status);
+        if (res.status === 404) {
+            setMsg('Usuario no encontrado');
+            return;
+        } else if (res.status === 500) {
             setMsg('Ocurrió un error en el servidor')
-        } else if (res === 401) {
+            return;
+        } else if (res.status === 401) {
             setMsg('No estás autorizado para actualizar este perfil')
-        } else {
-            saveUSER(res.data)
-            navigation.navigate('HomeScreen');
+            return;
+        } else if (res.status === 301) {
+            setMsg(res.data.message);
+            return;
         }
+        saveUSER(res.data)
+        navigation.navigate('HomeScreen');
+
     }
 
     const handleChangeProvince = async (id) => {

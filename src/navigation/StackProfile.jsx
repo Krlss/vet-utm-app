@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
     EditUserProfile,
-    PetProfileScreen,
+    ChangePassword,
     SettingsScreen
 } from '../screens';
 
@@ -20,6 +20,9 @@ const StackProfile = () => {
             />
             <ProfileStack.Screen name='EditUserProfile' component={EditUserProfile}
                 options={{ title: 'Editar datos', headerStyle: { backgroundColor: theme.colors.All } }}
+            />
+            <ProfileStack.Screen name='ChangePassword' component={ChangePassword}
+                options={{ title: 'Cambiar contraseña', headerStyle: { backgroundColor: theme.colors.All } }}
             />
             <ProfileStack.Screen name='StackPetProfile' component={StackPetProfile}
                 options={{ headerShown: false }}

@@ -14,3 +14,4 @@ export { default as EditUserProfile } from './EditUserProfile';
 export { default as EditPetProfile } from './EditPetProfile'; 
 export { default as AddPet } from './AddPet'; 
 export { default as ChangeOwner } from './ChangeOwner'; 
+export { default as ChangePassword } from './ChangePassword'; 

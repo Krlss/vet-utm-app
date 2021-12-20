@@ -74,7 +74,7 @@ export const Register = async (data) => {
     try {
         return await axios.post(api_url + '/register', data).
             then(e => e.data).
-            catch(e => e.response.status);
+            catch(e => e.response);
     } catch (error) {
         console.log(error);
     }
@@ -103,7 +103,7 @@ export const updatedDataUser = async (data, token) => {
     try {
         return await axios.put(api_url + `/updatedUser`, data, config)
             .then(e => e.data).
-            catch(e => e.response.status);
+            catch(e => e.response);
     } catch (error) {
         console.log(error);
     }
@@ -119,6 +119,21 @@ export const updatedDataPet = async (data, token) => {
         return await axios.put(api_url + `/updatedPet`, data, config)
             .then(e => e.data).
             catch(e => e.response.status);
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+export const updatedPassword = async (data, token) => {
+    let config = {
+        headers: {
+            'Authorization': token
+        }
+    }
+    try {
+        return await axios.put(api_url + `/updatedPassword`, data, config)
+            .then(e => e.data).
+            catch(e => e.response);
     } catch (error) {
         console.log(error);
     }

@@ -69,7 +69,7 @@ const Login = ({ navigation }) => {
                 }
 
                 navigation.navigate('HomeScreen');
-            } else if (res === 401) {
+            } else if (res === 401 || res === 404) {
                 setErrormsg('Correo o contraseña incorrecta!')
             } else if (res === 500) {
                 setErrormsg('Ocurrio un error en el servidor, intentalo más tarde')

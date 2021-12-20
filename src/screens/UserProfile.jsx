@@ -4,6 +4,7 @@ import { theme } from '../core/theme';
 import { iconType } from '../core/utils';
 import AuthContext from '../context/auth/AuthContext';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { Icon } from 'react-native-elements'
@@ -55,6 +56,10 @@ const UserProfile = ({ navigation, loading }) => {
 
                 <TouchableOpacity style={Styles.edit} onPress={() => { navigation.navigate('EditUserProfile') }} >
                     <FontAwesome5 name='user-edit' size={20} color='#333' />
+                </TouchableOpacity>
+
+                <TouchableOpacity style={Styles.password} onPress={() => { navigation.navigate('ChangePassword') }} >
+                    <MaterialCommunityIcons size={20} name='form-textbox-password'/> 
                 </TouchableOpacity>
             </View>
 
@@ -186,6 +191,11 @@ const Styles = StyleSheet.create({
         position: 'absolute',
         top: 10,
         right: 7
+    },
+    password: {
+        position: 'absolute',
+        top: 10,
+        right: 43
     },
 });
 

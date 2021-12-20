@@ -69,20 +69,24 @@ const Register = ({ navigation }) => {
             email: email.value,
             password: password.value
         });
-        console.log(res);
-        setLoading(false);
-        if (res !== 401 || res !== 500) {
-            setEmail({ value: '', error: '' });
-            setPassword({ value: '', error: '' });
-            setName({ value: '', error: '' });
-            setCedula({ value: '', error: '' });
-            setLast_name({ value: '', error: '' });
-            setPhone({ value: '', error: '' });
-
-            navigation.navigate('Login');
-        } else if (res === 500) {
-            setErrorApi('Ocurrió un error en el servidor');
+        setLoading(false); 
+        if (res.status === 401) {
+            setErrorApi(res.data.message);
+            return;
         }
+        if (res.status === 500) {
+            setErrorApi('Ocurrió un error en el servidor');
+            return;
+        }
+
+        setEmail({ value: '', error: '' });
+        setPassword({ value: '', error: '' });
+        setName({ value: '', error: '' });
+        setCedula({ value: '', error: '' });
+        setLast_name({ value: '', error: '' });
+        setPhone({ value: '', error: '' });
+        navigation.navigate('Login');
+
     }
 
     return (
