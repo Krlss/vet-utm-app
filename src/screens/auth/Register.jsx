@@ -72,24 +72,10 @@ const Register = ({ navigation }) => {
         });
         setLoading(false);
         if (res.status === 401) {
-            toast.show(res.data.message, {
-                type: "danger",
-                placement: "bottom",
-                duration: 4000,
-                offset: 30,
-                animationType: "slide-in"
-            });
-            return;
+            return toast.show(res.data.message, { type: "danger", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
         }
         if (res.status === 500) {
-            toast.show("Ocurrió un error en el servidor", {
-                type: "danger",
-                placement: "bottom",
-                duration: 4000,
-                offset: 30,
-                animationType: "slide-in"
-            });
-            return;
+            return toast.show("Ocurrió un error en el servidor", { type: "danger", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
         }
 
         setEmail({ value: '', error: '' });
@@ -98,8 +84,8 @@ const Register = ({ navigation }) => {
         setCedula({ value: '', error: '' });
         setLast_name({ value: '', error: '' });
         setPhone({ value: '', error: '' });
+        toast.show("Revisa tu correo electrónico para activar tu cuenta", { type: "success", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
         navigation.navigate('Login');
-
     }
 
     return (

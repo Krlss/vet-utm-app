@@ -18,6 +18,7 @@ import { theme } from '../../core/theme';
 import { emailValidator, passwordValidator } from '../../core/utils';
 import { Login as login } from '../../core/utils-http';
 import AuthContext from '../../context/auth/AuthContext';
+import { useToast } from "react-native-toast-notifications";
 
 
 const Login = ({ navigation }) => {
@@ -25,7 +26,7 @@ const Login = ({ navigation }) => {
     const [password, setPassword] = useState({ value: '', error: '' });
     const [loading, setLoading] = useState(false);
     const { saveUSER } = useContext(AuthContext);
-    const [errormsg, setErrormsg] = useState();
+    const toast = useToast();
 
     const handleSubmit = async () => {
         setLoading(true);
@@ -67,14 +68,16 @@ const Login = ({ navigation }) => {
                 } catch (error) {
                     console.log(error);
                 }
-
                 navigation.navigate('HomeScreen');
+                return toast.show('Bienvenido!', { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
             } else if (res === 401 || res === 404) {
-                setErrormsg('Correo o contraseña incorrecta!')
+                return toast.show('Correo o contraseña incorrecta!', { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
             } else if (res === 500) {
-                setErrormsg('Ocurrio un error en el servidor, intentalo más tarde')
-            } else if (res === 301)
-                setErrormsg('Revisa tu correo electrónico para activar tu cuenta')
+                return toast.show('Ocurrio un error en el servidor, intentalo más tarde', { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
+            } else if (res === 301) {
+                return toast.show('Revisa tu correo electrónico para activar tu cuenta', { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
+            }
+
         }
     }
     return (
@@ -84,10 +87,6 @@ const Login = ({ navigation }) => {
             <Logo />
 
             <Header>Sistema de identificación de mascotas</Header>
-
-            {
-                errormsg ? <Text style={{ color: 'red' }} >{errormsg}</Text> : null
-            }
 
             <TextInput
                 label="Correo"
