@@ -5,6 +5,7 @@ import { Provider as PaperProvider } from 'react-native-paper';
 import ReportState from './src/context/Report/ReportState';
 import AuthState from './src/context/auth/AuthState';
 import StackMain from './src/navigation/StackMain';
+import { ToastProvider } from 'react-native-toast-notifications'
 
 export default function App() {
   return (
@@ -12,8 +13,10 @@ export default function App() {
       <ReportState>
         <AuthState>
           <NavigationContainer>
-            <StackMain />
-            <StatusBar color='black' />
+            <ToastProvider>
+              <StackMain />
+              <StatusBar color='black' />
+            </ToastProvider>
           </NavigationContainer>
         </AuthState>
       </ReportState>

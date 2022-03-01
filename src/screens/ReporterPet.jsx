@@ -1,10 +1,9 @@
-import React, { useState, useEffect, useContext, useRef } from 'react';
+import React, { useState, useContext, useRef } from 'react';
 import * as ImagePicker from 'expo-image-picker';
 import ReportContext from '../context/Report/ReportContext';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-
-import axios from 'axios';
+import { useToast } from "react-native-toast-notifications";
 
 import {
     View,
@@ -43,7 +42,13 @@ const ReporterPet = ({ navigation }) => {
     };
 
     const selectImage = async () => {
-        if (data.length >= 6) return alert('Solo se pueden subir 6 fotos!')
+        if (data.length >= 6) return toast.show("Solo se pueden subir 6 fotos!", {
+            type: "custom",
+            placement: "bottom",
+            duration: 4000,
+            offset: 30,
+            animationType: "slide-in"
+        });
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
@@ -80,7 +85,13 @@ const ReporterPet = ({ navigation }) => {
         setDisable(false);
 
         if (res) {
-            Alert.alert('ENVIADO!', 'El reporte fué enviado a un administrador, será revisado para ser publicadas.', [{ text: 'Ok' }])
+            toast.show("El reporte fué enviado a un administrador, será revisado para ser publicadas.", {
+                type: "success",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             setData([]);
             setDisable(false);
             rsaveUSER({
@@ -104,7 +115,13 @@ const ReporterPet = ({ navigation }) => {
             });
             navigation.navigate('HomeScreen');
         } else {
-            Alert.alert('ERROR!', 'Al parecer hubo un error de conexión, intentalo más tarde.', [{ text: 'Ok' }])
+            toast.show("Al parecer hubo un error de conexión, intentalo más tarde.", {
+                type: "danger",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             setDisable(false);
         }
 

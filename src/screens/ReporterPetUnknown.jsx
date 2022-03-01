@@ -1,11 +1,12 @@
 import React, { useState } from "react";
-import { Image, View, Alert, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator } from 'react-native';
+import { Image, View, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteItemArr } from '../core/utils';
 import { Icon } from 'react-native-elements'
 import { createLostPetunknown } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
+import { useToast } from "react-native-toast-notifications";
 
 import { theme } from '../core/theme';
 const { width, height } = Dimensions.get('screen');
@@ -17,7 +18,7 @@ const ReporterPetUnknown = ({ navigation }) => {
     let fromdata = new FormData();
     const [images, setImages] = useState([]);
     const [disabled, setDisable] = useState(false);
-
+    const toast = useToast();
 
     const deleteItem = (item, index) => {
         if (index === images.length - 1) refImage.current.scrollToIndex({ animated: true, index: images.length - 1 })
@@ -30,12 +31,24 @@ const ReporterPetUnknown = ({ navigation }) => {
         refImage.current.scrollToIndex({ Animated: false, index: 0 });
         const res = await createLostPetunknown(images);
         if (res) {
-            Alert.alert('ENVIADO!', 'Las imagenes fueron enviadas a un administrador, las imagenes serán revisadas para ser publicadas.', [{ text: 'Ok' }])
+            toast.show("Las imagenes fueron enviadas a un administrador, las imagenes serán revisadas para ser publicadas.", {
+                type: "success",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             setImages([]);
             setDisable(false);
             navigation.navigate('HomeScreen');
         } else {
-            Alert.alert('ERROR!', 'Al parecer hubo un error de conexión, intentalo más tarde.', [{ text: 'Ok' }])
+            toast.show("Al parecer hubo un error de conexión, intentalo más tarde.", {
+                type: "danger",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             setDisable(false);
         }
     }
@@ -43,7 +56,13 @@ const ReporterPetUnknown = ({ navigation }) => {
 
     const selectImage = async () => {
 
-        if (images.length >= 6) return alert('Solo se pueden subir 6 fotos!')
+        if (images.length >= 6) return toast.show("Solo se pueden subir 6 fotos!", {
+            type: "custom",
+            placement: "bottom",
+            duration: 4000,
+            offset: 30,
+            animationType: "slide-in"
+        });
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
