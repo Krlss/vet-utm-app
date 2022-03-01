@@ -12,6 +12,7 @@ import Logo from '../../components/Logo';
 import Header from '../../components/Header';
 import TextInput from '../../components/TextInput';
 import Button from '../../components/Button';
+import { useToast } from "react-native-toast-notifications";
 
 import { theme } from '../../core/theme';
 
@@ -34,10 +35,10 @@ const Register = ({ navigation }) => {
     const [phone, setPhone] = useState({ value: '', error: '' });
     const [password, setPassword] = useState({ value: '', error: '' });
 
-    const [errorApi, setErrorApi] = useState();
     const [loading, setLoading] = useState(false);
 
     const { saveUSER } = useContext(AuthContext);
+    const toast = useToast();
 
     const handleSubmit = async () => {
         const nameError = nameValidator(name.value);
@@ -69,13 +70,25 @@ const Register = ({ navigation }) => {
             email: email.value,
             password: password.value
         });
-        setLoading(false); 
+        setLoading(false);
         if (res.status === 401) {
-            setErrorApi(res.data.message);
+            toast.show(res.data.message, {
+                type: "danger",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             return;
         }
         if (res.status === 500) {
-            setErrorApi('Ocurrió un error en el servidor');
+            toast.show("Ocurrió un error en el servidor", {
+                type: "danger",
+                placement: "bottom",
+                duration: 4000,
+                offset: 30,
+                animationType: "slide-in"
+            });
             return;
         }
 
@@ -96,10 +109,6 @@ const Register = ({ navigation }) => {
             <Logo />
 
             <Header>Sistema de identificación de mascotas</Header>
-
-            {
-                errorApi ? <Text style={{ color: 'red' }} >{errorApi}</Text> : null
-            }
 
             <TextInput
                 label="Cedula o RUC"

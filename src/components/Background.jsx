@@ -2,16 +2,16 @@ import React, { memo } from 'react';
 import {
     StyleSheet,
     KeyboardAvoidingView,
-    View,
-} from 'react-native'; 
+    ScrollView,
+} from 'react-native';
 
 const Background = ({ children }) => {
     return (
-        <View style={styles.background}>
+        <ScrollView style={styles.background} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <KeyboardAvoidingView style={styles.container} behavior="height">
                 {children}
             </KeyboardAvoidingView>
-        </View>
+        </ScrollView>
     );
 }
 
@@ -20,9 +20,7 @@ export default memo(Background);
 
 const styles = StyleSheet.create({
     background: {
-        alignItems: 'center',
         height: '100%',
-        justifyContent: 'center',
         alignContent: 'center',
         backgroundColor: 'white'
     },

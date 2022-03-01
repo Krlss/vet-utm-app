@@ -13,7 +13,6 @@ import {
     Platform,
     FlatList,
     Image,
-    Alert,
     ActivityIndicator
 } from 'react-native';
 import { Icon } from 'react-native-elements'
@@ -33,6 +32,7 @@ const ReporterPet = ({ navigation }) => {
     const { name, user_id, last_name1, last_name2, email, phone, id_province, id_canton, address } = ruser_data;
     const { birth, sex, castrated, specie, race } = ranimal_data;
 
+    const toast = useToast();
 
     const imagesRef = useRef('images');
 
