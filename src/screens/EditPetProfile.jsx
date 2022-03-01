@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle, Component } from '../components';
+import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet, deleteItemArr } from '../core/utils';
 import { updatedDataPet } from '../core/utils-http';
 import { Icon } from 'react-native-elements'
@@ -11,37 +11,36 @@ import * as ImagePicker from 'expo-image-picker';
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
 
+import DatePicker from 'react-native-date-picker'
+
 const EditUserProfile = ({ navigation, route }) => {
-    const { data, api_token } = route.params; 
+    const { data, api_token } = route.params;
     const { user_data, saveUSER } = useContext(AuthContext);
 
     const [name, setName] = useState(data.name);
     const [specie, setSpecie] = useState(data.specie);
     const [race, setRace] = useState(data.race);
     const [sex, setSex] = useState(data.sex);
-    const [birth, setBirth] = useState(data.birth);
+    const [birth, setBirth] = useState(data.birth ? new Date(data.birth) : new Date);
     const [castrated, setCastrated] = useState(data.castrated);
     const [lost, setLost] = useState(data.lost);
-
+    const [open, setOpen] = useState(false)
     const [images, setImages] = useState(data.images);
 
     const [loading, setLoading] = useState(false);
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
-    const [birthError, SetBirthError] = useState('');
     const imagesRef = useRef('images');
 
     const handleSubmit = async () => {
 
         const resn = namePet(name);
         const resr = RacePet(race);
-        const resb = birthPet(birth);
         setNameError(resn);
         setRaceError(resr);
-        SetBirthError(resb);
 
-        if (resn || resr || resb) return;
+        if (resn || resr ) return;
 
         setLoading(true);
         const res = await updatedDataPet({
@@ -116,12 +115,36 @@ const EditUserProfile = ({ navigation, route }) => {
             />
 
             <SimpleTitle title='Fecha de nacimiento' />
-            <SimpleInput
-                placeholder='ejm. 2021-12-09'
-                length={10}
-                value={birth}
-                error={birthError}
-                onChangeText={text => setBirth(text)}
+
+            <View style={{
+                flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,
+                alignItems: 'center'
+            }}>
+                {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
+
+                <TouchableOpacity style={Styles.buttonDate} onPress={() => setOpen(true)}>
+                    <MaterialIcon name='update' size={25} color='#333' />
+                </TouchableOpacity>
+            </View>
+
+            <DatePicker
+                date={birth}
+                onDateChange={setBirth}
+                mode='date'
+                locale='es'
+                modal
+                open={open}
+                title='Fecha de nacimiento'
+                confirmText="Confirmar"
+                cancelText="Cancelar"
+                maximumDate={new Date()}
+                onConfirm={(birth) => {
+                    setOpen(false)
+                    setBirth(birth)
+                }}
+                onCancel={() => {
+                    setOpen(false)
+                }}
             />
 
             <SimpleTitle title='Sexo' />
