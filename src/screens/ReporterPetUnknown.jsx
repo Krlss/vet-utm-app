@@ -33,6 +33,7 @@ const ReporterPetUnknown = ({ navigation }) => {
             Alert.alert('ENVIADO!', 'Las imagenes fueron enviadas a un administrador, las imagenes serán revisadas para ser publicadas.', [{ text: 'Ok' }])
             setImages([]);
             setDisable(false);
+            navigation.navigate('HomeScreen');
         } else {
             Alert.alert('ERROR!', 'Al parecer hubo un error de conexión, intentalo más tarde.', [{ text: 'Ok' }])
             setDisable(false);

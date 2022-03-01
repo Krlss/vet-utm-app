@@ -102,6 +102,7 @@ const ReporterPet = ({ navigation }) => {
                 specie: null,
                 race: null,
             });
+            navigation.navigate('HomeScreen');
         } else {
             Alert.alert('ERROR!', 'Al parecer hubo un error de conexión, intentalo más tarde.', [{ text: 'Ok' }])
             setDisable(false);
