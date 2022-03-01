@@ -1,7 +1,13 @@
 import axios from 'axios';
 import { BackHandler } from 'react-native';
 
-const api_url = 'http://192.168.100.101/api';
+var url1 =  "http://still-savannah-02968.herokuapp.com/api";
+var url2 =  "http://192.168.100.101/api";
+
+//http://still-savannah-02968.herokuapp.com/api
+//http://192.168.100.101/api
+
+const api_url = url1;
 
 export const getAnimalsLost = async () => {
     try {
