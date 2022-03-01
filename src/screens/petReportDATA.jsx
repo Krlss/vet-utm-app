@@ -1,9 +1,8 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
-import { namePet, race as RacePet, birthPet } from '../core/utils';
-import { CreatedNewPet } from '../core/utils-http';
+import { namePet, race as RacePet } from '../core/utils';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 
 import DatePicker from 'react-native-date-picker'
@@ -25,19 +24,16 @@ const petReportDATA = ({ navigation }) => {
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
-    /* const [birthError, SetBirthError] = useState(''); */
     const [open, setOpen] = useState(false)
 
     const handleSubmit = async () => {
 
         const resn = namePet(name);
         const resr = RacePet(race);
-        /* const resb = birthPet(birth); */
         setNameError(resn);
         setRaceError(resr);
-        /* SetBirthError(resb); */
 
-        if (resn || resr /* || resb */) return;
+        if (resn || resr ) return;
 
         rsavePET({
             name,
@@ -94,16 +90,6 @@ const petReportDATA = ({ navigation }) => {
             />
 
             <SimpleTitle title='Fecha de nacimiento' />
-            {/* <SimpleInput
-                placeholder='ejm. 2021-12-09'
-                length={10}
-                value={birth}
-                error={birthError}
-                onChangeText={text => {
-                    SetBirthError('')
-                    setBirth(text)
-                }}
-            /> */}
 
             <View style={{
                 flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,

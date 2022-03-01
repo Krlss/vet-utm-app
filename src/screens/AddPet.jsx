@@ -4,6 +4,8 @@ import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet } from '../core/utils';
 import { CreatedNewPet } from '../core/utils-http';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+import DatePicker from 'react-native-date-picker'
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
@@ -18,7 +20,7 @@ const AddPet = ({ navigation, route }) => {
     const [specie, setSpecie] = useState('canine');
     const [race, setRace] = useState();
     const [sex, setSex] = useState('M');
-    const [birth, setBirth] = useState();
+    const [birth, setBirth] = useState(new Date);
     const [castrated, setCastrated] = useState(true);
     const [lost, setLost] = useState(false);
 
@@ -26,18 +28,15 @@ const AddPet = ({ navigation, route }) => {
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
-    const [birthError, SetBirthError] = useState('');
-
+    const [open, setOpen] = useState(false)
     const handleSubmit = async () => {
 
         const resn = namePet(name);
         const resr = RacePet(race);
-        const resb = birthPet(birth);
-        setNameError(resn); 
+        setNameError(resn);
         setRaceError(resr);
-        SetBirthError(resb);
-        
-        if (resn || resr || resb) return;
+
+        if (resn || resr) return;
 
         setLoading(true);
         const res = await CreatedNewPet({
@@ -92,14 +91,35 @@ const AddPet = ({ navigation, route }) => {
             />
 
             <SimpleTitle title='Fecha de nacimiento' />
-            <SimpleInput
-                placeholder='ejm. 2021-12-09'
-                length={10}
-                value={birth}
-                error={birthError}
-                onChangeText={text => {
-                    SetBirthError('')
-                    setBirth(text)
+
+            <View style={{
+                flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,
+                alignItems: 'center'
+            }}>
+                {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
+
+                <TouchableOpacity style={Styles.buttonDate} onPress={() => setOpen(true)}>
+                    <MaterialIcon name='update' size={25} color='#333' />
+                </TouchableOpacity>
+            </View>
+
+            <DatePicker
+                date={birth}
+                onDateChange={setBirth}
+                mode='date'
+                locale='es'
+                modal
+                open={open}
+                title='Fecha de nacimiento'
+                confirmText="Confirmar"
+                cancelText="Cancelar"
+                maximumDate={new Date()}
+                onConfirm={(birth) => {
+                    setOpen(false)
+                    setBirth(birth)
+                }}
+                onCancel={() => {
+                    setOpen(false)
                 }}
             />
 
