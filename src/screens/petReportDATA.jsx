@@ -1,9 +1,12 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Button } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet } from '../core/utils';
 import { CreatedNewPet } from '../core/utils-http';
+import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
+
+import DatePicker from 'react-native-date-picker'
 
 import ReportContext from "../context/Report/ReportContext";
 import { theme } from '../core/theme';
@@ -17,23 +20,24 @@ const petReportDATA = ({ navigation }) => {
     const [specie, setSpecie] = useState(ranimal_data.specie ? ranimal_data : 'canine');
     const [race, setRace] = useState(ranimal_data.race);
     const [sex, setSex] = useState(ranimal_data.sex ? ranimal_data.sex : 'M');
-    const [birth, setBirth] = useState(ranimal_data.birth);
+    const [birth, setBirth] = useState(ranimal_data.birth ? ranimal_data.birth : new Date);
     const [castrated, setCastrated] = useState(ranimal_data.castrated ? ranimal_data.castrated : true);
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
-    const [birthError, SetBirthError] = useState('');
+    /* const [birthError, SetBirthError] = useState(''); */
+    const [open, setOpen] = useState(false)
 
     const handleSubmit = async () => {
 
         const resn = namePet(name);
         const resr = RacePet(race);
-        const resb = birthPet(birth);
+        /* const resb = birthPet(birth); */
         setNameError(resn);
         setRaceError(resr);
-        SetBirthError(resb);
+        /* SetBirthError(resb); */
 
-        if (resn || resr || resb) return;
+        if (resn || resr /* || resb */) return;
 
         rsavePET({
             name,
@@ -48,7 +52,9 @@ const petReportDATA = ({ navigation }) => {
     }
 
     return (
-        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}
+            keyboardShouldPersistTaps='handled'
+        >
 
             <SimpleTitle title='Nombre' />
             <SimpleInput
@@ -88,7 +94,7 @@ const petReportDATA = ({ navigation }) => {
             />
 
             <SimpleTitle title='Fecha de nacimiento' />
-            <SimpleInput
+            {/* <SimpleInput
                 placeholder='ejm. 2021-12-09'
                 length={10}
                 value={birth}
@@ -96,6 +102,37 @@ const petReportDATA = ({ navigation }) => {
                 onChangeText={text => {
                     SetBirthError('')
                     setBirth(text)
+                }}
+            /> */}
+
+            <View style={{
+                flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,
+                alignItems: 'center'
+            }}>
+                {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
+
+                <TouchableOpacity style={Styles.buttonDate} onPress={() => setOpen(true)}>
+                    <MaterialIcon name='update' size={25} color='#333' />
+                </TouchableOpacity>
+            </View>
+
+            <DatePicker
+                date={birth}
+                onDateChange={setBirth}
+                mode='date'
+                locale='es'
+                modal
+                open={open}
+                title='Fecha de nacimiento'
+                confirmText="Confirmar"
+                cancelText="Cancelar"
+                maximumDate={new Date()}
+                onConfirm={(birth) => {
+                    setOpen(false)
+                    setBirth(birth)
+                }}
+                onCancel={() => {
+                    setOpen(false)
                 }}
             />
 
