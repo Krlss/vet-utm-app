@@ -2,10 +2,11 @@ import React, { useState, useContext } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
-import { namePet, race as RacePet, birthPet } from '../core/utils';
+import { namePet, race as RacePet } from '../core/utils';
 import { CreatedNewPet } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import DatePicker from 'react-native-date-picker'
+import { useToast } from "react-native-toast-notifications";
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
@@ -29,6 +30,8 @@ const AddPet = ({ navigation, route }) => {
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
     const [open, setOpen] = useState(false)
+    const toast = useToast();
+
     const handleSubmit = async () => {
 
         const resn = namePet(name);
@@ -47,6 +50,7 @@ const AddPet = ({ navigation, route }) => {
         if (res != 404 || res != 500 || res != 401 || res != 405) {
             saveUSER(res.data)
             navigation.navigate('HomeScreen');
+            return toast.show('Mascota agregada a tu perfil', { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
         }
     }
 
