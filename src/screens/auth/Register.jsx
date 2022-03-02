@@ -47,7 +47,7 @@ const Register = ({ navigation }) => {
         const cedulaError = CedulaValidator(cedula.value);
         const last_nameError = last_nameValidator(last_name.value);
         const phoneError = phoneValidator(phone.value);
-
+        Keyboard.dismiss();
         if (emailError || passwordError || nameError || cedulaError || last_nameError || phoneError) {
             setEmail({ ...email, error: emailError });
             setPassword({ ...password, error: passwordError });

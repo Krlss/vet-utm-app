@@ -5,7 +5,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     Text,
-    Linking
+    Linking,
+    Keyboard
 } from 'react-native';
 
 import Background from '../../components/Background';
@@ -31,6 +32,7 @@ const Login = ({ navigation }) => {
 
     const handleSubmit = async () => {
         setLoading(true);
+        Keyboard.dismiss();
         const emailError = emailValidator(email.value);
         const passwordError = passwordValidator(password.value);
 
@@ -127,7 +129,10 @@ const Login = ({ navigation }) => {
 
             <View style={styles.row}>
                 <Text style={styles.label}>¿No tienes una cuenta? </Text>
-                <TouchableOpacity onPress={() => navigation.navigate('Register')}>
+                <TouchableOpacity onPress={() => {
+                    navigation.navigate('Register');
+                    Keyboard.dismiss();
+                }}>
                     <Text style={styles.link}>Registrarse</Text>
                 </TouchableOpacity>
             </View>

@@ -1,11 +1,12 @@
 import React, { useState, useContext } from "react";
-import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 
 import { SimpleInput, SimpleTitle } from '../components';
 import { passwordValidator } from '../core/utils';
 import { updatedPassword } from '../core/utils-http';
 import { theme } from '../core/theme';
 import AuthContext from "../context/auth/AuthContext";
+import { useToast } from "react-native-toast-notifications";
 
 const ChangePassword = ({ navigation }) => {
 
@@ -16,12 +17,13 @@ const ChangePassword = ({ navigation }) => {
     const [password, setPassword] = useState();
     const [passwordError, setPasswordError] = useState();
     const [loading, setLoading] = useState(false);
-    const [msg, setMsg] = useState('');
+    const toast = useToast();
 
     const handleSubmit = async () => {
+        if (currentPassword === password) return toast.show("Utiliza una nueva contraseña...!", { type: 'custom', duration: 4000, offset: 30, animationType: "slide-in" });
         const passc = passwordValidator(currentPassword);
         const passn = passwordValidator(password);
-
+        Keyboard.dismiss();
         setCurrentPasswordError(passc);
         setPasswordError(passn);
 
@@ -33,18 +35,19 @@ const ChangePassword = ({ navigation }) => {
         console.log(res);
 
         if (res.status === 404) {
-            setMsg(res.data.message);
+            return toast.show(res.data.message, { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 500) {
-            setMsg('Ocurrió un error en el servidor');
+            return toast.show("Ocurrió un error en el servidor", { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 401) {
-            setMsg('No tienes permisos para hacer esa acción');
+            return toast.show("No tienes permisos para hacer esa acción", { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res) {
             navigation.navigate('HomeScreen');
+            return toast.show("Tu contraseña ha sido restablecida", { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
         }
     }
 
     return (
-        <View style={{ marginTop: 10 }}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}>
 
             <SimpleTitle title='Contraseña actual' />
             <SimpleInput
@@ -66,14 +69,12 @@ const ChangePassword = ({ navigation }) => {
                 }}
             />
 
-            {msg ? <Text style={{ fontSize: 13, color: 'red', paddingHorizontal: 20 }}>{msg}</Text> : null}
-
             <View style={Styles.buttonContainer}>
                 <TouchableOpacity disabled={loading} style={Styles.button} onPress={handleSubmit}>
                     <Text style={Styles.buttonText}>{!loading ? 'LISTO' : 'CAMBIANDO...'}</Text>
                 </TouchableOpacity>
             </View>
-        </View>
+        </ScrollView>
     );
 }
 
