@@ -1,5 +1,5 @@
 import React, { useState, useContext } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet } from '../core/utils';
@@ -38,7 +38,7 @@ const AddPet = ({ navigation, route }) => {
         const resr = RacePet(race);
         setNameError(resn);
         setRaceError(resr);
-
+        Keyboard.dismiss();
         if (resn || resr) return;
 
         setLoading(true);
