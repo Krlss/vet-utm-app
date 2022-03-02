@@ -1,15 +1,17 @@
 import React, { useState, useContext, useEffect } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber, nameValidator, emailValidator, phoneValidator, last_nameValidator } from '../core/utils';
 import { getProvinces, getCantonsByProvince, updatedDataUser } from '../core/utils-http';
+import { useToast } from "react-native-toast-notifications";
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
 
 const EditUserProfile = ({ navigation }) => {
     const { user_data, saveUSER } = useContext(AuthContext);
+    const toast = useToast();
 
     const [name, setName] = useState(user_data.name);
     const [last_name, setLastName] = useState(user_data.last_name1 + " " + user_data.last_name2);
@@ -34,6 +36,7 @@ const EditUserProfile = ({ navigation }) => {
     const [phoneError, setPhoneError] = useState('');
 
     const handleSubmit = async () => {
+        Keyboard.dismiss();
 
         const resn = nameValidator(name);
         const resl = last_nameValidator(last_name);
@@ -61,20 +64,17 @@ const EditUserProfile = ({ navigation }) => {
 
         console.log(res.status);
         if (res.status === 404) {
-            setMsg('Usuario no encontrado');
-            return;
+            return toast.show("Usuario no encontrado", { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 500) {
-            setMsg('Ocurrió un error en el servidor')
-            return;
+            return toast.show("Ocurrió un error en el servidor", { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 401) {
-            setMsg('No estás autorizado para actualizar este perfil')
-            return;
+            return toast.show("No estas autorizado para actualizar este perfil", { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 301) {
-            setMsg(res.data.message);
-            return;
+            return toast.show(res.data.message, { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
         }
         saveUSER(res.data)
         navigation.navigate('HomeScreen');
+        return toast.show("Los datos de tu perfil fueron actualizados", { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
 
     }
 
