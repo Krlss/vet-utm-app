@@ -6,6 +6,7 @@ import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityI
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 import { RowComponent, Component, ViewSpacing } from '../components';
+import { useToast } from "react-native-toast-notifications";
 
 import { updatedDataPet } from '../core/utils-http';
 
@@ -17,6 +18,7 @@ const PetProfile = ({ navigation, route }) => {
         castrated, race, lost, n_lost, images } = route.params.pet;
 
     const [loading, setLoading] = useState(false);
+    const toast = useToast();
 
     const deletePet = (data, token, navigation) =>
         Alert.alert(
@@ -31,7 +33,10 @@ const PetProfile = ({ navigation, route }) => {
                     text: "Si", onPress: async () => {
                         setLoading(true);
                         const res = await updatedDataPet(data, token);
-                        if (res !== 400 || res !== 500 || res !== 401) navigation.navigate('HomeScreen');
+                        if (res !== 400 || res !== 500 || res !== 401) {
+                            navigation.navigate('HomeScreen');
+                            return toast.show('Mascota eliminada de tu perfil', { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
+                        }
                         if (res === 400 || res === 500 || res === 401) setLoading(false);
                     }
                 }
