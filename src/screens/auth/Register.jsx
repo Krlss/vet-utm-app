@@ -153,7 +153,8 @@ const Register = ({ navigation }) => {
                 value={password.value}
                 onChangeText={text => setPassword({ value: text, error: '' })}
                 errorText={password.error}
-                secureTextEntry
+                type="password"
+                show={false}
             />
 
             <Button loading={loading} mode="contained" onPress={handleSubmit}>

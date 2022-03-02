@@ -7,7 +7,7 @@ import {
 
 const Background = ({ children }) => {
     return (
-        <ScrollView style={styles.background} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
+        <ScrollView keyboardShouldPersistTaps='handled' style={styles.background} contentContainerStyle={{ flexGrow: 1, alignItems: 'center', justifyContent: 'center' }}>
             <KeyboardAvoidingView style={styles.container} behavior="height">
                 {children}
             </KeyboardAvoidingView>

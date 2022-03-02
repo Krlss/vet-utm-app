@@ -109,7 +109,8 @@ const Login = ({ navigation }) => {
                 value={password.value}
                 onChangeText={text => setPassword({ value: text, error: '' })}
                 errorText={password.error}
-                secureTextEntry
+                type="password"
+                show={false}
             />
 
             <View style={styles.forgotPassword}>
