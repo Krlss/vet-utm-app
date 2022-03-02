@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { Text, View, StyleSheet, FlatList, ActivityIndicator, RefreshControl } from 'react-native';
+import { Text, View, StyleSheet, FlatList, ActivityIndicator, RefreshControl, ScrollView as ViewScroll } from 'react-native';
 
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from 'react-native-elements'
 import { Image } from 'react-native-elements';
 import { ImageIcon, HeaderHome } from '../components';
@@ -23,7 +23,7 @@ const Home = ({
         const res = await getAnimalsLost();
 
         if (res !== 500 || res !== 404) {
-            
+
             setPets(res.data);
             setRes(true);
             setRefreshing(false);
@@ -73,14 +73,14 @@ const Home = ({
     }
 
     return (
-        <View style={{ backgroundColor: 'white' }}>
+        <ViewScroll refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
+            style={{ backgroundColor: 'white' }}>
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
                 res ?
                     pets ?
                         pets.length > 0 ?
                             <FlatList
-                                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
                                 data={pets}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.pet_id}
@@ -98,7 +98,7 @@ const Home = ({
                         <ActivityIndicator size="large" color="#333" />
                     </View>
             }
-        </View>
+        </ViewScroll>
     );
 }
 
