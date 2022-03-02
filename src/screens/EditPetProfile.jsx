@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image } from 'react-native';
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet, deleteItemArr } from '../core/utils';
@@ -7,6 +7,7 @@ import { updatedDataPet } from '../core/utils-http';
 import { Icon } from 'react-native-elements'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
+import { useToast } from "react-native-toast-notifications";
 
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
@@ -32,15 +33,17 @@ const EditUserProfile = ({ navigation, route }) => {
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
     const imagesRef = useRef('images');
+    const toast = useToast();
 
     const handleSubmit = async () => {
+        Keyboard.dismiss();
 
         const resn = namePet(name);
         const resr = RacePet(race);
         setNameError(resn);
         setRaceError(resr);
 
-        if (resn || resr ) return;
+        if (resn || resr) return;
 
         setLoading(true);
         const res = await updatedDataPet({
@@ -51,6 +54,7 @@ const EditUserProfile = ({ navigation, route }) => {
         if (res !== 404 || res !== 500 || res !== 401) {
             saveUSER(res.data)
             navigation.navigate('HomeScreen');
+            return toast.show("Los datos de tu mascota se actualizaron!", { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
         }
     }
 
@@ -60,7 +64,7 @@ const EditUserProfile = ({ navigation, route }) => {
     };
 
     const selectImage = async () => {
-        if (images.length >= 6) return alert('Solo se pueden subir 6 fotos!')
+        if (images.length >= 6) return toast.show("Solo se pueden subir 6 fotos!", { type: "custom", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
         let result = await ImagePicker.launchImageLibraryAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.All,
             quality: 1,
