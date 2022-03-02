@@ -5,7 +5,7 @@ import {
     ReportPetScreen,
     UserReportDATA,
     PetReportDATA
-} from '../screens/Index';
+} from '../screens';
 
 const ReporteStack = createNativeStackNavigator();
 

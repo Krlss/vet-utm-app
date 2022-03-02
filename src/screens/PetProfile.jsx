@@ -5,7 +5,7 @@ import { iconType, birthToAge, nameStringPrayer, sexAnimal, castratedAnimal } fr
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
-import { RowComponent, Component, ViewSpacing } from '../components/Index';
+import { RowComponent, Component, ViewSpacing } from '../components';
 import { useToast } from "react-native-toast-notifications";
 
 import { updatedDataPet } from '../core/utils-http';

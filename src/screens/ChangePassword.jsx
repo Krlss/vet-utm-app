@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, Keyboard, ScrollView } from 'react-native';
 
-import { SimpleInput, SimpleTitle } from '../components/Index';
+import { SimpleInput, SimpleTitle } from '../components';
 import { passwordValidator } from '../core/utils';
 import { updatedPassword } from '../core/utils-http';
 import { theme } from '../core/theme';

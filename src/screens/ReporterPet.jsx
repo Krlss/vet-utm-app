@@ -20,7 +20,7 @@ import { theme } from '../core/theme';
 
 import { deleteItemArr } from '../core/utils';
 import { reportPet } from '../core/utils-http';
-import { TitleAndButton } from '../components/Index';
+import { TitleAndButton } from '../components';
 
 
 const ReporterPet = ({ navigation }) => {

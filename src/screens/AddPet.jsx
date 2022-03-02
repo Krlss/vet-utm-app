@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle } from '../components/Index';
+import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet } from '../core/utils';
 import { CreatedNewPet } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';

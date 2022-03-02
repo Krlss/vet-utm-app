@@ -1,7 +1,7 @@
 import React, { useState, useContext, useRef } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle } from '../components/Index';
+import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet, birthPet, deleteItemArr } from '../core/utils';
 import { updatedDataPet } from '../core/utils-http';
 import { Icon } from 'react-native-elements'
