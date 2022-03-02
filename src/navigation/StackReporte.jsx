@@ -3,9 +3,9 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { theme } from '../core/theme';
 import {
     ReportPetScreen,
-    userReportDATA,
-    petReportDATA
-} from '../screens';
+    UserReportDATA,
+    PetReportDATA
+} from '../screens/Index';
 
 const ReporteStack = createNativeStackNavigator();
 
@@ -23,10 +23,10 @@ const StackReporte = () => {
                     title: 'Reporte'
                 }}
             />
-            <ReporteStack.Screen name='userReportDATA' component={userReportDATA}
+            <ReporteStack.Screen name='UserReportDATA' component={UserReportDATA}
                 options={{ title: 'Datos del dueño' }}
             />
-            <ReporteStack.Screen name='petReportDATA' component={petReportDATA}
+            <ReporteStack.Screen name='PetReportDATA' component={PetReportDATA}
                 options={{ title: 'Datos de la mascota' }}
             />
         </ReporteStack.Navigator>

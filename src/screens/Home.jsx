@@ -5,7 +5,7 @@ import { Text, View, StyleSheet, FlatList, ActivityIndicator, RefreshControl, Sc
 import { ScrollView, TouchableOpacity } from "react-native-gesture-handler";
 import { Icon } from 'react-native-elements'
 import { Image } from 'react-native-elements';
-import { ImageIcon, HeaderHome } from '../components';
+import { ImageIcon, HeaderHome } from '../components/Index';
 import { iconType } from '../core/utils';
 import { getAnimalsLost } from '../core/utils-http';
 

@@ -20,7 +20,7 @@ import { theme } from '../core/theme';
 
 import { deleteItemArr } from '../core/utils';
 import { reportPet } from '../core/utils-http';
-import { TitleAndButton } from '../components';
+import { TitleAndButton } from '../components/Index';
 
 
 const ReporterPet = ({ navigation }) => {
@@ -131,9 +131,9 @@ const ReporterPet = ({ navigation }) => {
     return (
         <View style={styles.container}>
             <View>
-                <TitleAndButton disabled={disabled} title='Datos del dueño' onPress={() => { navigation.navigate('userReportDATA') }} />
+                <TitleAndButton disabled={disabled} title='Datos del dueño' onPress={() => { navigation.navigate('UserReportDATA') }} />
 
-                <TitleAndButton disabled={disabled} title='Datos de la mascota' onPress={() => { navigation.navigate('petReportDATA') }} />
+                <TitleAndButton disabled={disabled} title='Datos de la mascota' onPress={() => { navigation.navigate('PetReportDATA') }} />
 
                 {
                     data.length ?

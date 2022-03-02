@@ -1,7 +1,7 @@
 import React, { useState, useContext, useEffect } from "react";
 import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator, Keyboard } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
+import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components/Index';
 import { onlyNumber, nameValidator, emailValidator, phoneValidator, last_nameValidator } from '../core/utils';
 import { getProvinces, getCantonsByProvince, updatedDataUser } from '../core/utils-http';
 import { useToast } from "react-native-toast-notifications";

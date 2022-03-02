@@ -6,7 +6,7 @@ import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AuthContext from '../context/auth/AuthContext';
 
-import { ItemList } from '../components';
+import { ItemList } from '../components/Index';
 import UserProfile from './UserProfile';
 import { getUserProfile } from '../core/utils-http';
 

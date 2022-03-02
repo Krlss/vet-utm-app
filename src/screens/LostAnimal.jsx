@@ -3,7 +3,7 @@ import { Image, View, StyleSheet, Dimensions, Animated, ActivityIndicator, Text 
 import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { iconType, nameStringPrayer, birthToAge, sexAnimal, castratedAnimal } from '../core/utils';
 import { getOneAnimalLost } from '../core/utils-http';
-import { HeaderLostPet, Title, RowComponent, Value, Component, ViewSpacing } from '../components';
+import { HeaderLostPet, Title, RowComponent, Value, Component, ViewSpacing } from '../components/Index';
 
 const { width, height } = Dimensions.get('screen');
 const ITEM_WIDTH = width;
