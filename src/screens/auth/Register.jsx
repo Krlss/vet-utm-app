@@ -102,6 +102,7 @@ const Register = ({ navigation }) => {
                 keyboardType='numeric'
                 returnKeyType="next"
                 value={cedula.value}
+                show={true}
                 onChangeText={text => setCedula({ value: text, error: '' })}
                 errorText={cedula.error}
             />
@@ -110,6 +111,7 @@ const Register = ({ navigation }) => {
                 label="Nombres"
                 maxLength={30}
                 returnKeyType="next"
+                show={true}
                 value={name.value}
                 onChangeText={text => setName({ value: text, error: '' })}
                 errorText={name.error}
@@ -119,6 +121,7 @@ const Register = ({ navigation }) => {
                 label="Apellidos"
                 maxLength={30}
                 returnKeyType="next"
+                show={true}
                 value={last_name.value}
                 onChangeText={text => setLast_name({ value: text, error: '' })}
                 errorText={last_name.error}
@@ -128,6 +131,7 @@ const Register = ({ navigation }) => {
                 label="Telefono celular"
                 maxLength={10}
                 returnKeyType="next"
+                show={true}
                 keyboardType='numeric'
                 value={phone.value}
                 onChangeText={text => setPhone({ value: text, error: '' })}

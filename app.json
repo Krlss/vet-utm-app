@@ -6,11 +6,11 @@
       "backgroundColor": "#ffb509"
     },
     "name": "SIM",
-    "slug": "comVetUtm",
+    "slug": "comVetUtmSIM",
     "version": "1.0.0",
     "orientation": "portrait",
     "android": {
-      "versionCode" : 2,
+      "versionCode" : 3,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

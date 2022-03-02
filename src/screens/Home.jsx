@@ -73,14 +73,15 @@ const Home = ({
     }
 
     return (
-        <ViewScroll refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
-            style={{ backgroundColor: 'white' }}>
+        <View
+            style={{ backgroundColor: 'white', height: '100%' }}>
             <HeaderHome navigation={navigation} Touch={() => { navigation.navigate('StackMenuMain') }} />
             {
                 res ?
                     pets ?
                         pets.length > 0 ?
                             <FlatList
+                                refreshControl={<RefreshControl refreshing={refreshing} onRefresh={() => { setRefreshing(true) }} />}
                                 data={pets}
                                 renderItem={renderItem}
                                 keyExtractor={item => item.pet_id}
@@ -98,7 +99,7 @@ const Home = ({
                         <ActivityIndicator size="large" color="#333" />
                     </View>
             }
-        </ViewScroll>
+        </View>
     );
 }
 
