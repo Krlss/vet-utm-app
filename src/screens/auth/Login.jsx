@@ -5,6 +5,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     Text,
+    Linking
 } from 'react-native';
 
 import Background from '../../components/Background';
@@ -16,7 +17,7 @@ import Button from '../../components/Button';
 import { theme } from '../../core/theme';
 
 import { emailValidator, passwordValidator } from '../../core/utils';
-import { Login as login } from '../../core/utils-http';
+import { Login as login, base_url } from '../../core/utils-http';
 import AuthContext from '../../context/auth/AuthContext';
 import { useToast } from "react-native-toast-notifications";
 
@@ -111,7 +112,10 @@ const Login = ({ navigation }) => {
 
             <View style={styles.forgotPassword}>
                 <TouchableOpacity
-                /* onPress={() => navigation.navigate('ForgotPasswordScreen')} */
+                    onPress={() => Linking.openURL(base_url + "/forgot-password").catch(e => {
+                        console.error("Failed opening page because: ", err)
+                        alert('Failed to open page')
+                    })}
                 >
                     <Text style={styles.label}>¿Olvidaste tu contraseña?</Text>
                 </TouchableOpacity>
