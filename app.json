@@ -5,12 +5,12 @@
       "image": "./assets/splash.png",
       "backgroundColor": "#ffb509"
     },
-    "name": "SIM",
+    "name": "Identificación de mascotas UTM",
     "slug": "comVetUtmSIM",
     "version": "1.0.0",
     "orientation": "portrait",
     "android": {
-      "versionCode" : 3,
+      "versionCode": 6,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

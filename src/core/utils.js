@@ -133,8 +133,8 @@ export const castratedAnimal = (string) => {
 }
 
 export const birthToAge = (date) => {
-
-    return moment(date, "YYYYMMDD").fromNow();
+    
+    return moment(date, "YYYYMMDD").fromNow().replace('hace ', '');
 };
 
 

@@ -12,7 +12,7 @@ import { useToast } from "react-native-toast-notifications";
 import AuthContext from "../context/auth/AuthContext";
 import { theme } from '../core/theme';
 
-import DatePicker from 'react-native-date-picker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 
 const EditUserProfile = ({ navigation, route }) => {
     const { data, api_token } = route.params;
@@ -25,7 +25,7 @@ const EditUserProfile = ({ navigation, route }) => {
     const [birth, setBirth] = useState(data.birth ? new Date(data.birth) : new Date);
     const [castrated, setCastrated] = useState(data.castrated);
     const [lost, setLost] = useState(data.lost);
-    const [open, setOpen] = useState(false)
+    const [show, setShow] = useState(false);
     const [images, setImages] = useState(data.images);
 
     const [loading, setLoading] = useState(false);
@@ -34,6 +34,12 @@ const EditUserProfile = ({ navigation, route }) => {
     const [raceError, setRaceError] = useState('');
     const imagesRef = useRef('images');
     const toast = useToast();
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || birth;
+        setShow(Platform.OS === 'ios');
+        setBirth(currentDate);
+    };
 
     const handleSubmit = async () => {
         Keyboard.dismiss();
@@ -126,30 +132,23 @@ const EditUserProfile = ({ navigation, route }) => {
             }}>
                 {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
 
-                <TouchableOpacity style={Styles.buttonDate} onPress={() => setOpen(true)}>
+                <TouchableOpacity style={Styles.buttonDate} onPress={() => setShow(true)}>
                     <MaterialIcon name='update' size={25} color='#333' />
                 </TouchableOpacity>
             </View>
 
-            <DatePicker
-                date={birth}
-                onDateChange={setBirth}
-                mode='date'
-                locale='es'
-                modal
-                open={open}
-                title='Fecha de nacimiento'
-                confirmText="Confirmar"
-                cancelText="Cancelar"
-                maximumDate={new Date()}
-                onConfirm={(birth) => {
-                    setOpen(false)
-                    setBirth(birth)
-                }}
-                onCancel={() => {
-                    setOpen(false)
-                }}
-            />
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={birth}
+                    mode='date'
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(2000, 1, 1)}
+                />
+            )}
 
             <SimpleTitle title='Sexo' />
             <View style={{ paddingHorizontal: 15 }}>

@@ -1,4 +1,4 @@
-package com.vetutmapp;
+package com.vetutm;
 
 import android.os.Bundle;
 

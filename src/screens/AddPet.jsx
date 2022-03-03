@@ -5,7 +5,8 @@ import { SimpleInput, SimpleTitle } from '../components';
 import { namePet, race as RacePet } from '../core/utils';
 import { CreatedNewPet } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
-import DatePicker from 'react-native-date-picker'
+import DateTimePicker from '@react-native-community/datetimepicker';
+
 import { useToast } from "react-native-toast-notifications";
 
 import AuthContext from "../context/auth/AuthContext";
@@ -29,8 +30,16 @@ const AddPet = ({ navigation, route }) => {
 
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
-    const [open, setOpen] = useState(false)
+    const [show, setShow] = useState(false);
     const toast = useToast();
+
+
+    const onChange = (event, selectedDate) => {
+        const currentDate = selectedDate || birth;
+        setShow(Platform.OS === 'ios');
+        setBirth(currentDate);
+    };
+
 
     const handleSubmit = async () => {
 
@@ -102,30 +111,23 @@ const AddPet = ({ navigation, route }) => {
             }}>
                 {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
 
-                <TouchableOpacity style={Styles.buttonDate} onPress={() => setOpen(true)}>
+                <TouchableOpacity style={Styles.buttonDate} onPress={() => setShow(true)}>
                     <MaterialIcon name='update' size={25} color='#333' />
                 </TouchableOpacity>
             </View>
 
-            <DatePicker
-                date={birth}
-                onDateChange={setBirth}
-                mode='date'
-                locale='es'
-                modal
-                open={open}
-                title='Fecha de nacimiento'
-                confirmText="Confirmar"
-                cancelText="Cancelar"
-                maximumDate={new Date()}
-                onConfirm={(birth) => {
-                    setOpen(false)
-                    setBirth(birth)
-                }}
-                onCancel={() => {
-                    setOpen(false)
-                }}
-            />
+            {show && (
+                <DateTimePicker
+                    testID="dateTimePicker"
+                    value={birth}
+                    mode='date'
+                    is24Hour={true}
+                    display="default"
+                    onChange={onChange}
+                    maximumDate={new Date()}
+                    minimumDate={new Date(2000, 1, 1)}
+                />
+            )}
 
             <SimpleTitle title='Sexo' />
             <View style={{ paddingHorizontal: 15 }}>
