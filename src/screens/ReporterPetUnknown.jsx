@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Image, View, StyleSheet, Dimensions, TouchableOpacity, Animated, Text, ActivityIndicator } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
 import { deleteItemArr } from '../core/utils';
@@ -7,6 +7,7 @@ import { createLostPetunknown } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useToast } from "react-native-toast-notifications";
+import AuthContext from '../context/auth/AuthContext'; //IP PUBLIC
 
 import { theme } from '../core/theme';
 const { width, height } = Dimensions.get('screen');
@@ -25,11 +26,12 @@ const ReporterPetUnknown = ({ navigation }) => {
         setImages(deleteItemArr(images, item));
     };
 
+    const { user_data } = useContext(AuthContext);
 
     const handleSubmit = async () => {
         setDisable(true);
         refImage.current.scrollToIndex({ Animated: false, index: 0 });
-        const res = await createLostPetunknown(images);
+        const res = await createLostPetunknown({ images, public_ip: user_data.public_ip });
         if (res) {
             toast.show("Las imagenes fueron enviadas a un administrador, las imagenes serán revisadas para ser publicadas.", {
                 type: "success",
@@ -81,7 +83,6 @@ const ReporterPetUnknown = ({ navigation }) => {
     const ScrollX = React.useRef(new Animated.Value(0)).current;
     const refImage = React.useRef('refImage');
 
-    console.log(images);
     return (
         <View style={Styles.container}>
 

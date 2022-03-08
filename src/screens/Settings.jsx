@@ -5,6 +5,7 @@ import BottomSheet, { BottomSheetScrollView } from '@gorhom/bottom-sheet';
 import { Icon } from 'react-native-elements'
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import AuthContext from '../context/auth/AuthContext';
+import publicIP from 'react-native-public-ip';
 
 import { ItemList } from '../components';
 import UserProfile from './UserProfile';
@@ -20,7 +21,6 @@ const Settings = ({ navigation }) => {
     const { saveUSER } = useContext(AuthContext);
     const [dataStorage, setDataStorage] = useState();
     const [loading, setLoading] = useState(true);
-
     const logout = async () => {
         try {
             const removeStorage = await AsyncStorage.removeItem('@auth_vet.utm');
@@ -32,6 +32,10 @@ const Settings = ({ navigation }) => {
 
     useEffect(async () => {
         try {
+            const public_ip = await publicIP();
+
+            saveUSER({ public_ip });
+
             const jsonValue = await AsyncStorage.getItem('@auth_vet.utm');
             setDataStorage(jsonValue != null ? JSON.parse(jsonValue) : null);
             if (jsonValue !== null) {
@@ -59,6 +63,7 @@ const Settings = ({ navigation }) => {
                         profile_photo_path, user_id,
                         canton, province, pet, api_token,
                         id_province, parish, id_parish,
+                        public_ip,
                         address_ref, main_street, street_1_sec, street_2_sec,
                     });
                 }
