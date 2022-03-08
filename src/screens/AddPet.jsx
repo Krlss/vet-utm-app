@@ -16,7 +16,7 @@ const AddPet = ({ navigation, route }) => {
 
     const { api_token } = route.params;
 
-    const { saveUSER } = useContext(AuthContext);
+    const { saveUSER, user_data } = useContext(AuthContext);
 
     const [name, setName] = useState();
     const [specie, setSpecie] = useState('canine');
@@ -52,7 +52,7 @@ const AddPet = ({ navigation, route }) => {
 
         setLoading(true);
         const res = await CreatedNewPet({
-            name, specie, race, birth, sex, castrated, lost
+            name, specie, race, birth, sex, castrated, lost, public_ip: user_data.public_ip
         }, api_token);
         console.log(res);
         setLoading(false);
