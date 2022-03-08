@@ -55,9 +55,7 @@ const petReportDATA = ({ navigation }) => {
     }
 
     return (
-        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}
-            keyboardShouldPersistTaps='handled'
-        >
+        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}>
 
             <SimpleTitle title='Nombre' />
             <SimpleInput

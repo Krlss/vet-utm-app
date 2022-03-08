@@ -114,7 +114,7 @@ const EditUserProfile = ({ navigation }) => {
     useEffect(async () => {
         const res = await getProvinces();
         const res1 = await getCantonsByProvince(province_id ? province_id : res.data[0].id);
-        const res2 = await getParishByCanton(canton_id ? canton_id : res2.data[0].id);
+        const res2 = await getParishByCanton(canton_id ? canton_id : res1.data[0].id);
         setLoadingScreen(false);
         console.log(res1);
         if (res !== 500 || res !== 404) {

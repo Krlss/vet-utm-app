@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber, nameValidator, emailValidator, phoneValidator, last_nameValidator, CedulaValidator, addressValidator } from '../core/utils';
-import { getProvinces, getCantonsByProvince } from '../core/utils-http';
+import { getProvinces, getCantonsByProvince, getParishByCanton } from '../core/utils-http';
 
 import ReportContext from "../context/Report/ReportContext";
 
@@ -21,11 +21,12 @@ const userReportDATA = ({ navigation }) => {
     const [phone, setPhone] = useState(ruser_data.phone);
     const [province_id, setProvince_id] = useState(ruser_data.id_province);
     const [canton_id, setCanton_id] = useState(ruser_data.id_canton);
-    const [address, setAddress] = useState(ruser_data.address);
+    const [parish_id, setParish_id] = useState(ruser_data.parish_id);
 
     //data api
     const [provinces, setProvinces] = useState();
     const [cantons, setCantons] = useState();
+    const [parish, setParish] = useState();
 
     const [loadingScreen, setLoadingScreen] = useState(true);
 
@@ -35,7 +36,12 @@ const userReportDATA = ({ navigation }) => {
     const [lastnameError, setLastNameError] = useState('');
     const [emailError, setEmailError] = useState('');
     const [phoneError, setPhoneError] = useState('');
-    const [addressError, setAddressError] = useState('');
+
+
+    const [main_street, setMainStreet] = useState(ruser_data.main_street);
+    const [street_1_sec, setStreetSec1] = useState(ruser_data.street_1_sec);
+    const [street_2_sec, setStreetSec2] = useState(ruser_data.street_2_sec);
+    const [address_ref, setAddressRef] = useState(ruser_data.address_ref);
 
     const handleSubmit = async () => {
 
@@ -44,14 +50,12 @@ const userReportDATA = ({ navigation }) => {
         const resl = last_nameValidator(last_name);
         const rese = emailValidator(email);
         const resp = phoneValidator(phone);
-        const resa = addressValidator(address);
 
         setCedulaError(resc);
         setNameError(resn);
         setLastNameError(resl);
         setEmailError(rese);
         setPhoneError(resp);
-        setAddressError(resa);
 
         if (resn || resl || rese || resp || cedulaError) return;
 
@@ -66,7 +70,8 @@ const userReportDATA = ({ navigation }) => {
             phone,
             id_province: province_id,
             id_canton: canton_id,
-            address
+            id_parish: parish_id,
+            main_street, street_1_sec, street_2_sec, address_ref
         });
         navigation.pop()
     }
@@ -77,16 +82,34 @@ const userReportDATA = ({ navigation }) => {
         if (res !== 500 || res !== 404) {
             setCantons(res.data);
             setCanton_id(res.data[0].id);
+
+            const res1 = await getParishByCanton(res.data[0].id);
+            if (res1 !== 500 || res1 !== 404) {
+                setParish(res1.data);
+                setParish_id(res1.data[0].id);
+            }
+        }
+    }
+
+    const handleChangeCanton = async (id) => {
+        setCanton_id(id);
+        const res = await getParishByCanton(id);
+        if (res !== 500 || res !== 404) {
+            setParish(res.data);
+            setParish_id(res.data[0].id);
         }
     }
 
     useEffect(async () => {
         const res = await getProvinces();
         const res1 = await getCantonsByProvince(province_id ? province_id : res.data[0].id);
+        const res2 = await getParishByCanton(canton_id ? canton_id : res1.data[0].id);
         setLoadingScreen(false);
+        console.log(res1);
         if (res !== 500 || res !== 404) {
             setProvinces(res.data);
             setCantons(res1.data);
+            setParish(res2.data);
         }
     }, [])
 
@@ -187,7 +210,7 @@ const userReportDATA = ({ navigation }) => {
                         <Picker
                             selectedValue={canton_id}
                             style={{ width: '100%', }}
-                            onValueChange={(itemValue, itemIndex) => setCanton_id(itemValue)}
+                            onValueChange={(itemValue, itemIndex) => handleChangeCanton(itemValue)}
                         >
                             {
                                 cantons ?
@@ -201,17 +224,59 @@ const userReportDATA = ({ navigation }) => {
                         </Picker>
                     </View>
 
-                    <SimpleTitle title='Dirección' />
-                    <SimpleTextArea
-                        placeholder='Dirección'
+                    <SimpleTitle title='Parroquia' />
+                    <View style={{ paddingHorizontal: 15 }}>
+                        <Picker
+                            selectedValue={parish_id}
+                            style={{ width: '100%', }}
+                            onValueChange={(itemValue, itemIndex) => setParish_id(itemValue)}
+                        >
+                            {
+                                parish ?
+                                    parish.map((e, i) => {
+                                        return (
+                                            <Picker.Item key={e.id} label={e.name} value={e.id} />
+                                        );
+                                    })
+                                    : null
+                            }
+                        </Picker>
+                    </View>
+
+                    <SimpleTitle title='Calle principal' />
+                    <SimpleInput
+                        placeholder='Calle principal'
                         length={255}
-                        value={address}
-                        error={addressError}
+                        value={main_street}
+                        numberOfLines={3}
+                        onChangeText={text => setMainStreet(text)}
+                    />
+
+                    <SimpleTitle title='Calle secundaria 1' />
+                    <SimpleInput
+                        placeholder='Calle secundaria 1'
+                        length={255}
+                        value={street_1_sec}
+                        numberOfLines={3}
+                        onChangeText={text => setStreetSec1(text)}
+                    />
+
+                    <SimpleTitle title='Calle secundaria 2' />
+                    <SimpleInput
+                        placeholder='Calle secundaria 2'
+                        length={255}
+                        value={street_2_sec}
+                        numberOfLines={3}
+                        onChangeText={text => setStreetSec2(text)}
+                    />
+
+                    <SimpleTitle title='Referencia' />
+                    <SimpleTextArea
+                        placeholder='Referencia'
+                        length={255}
+                        value={address_ref}
                         numberOfLines={5}
-                        onChangeText={text => {
-                            setAddress(text)
-                            setAddressError('')
-                        }}
+                        onChangeText={text => setAddressRef(text)}
                     />
 
                     <View style={Styles.buttonContainer}>

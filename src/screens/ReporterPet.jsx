@@ -21,6 +21,7 @@ import { theme } from '../core/theme';
 import { deleteItemArr } from '../core/utils';
 import { reportPet } from '../core/utils-http';
 import { TitleAndButton } from '../components';
+import AuthContext from '../context/auth/AuthContext';
 
 
 const ReporterPet = ({ navigation }) => {
@@ -28,8 +29,9 @@ const ReporterPet = ({ navigation }) => {
     const [disabled, setDisable] = useState(false);
 
     const { ruser_data, ranimal_data, rsaveUSER, rsavePET } = useContext(ReportContext);
+    const { user_data } = useContext(AuthContext);
 
-    const { name, user_id, last_name1, last_name2, email, phone, id_province, id_canton, address } = ruser_data;
+    const { name, user_id, last_name1, last_name2, email, phone, id_province, id_canton, id_parish, address_ref, main_street, street_1_sec, street_2_sec } = ruser_data;
     const { birth, sex, castrated, specie, race } = ranimal_data;
 
     const toast = useToast();
@@ -77,7 +79,9 @@ const ReporterPet = ({ navigation }) => {
             user: {
                 name, user_id, last_name1,
                 last_name2, email, phone,
-                id_province, id_canton, address
+                id_province, id_canton,
+                id_parish, address_ref, main_street, street_1_sec, street_2_sec,
+                public_ip: user_data.public_ip
             },
             birth, sex, castrated, specie, race,
             namepet: ranimal_data.name, images: data
@@ -103,7 +107,11 @@ const ReporterPet = ({ navigation }) => {
                 phone: null,
                 id_province: null,
                 id_canton: null,
-                address: null
+                id_parish: null,
+                address_ref: null,
+                main_street: null,
+                street_1_sec: null,
+                street_2_sec: null,
             });
             rsavePET({
                 name: null,
@@ -180,7 +188,7 @@ const ReporterPet = ({ navigation }) => {
                     {
                         data.length > 0 &&
                             name && user_id && last_name1 && last_name2 &&
-                            email && phone && id_province && id_canton && address && birth && sex && castrated && specie && race && ranimal_data.name
+                            email && phone && id_province && id_canton && birth && sex && castrated && specie && race && ranimal_data.name
                             ?
                             < TouchableOpacity disabled={disabled ? true : false}
                                 style={[styles.buttonSend, { opacity: disabled ? .8 : 1, backgroundColor: disabled ? 'transparent' : theme.colors.All }]}
