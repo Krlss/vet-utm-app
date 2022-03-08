@@ -101,8 +101,8 @@ const ReporterPet = ({ navigation }) => {
             rsaveUSER({
                 user_id: null,
                 name: null,
-                last_name1: '',
-                last_name2: '',
+                last_name1: "",
+                last_name2: "",
                 email: null,
                 phone: null,
                 id_province: null,

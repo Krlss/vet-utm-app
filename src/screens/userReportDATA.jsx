@@ -21,7 +21,7 @@ const userReportDATA = ({ navigation }) => {
     const [phone, setPhone] = useState(ruser_data.phone);
     const [province_id, setProvince_id] = useState(ruser_data.id_province);
     const [canton_id, setCanton_id] = useState(ruser_data.id_canton);
-    const [parish_id, setParish_id] = useState(ruser_data.parish_id);
+    const [parish_id, setParish_id] = useState(ruser_data.id_parish);
 
     //data api
     const [provinces, setProvinces] = useState();
