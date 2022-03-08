@@ -59,7 +59,7 @@ const UserProfile = ({ navigation, loading }) => {
                 </TouchableOpacity>
 
                 <TouchableOpacity style={Styles.password} onPress={() => { navigation.navigate('ChangePassword') }} >
-                    <MaterialCommunityIcons size={20} name='form-textbox-password'/> 
+                    <MaterialCommunityIcons size={20} name='form-textbox-password' />
                 </TouchableOpacity>
             </View>
 
@@ -81,15 +81,26 @@ const UserProfile = ({ navigation, loading }) => {
                         <Ionicons size={25} name='location' style={{ marginRight: 10 }} />
                         <Text>{`${user_data.province ? user_data.province.name : 'Sin provincia'}`}</Text>
                     </View>
+                </View>
 
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 35 }}>
                     <View style={{ flexDirection: 'row', alignItems: 'center' }}>
                         <Text>{`${user_data.canton ? user_data.canton.name : 'Sin canton'}`}</Text>
                     </View>
                 </View>
 
+                <View style={{ flexDirection: 'row', alignItems: 'center', marginLeft: 35 }}>
+                    <View style={{ flexDirection: 'row', alignItems: 'center' }}>
+                        <Text>{`${user_data.parish ? user_data.parish.name : 'Sin parroquia'}`}</Text>
+                    </View>
+                </View>
+
                 <View style={{ flexDirection: 'column', marginTop: 5 }}>
-                    <Text style={{ fontSize: 20, fontWeight: '700' }}>Dirección</Text>
-                    <Text>{`${user_data.address ? user_data.address : 'Sin dirección'}`}</Text>
+                    <Text style={{ fontSize: 15, fontWeight: '700' }}>Dirección </Text>
+                    <Text>{`${user_data.main_street ? user_data.main_street : 'Sin calle principal'}`}</Text>
+                    <Text>{`${user_data.street_1_sec ? user_data.street_1_sec : 'Sin calle secundaria 1'}`}</Text>
+                    <Text>{`${user_data.street_2_sec ? user_data.street_2_sec : 'Sin calle secundaria 2'}`}</Text>
+                    <Text>{`${user_data.address_ref ? user_data.address_ref : 'Sin referencia'}`}</Text>
                 </View>
 
                 {

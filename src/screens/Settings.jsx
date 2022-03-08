@@ -41,19 +41,25 @@ const Settings = ({ navigation }) => {
                     const removeStorage = await AsyncStorage.removeItem('@auth_vet.utm');
                     navigation.pop();
                 } else {
-
-                    const { address, email, email_verified_at,
+                    console.log(res.data)
+                    const { email, email_verified_at,
                         id_canton, last_name1, last_name2,
                         name, phone, profile_photo_url, api_token,
-                        profile_photo_path, user_id, canton, province, pet } = res.data;
+                        profile_photo_path, user_id, canton, province,
+                        id_province,
+                        parish, id_parish,
+                        address_ref, main_street, street_1_sec, street_2_sec,
+                        pet } = res.data;
 
                     /* Save in context state */
                     saveUSER({
-                        address, email, email_verified_at,
+                        email, email_verified_at,
                         id_canton, last_name1, last_name2,
                         name, phone, profile_photo_url,
                         profile_photo_path, user_id,
-                        canton, province, pet, api_token
+                        canton, province, pet, api_token,
+                        id_province, parish, id_parish,
+                        address_ref, main_street, street_1_sec, street_2_sec,
                     });
                 }
                 setLoading(false);

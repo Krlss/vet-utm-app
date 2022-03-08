@@ -7,7 +7,7 @@ var url2 = "http://192.168.100.101/api";
 //http://still-savannah-02968.herokuapp.com/api
 //http://192.168.100.101/api
 
-const api_url = url1;
+const api_url = url2;
 export const base_url = "http://still-savannah-02968.herokuapp.com";
 export const getAnimalsLost = async () => {
     try {
