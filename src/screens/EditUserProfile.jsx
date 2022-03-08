@@ -3,7 +3,7 @@ import { ScrollView, View, Text, TouchableOpacity, StyleSheet, ActivityIndicator
 import { Picker } from '@react-native-picker/picker';
 import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { onlyNumber, nameValidator, emailValidator, phoneValidator, last_nameValidator } from '../core/utils';
-import { getProvinces, getCantonsByProvince, updatedDataUser } from '../core/utils-http';
+import { getProvinces, getCantonsByProvince, updatedDataUser, getParishByCanton } from '../core/utils-http';
 import { useToast } from "react-native-toast-notifications";
 
 import AuthContext from "../context/auth/AuthContext";
@@ -19,11 +19,19 @@ const EditUserProfile = ({ navigation }) => {
     const [phone, setPhone] = useState(user_data.phone);
     const [province_id, setProvince_id] = useState(user_data.province ? user_data.province.id : null);
     const [canton_id, setCanton_id] = useState(user_data.canton ? user_data.canton.id : null);
-    const [address, setAddress] = useState(user_data.address);
+    const [parish_id, setParish_id] = useState(user_data.parish ? user_data.parish.id : null);
+
+
+    const [main_street, setMainStreet] = useState(user_data.main_street ? user_data.main_street : null);
+    const [street_1_sec, setStreetSec1] = useState(user_data.street_1_sec ? user_data.street_1_sec : null);
+    const [street_2_sec, setStreetSec2] = useState(user_data.street_2_sec ? user_data.street_2_sec : null);
+    const [address_ref, setAddressRef] = useState(user_data.address_ref ? user_data.address_ref : null);
+    //const [address, setAddress] = useState(user_data.address);
 
     //data api
     const [provinces, setProvinces] = useState();
     const [cantons, setCantons] = useState();
+    const [parish, setParish] = useState();
 
     const [loading, setLoading] = useState(false);
     const [loadingScreen, setLoadingScreen] = useState(true);
@@ -55,7 +63,8 @@ const EditUserProfile = ({ navigation }) => {
 
         const res = await updatedDataUser({
             name: name, email: email, phone: phone,
-            id_canton: canton_id, address,
+            id_canton: canton_id, id_province: province_id, id_parish: parish_id,
+            main_street, street_1_sec, street_2_sec, address_ref,
             last_name1: last_name_arr[0],
             last_name2: last_name_arr[1],
         }, user_data.api_token);
@@ -84,21 +93,36 @@ const EditUserProfile = ({ navigation }) => {
         if (res !== 500 || res !== 404) {
             setCantons(res.data);
             setCanton_id(res.data[0].id);
+
+            const res1 = await getParishByCanton(res.data[0].id);
+            if (res1 !== 500 || res1 !== 404) {
+                setParish(res1.data);
+                setParish_id(res1.data[0].id);
+            }
+        }
+    }
+
+    const handleChangeCanton = async (id) => {
+        setCanton_id(id);
+        const res = await getParishByCanton(id);
+        if (res !== 500 || res !== 404) {
+            setParish(res.data);
+            setParish_id(res.data[0].id);
         }
     }
 
     useEffect(async () => {
         const res = await getProvinces();
         const res1 = await getCantonsByProvince(province_id ? province_id : res.data[0].id);
+        const res2 = await getParishByCanton(canton_id ? canton_id : res2.data[0].id);
         setLoadingScreen(false);
         console.log(res1);
         if (res !== 500 || res !== 404) {
             setProvinces(res.data);
             setCantons(res1.data);
+            setParish(res2.data);
         }
     }, [])
-
-    console.log(phone);
 
     return (
 
@@ -183,7 +207,7 @@ const EditUserProfile = ({ navigation }) => {
                         <Picker
                             selectedValue={canton_id}
                             style={{ width: '100%', }}
-                            onValueChange={(itemValue, itemIndex) => setCanton_id(itemValue)}
+                            onValueChange={(itemValue, itemIndex) => handleChangeCanton(itemValue)}
                         >
                             {
                                 cantons ?
@@ -197,13 +221,59 @@ const EditUserProfile = ({ navigation }) => {
                         </Picker>
                     </View>
 
-                    <SimpleTitle title='Dirección' />
-                    <SimpleTextArea
-                        placeholder='Dirección'
+                    <SimpleTitle title='Parroquia' />
+                    <View style={{ paddingHorizontal: 15 }}>
+                        <Picker
+                            selectedValue={parish_id}
+                            style={{ width: '100%', }}
+                            onValueChange={(itemValue, itemIndex) => setParish_id(itemValue)}
+                        >
+                            {
+                                parish ?
+                                    parish.map((e, i) => {
+                                        return (
+                                            <Picker.Item key={e.id} label={e.name} value={e.id} />
+                                        );
+                                    })
+                                    : null
+                            }
+                        </Picker>
+                    </View>
+
+                    <SimpleTitle title='Calle principal' />
+                    <SimpleInput
+                        placeholder='Calle principal'
                         length={255}
-                        value={address}
+                        value={main_street}
+                        numberOfLines={3}
+                        onChangeText={text => setMainStreet(text)}
+                    />
+
+                    <SimpleTitle title='Calle secundaria 1' />
+                    <SimpleInput
+                        placeholder='Calle secundaria 1'
+                        length={255}
+                        value={street_1_sec}
+                        numberOfLines={3}
+                        onChangeText={text => setStreetSec1(text)}
+                    />
+
+                    <SimpleTitle title='Calle secundaria 2' />
+                    <SimpleInput
+                        placeholder='Calle secundaria 2'
+                        length={255}
+                        value={street_2_sec}
+                        numberOfLines={3}
+                        onChangeText={text => setStreetSec2(text)}
+                    />
+
+                    <SimpleTitle title='Referencia' />
+                    <SimpleTextArea
+                        placeholder='Referencia'
+                        length={255}
+                        value={address_ref}
                         numberOfLines={5}
-                        onChangeText={text => setAddress(text)}
+                        onChangeText={text => setAddressRef(text)}
                     />
 
                     {msg ? <Text style={{ fontSize: 13, color: 'red', paddingHorizontal: 20 }}>{msg}</Text> : null}
