@@ -47,7 +47,7 @@ const UserProfile = ({ navigation, loading }) => {
             <ImageBackground source={iconType('bg-image')} style={Styles.imageBg}></ImageBackground >
             <View style={Styles.card}>
                 <Image
-                    source={user_data.profile_photo_url ? { uri: user_data.profile_photo_url } : iconType('user-default')}
+                    source={/* user_data.profile_photo_url ? { uri: user_data.profile_photo_url } :  */iconType('user-default')}
                     style={Styles.imgUser}
                 />
                 <View style={Styles.cardData}>
