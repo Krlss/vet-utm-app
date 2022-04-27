@@ -1,14 +1,14 @@
 import axios from 'axios';
 import { BackHandler } from 'react-native';
 
-var url1 = "http://still-savannah-02968.herokuapp.com/api";
+var url1 = "http://pacific-island-51597.herokuapp.com/api";
 var url2 = "http://192.168.100.101/api";
 
-//http://still-savannah-02968.herokuapp.com/api
+//http://pacific-island-51597.herokuapp.com/api
 //http://192.168.100.101/api
 
 const api_url = url1;
-export const base_url = "http://still-savannah-02968.herokuapp.com";
+export const base_url = "http://pacific-island-51597.herokuapp.com";
 export const getAnimalsLost = async () => {
     try {
         return await axios.get(`${api_url}/petsLost`).
