@@ -22,7 +22,8 @@ import {
     nameValidator,
     CedulaValidator,
     phoneValidator,
-    last_nameValidator
+    last_nameValidator,
+    getErrors
 } from '../../core/utils';
 import { Register as RegisterApi } from '../../core/utils-http';
 import AuthContext from '../../context/auth/AuthContext';
@@ -76,6 +77,9 @@ const Register = ({ navigation }) => {
         }
         if (res.status === 500) {
             return toast.show("Ocurrió un error en el servidor", { type: "danger", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
+        }
+        if (res.status == 422) {
+            return toast.show(getErrors(res.data.errors), { type: "danger", placement: "bottom", duration: 4000, offset: 30, animationType: "slide-in" });
         }
 
         setEmail({ value: '', error: '' });

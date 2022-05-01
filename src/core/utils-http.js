@@ -41,6 +41,22 @@ export const getCantonsByProvince = async (provinceID) => {
     } catch (error) { console.log(error); }
 }
 
+export const getSpecies = async () => {
+    try {
+        const res = await axios.get(`${api_url}/species`);
+        if (res.status === 200) return res.data;
+        if (res.status === 500 || res.status === 404) return res.status;
+    } catch (error) { console.log(error); }
+}
+
+export const getRacesBySpecie = async (specieID) => {
+    try {
+        const res = await axios.get(`${api_url}/species/races/${specieID}`);
+        if (res.status === 200) return res.data;
+        if (res.status === 500 || res.status === 404) return res.status;
+    } catch (error) { console.log(error); }
+}
+
 export const getParishByCanton = async (cantonID) => {
     try {
         const res = await axios.get(`${api_url}/cantons/parish/${cantonID}`);

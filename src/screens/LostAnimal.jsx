@@ -23,7 +23,6 @@ const PetProfile = ({
 
     useEffect(async () => {
         const res = await getOneAnimalLost(petId);
-        console.log(res);
         if (res !== 500 || res != 404) {
             setPetProfile(res.data.pet)
             setImages(res.data.images);
@@ -96,47 +95,58 @@ const PetProfile = ({
                                 id={petProfile.pet_id}
                             />
                             {/* Raza + edad (una fila) */}
-                            {
-                                petProfile.specie || petProfile.race || petProfile.birth ?
-                                    <RowComponent>
-                                        {petProfile.specie && petProfile.race ?
-                                            <Component
-                                                flex={{ flex: 2 }}
-                                                source={iconType(petProfile.specie)}
-                                                title='Raza'
-                                                value={nameStringPrayer(petProfile.race)}
-                                            /> : <ViewSpacing />
-                                        }
-                                        {petProfile.birth ?
-                                            <Component
-                                                flex={{ flex: 1 }}
-                                                title='Edad'
-                                                value={birthToAge(petProfile.birth)}
-                                            /> : null
-                                        }
-                                    </RowComponent> : null
-                            }
+
+                            <RowComponent>
+
+                                {
+                                    petProfile.image_specie ?
+                                        <Component
+                                            flex={{ flex: 2 }}
+                                            uri={{ uri: petProfile.image_specie }}
+                                            title='Raza'
+                                            value={nameStringPrayer(petProfile.race.name)}
+                                        /> :
+                                        <Component
+                                            flex={{ flex: 2 }}
+                                            source={iconType(petProfile.sex ? (petProfile.sex + 0) : 'desconocido')}
+                                            title='Raza'
+                                            value={nameStringPrayer(petProfile.race ? petProfile.race.name : 'Desconocida')}
+                                        />
+                                }
+
+                                {petProfile.birth ?
+                                    <Component
+                                        flex={{ flex: 1 }}
+                                        title='Edad'
+                                        value={birthToAge(petProfile.birth)}
+                                    /> : null
+                                }
+                            </RowComponent>
 
                             {
-                                petProfile.sex || petProfile.castrated ?
-                                    <RowComponent>
-                                        {petProfile.sex ?
-                                            <Component
-                                                flex={{ flex: 2 }}
-                                                source={iconType(petProfile.sex)}
-                                                title='Género'
-                                                truncate={true}
-                                                value={sexAnimal(petProfile.sex)}
-                                            /> : <ViewSpacing />
-                                        }
-                                        {petProfile.castrated ?
-                                            <Component
-                                                flex={{ flex: 1 }}
-                                                title='Estado'
-                                                value={castratedAnimal(petProfile.castrated)}
-                                            /> : null
-                                        }
-                                    </RowComponent> : null
+                                <RowComponent>
+                                    {petProfile.sex ?
+                                        <Component
+                                            flex={{ flex: 2 }}
+                                            source={iconType(petProfile.sex)}
+                                            title='Género'
+                                            truncate={true}
+                                            value={sexAnimal(petProfile.sex)}
+                                        /> :
+                                        <Component
+                                            flex={{ flex: 2 }}
+                                            source={iconType('sexo')}
+                                            title='Género'
+                                            truncate={true}
+                                            value='Desconocido'
+                                        />
+                                    }
+                                    <Component
+                                        flex={{ flex: 1 }}
+                                        title='Estado'
+                                        value={castratedAnimal(petProfile.castrated)}
+                                    />
+                                </RowComponent>
                             }
                             {petProfile.user_id ?
                                 <RowComponent>

@@ -21,18 +21,15 @@ import { theme } from '../core/theme';
 import { deleteItemArr } from '../core/utils';
 import { reportPet } from '../core/utils-http';
 import { TitleAndButton } from '../components';
-import AuthContext from '../context/auth/AuthContext';
-
 
 const ReporterPet = ({ navigation }) => {
     const [data, setData] = useState([]);
     const [disabled, setDisable] = useState(false);
 
     const { ruser_data, ranimal_data, rsaveUSER, rsavePET } = useContext(ReportContext);
-    const { user_data } = useContext(AuthContext);
 
     const { name, user_id, last_name1, last_name2, email, phone, id_province, id_canton, id_parish, address_ref, main_street, street_1_sec, street_2_sec } = ruser_data;
-    const { birth, sex, castrated, specie, race } = ranimal_data;
+    const { birth, sex, castrated, specie, race, characteristic } = ranimal_data;
 
     const toast = useToast();
 
@@ -80,11 +77,10 @@ const ReporterPet = ({ navigation }) => {
                 name, user_id, last_name1,
                 last_name2, email, phone,
                 id_province, id_canton,
-                id_parish, address_ref, main_street, street_1_sec, street_2_sec,
-                public_ip: user_data.public_ip
+                id_parish, address_ref, main_street, street_1_sec, street_2_sec
             },
             birth, sex, castrated, specie, race,
-            namepet: ranimal_data.name, images: data
+            namepet: ranimal_data.name, images: data, characteristic
         });
         setDisable(false);
 
@@ -120,8 +116,8 @@ const ReporterPet = ({ navigation }) => {
                 castrated: null,
                 specie: null,
                 race: null,
+                characteristic: null
             });
-            navigation.navigate('HomeScreen');
         } else {
             toast.show("Al parecer hubo un error de conexión, intentalo más tarde.", {
                 type: "danger",

@@ -22,11 +22,22 @@ const UserProfile = ({ navigation, loading }) => {
                 })}>
                 <View style={Styles.containerParent}>
                     <View style={Styles.container} >
-                        <Image
-                            source={iconType(item.specie)}
-                            style={Styles.image}
-                            PlaceholderContent={<ActivityIndicator />}
-                        />
+
+                        {
+                            item.image_specie ?
+                                <Image
+                                    source={{ uri: item.image_specie }}
+                                    style={Styles.image}
+                                    PlaceholderContent={<ActivityIndicator />}
+                                />
+                                :
+                                <Image
+                                    source={iconType(item.sex ? (item.sex + 0) : 'desconocido')}
+                                    style={Styles.image}
+                                    PlaceholderContent={<ActivityIndicator />}
+                                />
+                        }
+
                         <View style={Styles.containerInternal}>
                             <Text style={Styles.name}>{item.name}</Text>
                             <Text style={Styles.id}>#{item.pet_id}</Text>
@@ -47,7 +58,7 @@ const UserProfile = ({ navigation, loading }) => {
             <ImageBackground source={iconType('bg-image')} style={Styles.imageBg}></ImageBackground >
             <View style={Styles.card}>
                 <Image
-                    source={/* user_data.profile_photo_url ? { uri: user_data.profile_photo_url } :  */iconType('user-default')}
+                    source={user_data.profile_photo_url ? { uri: user_data.profile_photo_url } : iconType('user')}
                     style={Styles.imgUser}
                 />
                 <View style={Styles.cardData}>
@@ -183,7 +194,6 @@ const Styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginRight: 15,
-        borderRadius: 400 / 2,
     },
     containerInternal: {
         justifyContent: 'space-around'

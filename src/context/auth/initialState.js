@@ -20,7 +20,6 @@ export const initialState = {
     main_street: null,
     street_1_sec: null,
     street_2_sec: null,
-    public_ip: null,
     pet: [],
   },
 };

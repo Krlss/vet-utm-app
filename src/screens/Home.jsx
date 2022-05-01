@@ -52,11 +52,22 @@ const Home = ({
                 })}>
                 <View style={styles.containerParent}>
                     <View style={styles.container} >
-                        <Image
-                            source={iconType(item.specie)}
-                            style={styles.image}
-                            PlaceholderContent={<ActivityIndicator />}
-                        />
+
+                        {
+                            item.image_specie ?
+                                <Image
+                                    source={{ uri: item.image_specie.url }}
+                                    style={styles.image}
+                                    PlaceholderContent={<ActivityIndicator />}
+                                />
+                                :
+                                <Image
+                                    source={iconType(item.sex ? (item.sex + 0) : 'desconocido')}
+                                    style={styles.image}
+                                    PlaceholderContent={<ActivityIndicator />}
+                                />
+                        }
+
                         <View style={styles.containerInternal}>
                             <Text style={styles.name}>{item.name}</Text>
                             <Text style={styles.id}>#{item.pet_id}</Text>
@@ -121,7 +132,6 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         marginRight: 15,
-        borderRadius: 400 / 2,
     },
     containerInternal: {
         justifyContent: 'space-around'

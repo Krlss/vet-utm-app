@@ -10,7 +10,7 @@
     "version": "1.0.0",
     "orientation": "portrait",
     "android": {
-      "versionCode": 8,
+      "versionCode": 10,
       "softwareKeyboardLayoutMode": "pan",
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",

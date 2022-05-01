@@ -80,8 +80,7 @@ const EditUserProfile = ({ navigation }) => {
             return toast.show("No estas autorizado para actualizar este perfil", { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
         } else if (res.status === 301) {
             return toast.show(res.data.message, { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
-        }
-        saveUSER(res.data)
+        }        
         navigation.navigate('HomeScreen');
         return toast.show("Los datos de tu perfil fueron actualizados", { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
 
@@ -116,7 +115,7 @@ const EditUserProfile = ({ navigation }) => {
         const res1 = await getCantonsByProvince(province_id ? province_id : res.data[0].id);
         const res2 = await getParishByCanton(canton_id ? canton_id : res1.data[0].id);
         setLoadingScreen(false);
-        console.log(res1);
+        
         if (res !== 500 || res !== 404) {
             setProvinces(res.data);
             setCantons(res1.data);

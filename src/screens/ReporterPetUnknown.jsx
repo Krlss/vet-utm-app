@@ -7,7 +7,7 @@ import { createLostPetunknown } from '../core/utils-http';
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import { useToast } from "react-native-toast-notifications";
-import AuthContext from '../context/auth/AuthContext'; //IP PUBLIC
+import AuthContext from '../context/auth/AuthContext';
 
 import { theme } from '../core/theme';
 const { width, height } = Dimensions.get('screen');
@@ -31,7 +31,7 @@ const ReporterPetUnknown = ({ navigation }) => {
     const handleSubmit = async () => {
         setDisable(true);
         refImage.current.scrollToIndex({ Animated: false, index: 0 });
-        const res = await createLostPetunknown({ images, public_ip: user_data.public_ip });
+        const res = await createLostPetunknown({ images, user_id: user_data.user_id });
         if (res) {
             toast.show("Las imagenes fueron enviadas a un administrador, las imagenes serán revisadas para ser publicadas.", {
                 type: "success",

@@ -1,9 +1,9 @@
-import React, { useState, useContext, useRef } from "react";
-import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Keyboard } from 'react-native';
+import React, { useState, useContext, useRef, useEffect } from "react";
+import { ScrollView, View, Text, TouchableOpacity, StyleSheet, FlatList, Image, Keyboard, ActivityIndicator } from 'react-native';
 import { Picker } from '@react-native-picker/picker';
-import { SimpleInput, SimpleTitle } from '../components';
+import { SimpleInput, SimpleTitle, SimpleTextArea } from '../components';
 import { namePet, race as RacePet, birthPet, deleteItemArr } from '../core/utils';
-import { updatedDataPet } from '../core/utils-http';
+import { updatedDataPet, getSpecies, getRacesBySpecie } from '../core/utils-http';
 import { Icon } from 'react-native-elements'
 import MaterialIcon from 'react-native-vector-icons/MaterialCommunityIcons';
 import * as ImagePicker from 'expo-image-picker';
@@ -16,11 +16,12 @@ import DateTimePicker from '@react-native-community/datetimepicker';
 
 const EditUserProfile = ({ navigation, route }) => {
     const { data, api_token } = route.params;
-    const { user_data, saveUSER } = useContext(AuthContext);
+    const { saveUSER } = useContext(AuthContext);
 
     const [name, setName] = useState(data.name);
-    const [specie, setSpecie] = useState(data.specie);
-    const [race, setRace] = useState(data.race);
+    const [characteristic, setCharacteristic] = useState(data.characteristic);
+    const [specie, setSpecie] = useState(data.specie.id);
+    const [race, setRace] = useState(data.race.id);
     const [sex, setSex] = useState(data.sex);
     const [birth, setBirth] = useState(data.birth ? new Date(data.birth) : new Date);
     const [castrated, setCastrated] = useState(data.castrated);
@@ -30,10 +31,26 @@ const EditUserProfile = ({ navigation, route }) => {
 
     const [loading, setLoading] = useState(false);
 
+    //data api
+    const [species, setSpecies] = useState();
+    const [races, setRaces] = useState();
+
+    const [loadingScreen, setLoadingScreen] = useState(true);
+
     const [nameError, setNameError] = useState('');
     const [raceError, setRaceError] = useState('');
     const imagesRef = useRef('images');
     const toast = useToast();
+
+    useEffect(async () => {
+        const res = await getSpecies();
+        const res1 = await getRacesBySpecie(specie ? specie : res.data[0].id);
+        setLoadingScreen(false);
+        if (res !== 500 || res !== 404) {
+            setSpecies(res.data);
+            setRaces(res1.data);
+        }
+    }, [])
 
     const onChange = (event, selectedDate) => {
         const currentDate = selectedDate || birth;
@@ -53,12 +70,11 @@ const EditUserProfile = ({ navigation, route }) => {
 
         setLoading(true);
         const res = await updatedDataPet({
-            name, specie, race, birth, sex, castrated, lost, pet_id: data.pet_id, images
+            name, id_specie: specie, id_race: race, birth, sex, castrated, lost, pet_id: data.pet_id, images, characteristic
         }, api_token);
 
         setLoading(false);
-        if (res !== 404 || res !== 500 || res !== 401) {
-            saveUSER(res.data)
+        if (res !== 404 || res !== 500 || res !== 401) { 
             navigation.navigate('HomeScreen');
             return toast.show("Los datos de tu mascota se actualizaron!", { type: 'success', duration: 4000, offset: 30, animationType: "slide-in" });
         }
@@ -90,145 +106,186 @@ const EditUserProfile = ({ navigation, route }) => {
 
     }
 
+
+    const handleChangeSpecie = async (id) => {
+        setSpecie(id);
+        const res = await getRacesBySpecie(id);
+        if (res !== 500 || res !== 404) {
+            setRaces(res.data);
+            setRace(res.data[0].id);
+        }
+    }
+
     return (
-        <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}>
-
-            <SimpleTitle title='Nombre' />
-            <SimpleInput
-                placeholder='Nombre'
-                length={25}
-                value={name}
-                error={nameError}
-                onChangeText={text => setName(text)}
-            />
-
-            <SimpleTitle title='Especie' />
-
-            <View style={{ paddingHorizontal: 15 }}>
-                <Picker
-                    selectedValue={specie}
-                    style={{ width: '100%', }}
-                    onValueChange={(itemValue, itemIndex) => { setSpecie(itemValue) }}
-                >
-                    <Picker.Item label='Canina' value='canine' />
-                    <Picker.Item label='Felina' value='feline' />
-                </Picker>
+        loadingScreen ?
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+                <ActivityIndicator size="large" color="#333" />
             </View>
+            :
+            <ScrollView keyboardShouldPersistTaps='handled' style={{ marginTop: 10 }}>
 
-            <SimpleTitle title='Raza' />
-            <SimpleInput
-                placeholder='Raza'
-                length={65}
-                value={race}
-                error={raceError}
-                onChangeText={text => setRace(text)}
-            />
-
-            <SimpleTitle title='Fecha de nacimiento' />
-
-            <View style={{
-                flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,
-                alignItems: 'center'
-            }}>
-                {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
-
-                <TouchableOpacity style={Styles.buttonDate} onPress={() => setShow(true)}>
-                    <MaterialIcon name='update' size={25} color='#333' />
-                </TouchableOpacity>
-            </View>
-
-            {show && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={birth}
-                    mode='date'
-                    is24Hour={true}
-                    display="default"
-                    onChange={onChange}
-                    maximumDate={new Date()}
-                    minimumDate={new Date(2000, 1, 1)}
+                <SimpleTitle title='Nombre' />
+                <SimpleInput
+                    placeholder='Nombre'
+                    length={25}
+                    value={name}
+                    error={nameError}
+                    onChangeText={text => setName(text)}
                 />
-            )}
 
-            <SimpleTitle title='Sexo' />
-            <View style={{ paddingHorizontal: 15 }}>
-                <Picker
-                    selectedValue={sex}
-                    style={{ width: '100%', }}
-                    onValueChange={(itemValue, itemIndex) => setSex(itemValue)}
-                >
-                    <Picker.Item label='Macho' value='M' />
-                    <Picker.Item label='Hembra' value='F' />
-                </Picker>
-            </View>
+                <SimpleTitle title='Especie' />
 
-            <SimpleTitle title='Castrado' />
-            <View style={{ paddingHorizontal: 15 }}>
-                <Picker
-                    selectedValue={castrated}
-                    style={{ width: '100%', }}
-                    onValueChange={(itemValue, itemIndex) => setCastrated(itemValue)}
-                >
-                    <Picker.Item label='Si' value={true} />
-                    <Picker.Item label='No' value={false} />
-                </Picker>
-            </View>
+                <View style={{ paddingHorizontal: 15 }}>
+                    <Picker
+                        selectedValue={specie}
+                        style={{ width: '100%', }}
+                        onValueChange={(itemValue, itemIndex) => handleChangeSpecie(itemValue)}
+                    >
+                        {
+                            species ?
+                                species.map((e, i) => {
+                                    return (
+                                        <Picker.Item key={e.id} label={e.name} value={e.id} />
+                                    );
+                                })
+                                : null
+                        }
+                    </Picker>
+                </View>
 
-            <SimpleTitle title='Perdido' />
-            <View style={{ paddingHorizontal: 15 }}>
-                <Picker
-                    selectedValue={lost}
-                    style={{ width: '100%', }}
-                    onValueChange={(itemValue, itemIndex) => setLost(itemValue)}
-                >
-                    <Picker.Item label='Si' value={true} />
-                    <Picker.Item label='No' value={false} />
-                </Picker>
-            </View>
+                <SimpleTitle title='Raza' />
 
-            <SimpleTitle title='Fotos de tu mascota' />
-            <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
-                <FlatList
-                    style={{ marginTop: 10 }}
-                    keyExtractor={(item) => item.url}
-                    data={images}
-                    horizontal
-                    ref={imagesRef}
-                    renderItem={({ item, index }) => {
-                        return (
-                            <View style={{ marginHorizontal: 5 }}>
-                                <Image source={{ uri: item.url }} style={Styles.Imageflat} />
-                                {
-                                    !loading ?
-                                        <View style={{ position: 'absolute', top: 10, right: 10 }}>
-                                            <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
-                                                <Icon
-                                                    name='delete'
-                                                    color='tomato'
-                                                    size={25}
-                                                />
-                                            </TouchableOpacity>
-                                        </View> : null
-                                }
-                            </View>
-                        );
-                    }}
+                <View style={{ paddingHorizontal: 15 }}>
+                    <Picker
+                        selectedValue={race}
+                        style={{ width: '100%', }}
+                        onValueChange={(itemValue, itemIndex) => setRace(itemValue)}
+                    >
+                        {
+                            races ?
+                                races.map((e, i) => {
+                                    return (
+                                        <Picker.Item key={e.id} label={e.name} value={e.id} />
+                                    );
+                                })
+                                : null
+                        }
+                    </Picker>
+                </View>
+
+                <SimpleTitle title='Fecha de nacimiento' />
+
+                <View style={{
+                    flexDirection: 'row', justifyContent: 'space-between', paddingHorizontal: 20, marginVertical: 7,
+                    alignItems: 'center'
+                }}>
+                    {birth ? <View><Text>{birth.getDate() + '/' + (birth.getMonth() + 1) + '/' + birth.getFullYear()}</Text></View> : null}
+
+                    <TouchableOpacity style={Styles.buttonDate} onPress={() => setShow(true)}>
+                        <MaterialIcon name='update' size={25} color='#333' />
+                    </TouchableOpacity>
+                </View>
+
+                {show && (
+                    <DateTimePicker
+                        testID="dateTimePicker"
+                        value={birth}
+                        mode='date'
+                        is24Hour={true}
+                        display="default"
+                        onChange={onChange}
+                        maximumDate={new Date()}
+                        minimumDate={new Date(2000, 1, 1)}
+                    />
+                )}
+
+                <SimpleTitle title='Sexo' />
+                <View style={{ paddingHorizontal: 15 }}>
+                    <Picker
+                        selectedValue={sex}
+                        style={{ width: '100%', }}
+                        onValueChange={(itemValue, itemIndex) => setSex(itemValue)}
+                    >
+                        <Picker.Item label='Macho' value='M' />
+                        <Picker.Item label='Hembra' value='F' />
+                    </Picker>
+                </View>
+
+                <SimpleTitle title='Castrado' />
+                <View style={{ paddingHorizontal: 15 }}>
+                    <Picker
+                        selectedValue={castrated}
+                        style={{ width: '100%', }}
+                        onValueChange={(itemValue, itemIndex) => setCastrated(itemValue)}
+                    >
+                        <Picker.Item label='Si' value={true} />
+                        <Picker.Item label='No' value={false} />
+                    </Picker>
+                </View>
+
+                <SimpleTitle title='Perdido' />
+                <View style={{ paddingHorizontal: 15 }}>
+                    <Picker
+                        selectedValue={lost}
+                        style={{ width: '100%', }}
+                        onValueChange={(itemValue, itemIndex) => setLost(itemValue)}
+                    >
+                        <Picker.Item label='Si' value={true} />
+                        <Picker.Item label='No' value={false} />
+                    </Picker>
+                </View>
+
+                <SimpleTitle title='Característica' />
+                <SimpleTextArea
+                    placeholder='Característica'
+                    value={characteristic}
+                    onChangeText={text => setCharacteristic(text)}
+                    numberOfLines={1}
                 />
-                {
-                    !loading ?
-                        <TouchableOpacity style={Styles.button} onPress={() => { selectImage() }}>
-                            <MaterialIcon name='image-plus' size={25} color='#333' />
-                        </TouchableOpacity> : null
-                }
-            </View>
 
-            <View style={Styles.buttonContainer}>
-                <TouchableOpacity disabled={loading} style={Styles.buttonSend} onPress={handleSubmit}>
-                    <Text style={Styles.buttonText}>{!loading ? 'GUARDAR' : 'GUARDANDO...'}</Text>
-                </TouchableOpacity>
-            </View>
+                <SimpleTitle title='Fotos de tu mascota' />
+                <View style={{ paddingVertical: 10, paddingHorizontal: 15 }}>
+                    <FlatList
+                        style={{ marginTop: 10 }}
+                        keyExtractor={(item) => item.url}
+                        data={images}
+                        horizontal
+                        ref={imagesRef}
+                        renderItem={({ item, index }) => {
+                            return (
+                                <View style={{ marginHorizontal: 5 }}>
+                                    <Image source={{ uri: item.url }} style={Styles.Imageflat} />
+                                    {
+                                        !loading ?
+                                            <View style={{ position: 'absolute', top: 10, right: 10 }}>
+                                                <TouchableOpacity onPress={() => deleteItem(item.url, index)}>
+                                                    <Icon
+                                                        name='delete'
+                                                        color='tomato'
+                                                        size={25}
+                                                    />
+                                                </TouchableOpacity>
+                                            </View> : null
+                                    }
+                                </View>
+                            );
+                        }}
+                    />
+                    {
+                        !loading ?
+                            <TouchableOpacity style={Styles.button} onPress={() => { selectImage() }}>
+                                <MaterialIcon name='image-plus' size={25} color='#333' />
+                            </TouchableOpacity> : null
+                    }
+                </View>
 
-        </ScrollView>
+                <View style={Styles.buttonContainer}>
+                    <TouchableOpacity disabled={loading} style={Styles.buttonSend} onPress={handleSubmit}>
+                        <Text style={Styles.buttonText}>{!loading ? 'GUARDAR' : 'GUARDANDO...'}</Text>
+                    </TouchableOpacity>
+                </View>
+
+            </ScrollView>
     );
 }
 

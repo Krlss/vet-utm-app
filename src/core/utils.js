@@ -76,28 +76,6 @@ export const onlyNumber = (string = '') => {
 
 export const iconType = (specie) => {
     switch (specie) {
-        case 'perro':
-        case 'Perro':
-        case 'dog':
-        case 'Dog':
-        case 'canine':
-            return require('../assets/img/dog.png')
-        case 'gato':
-        case 'Gato':
-        case 'Cat':
-        case 'cat':
-        case 'feline':
-            return require('../assets/img/cat.png')
-        case 'm':
-        case 'M':
-        case 'Macho':
-        case 'macho':
-            return require('../assets/img/men.png')
-        case 'F':
-        case 'f':
-        case 'Hembra':
-        case 'hembra':
-            return require('../assets/img/woman.png')
         case 'owner_pet':
             return require('../assets/img/owner_pet.png')
         case 'affection':
@@ -108,11 +86,24 @@ export const iconType = (specie) => {
             return require('../assets/img/logo.png')
         case 'user-default':
             return require('../assets/img/user-default.png')
+        case 'user':
+            return require('../assets/img/user.png')
         case 'bg-image':
             return require('../assets/img/bg_auth.png')
         case 'lost':
             return require('../assets/img/lost.png')
-
+        case 'F':
+            return require('../assets/img/woman.png');
+        case 'M':
+            return require('../assets/img/men.png');
+        case 'F0':
+            return require('../assets/img/woman_pet.png');
+        case 'M0':
+            return require('../assets/img/men_pet.png');
+        case 'desconocido':
+            return require('../assets/img/desconocido.png');
+        case 'sexo':
+            return require('../assets/img/sexo.png');
         default:
             return require('../assets/img/unknown.png');
     }
@@ -133,7 +124,7 @@ export const castratedAnimal = (string) => {
 }
 
 export const birthToAge = (date) => {
-    
+
     return moment(date, "YYYYMMDD").fromNow().replace('hace ', '');
 };
 
@@ -192,4 +183,12 @@ export const birthPet = (string) => {
         console.log(error);
         return 'El formato no es correcto.'
     } */
+}
+
+export const getErrors = (object) => {
+    var string = "";
+    for (const key in object) {
+        string += object[key] + "\n";
+    }
+    return string;
 }

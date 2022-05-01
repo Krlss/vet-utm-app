@@ -11,7 +11,7 @@ import { useToast } from "react-native-toast-notifications";
 const ChangeOwner = ({ navigation, route }) => {
 
     const { data, token } = route.params;
-    const { user_data, saveUSER } = useContext(AuthContext);
+    const { user_data } = useContext(AuthContext);
 
     const [user_id, setUser_id] = useState();
     const [user_idError, setUser_idError] = useState();
@@ -30,7 +30,6 @@ const ChangeOwner = ({ navigation, route }) => {
             setLoading(true);
             const res = await updatedDataPet({ user_id, pet_id: data.pet_id }, token);
             setLoading(false);
-            console.log(res);
 
             if (res === 404) {
                 return toast.show('Cédula o RUC incorrecto', { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
@@ -39,7 +38,6 @@ const ChangeOwner = ({ navigation, route }) => {
             } else if (res === 401) {
                 return toast.show('No tienes permisos para hacer esa acción', { type: 'danger', duration: 4000, offset: 30, animationType: "slide-in" });
             } else if (res) {
-                saveUSER(res.data)
                 navigation.navigate('HomeScreen');
                 return toast.show('Mascota eliminada de tu perfil', { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });
             }

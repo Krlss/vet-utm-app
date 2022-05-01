@@ -32,7 +32,6 @@ const ChangePassword = ({ navigation }) => {
         setLoading(true);
         const res = await updatedPassword({ currentPassword, password }, user_data.api_token);
         setLoading(false);
-        console.log(res);
 
         if (res.status === 404) {
             return toast.show(res.data.message, { type: 'warning', duration: 4000, offset: 30, animationType: "slide-in" });

@@ -15,7 +15,7 @@ const { width, height } = Dimensions.get('screen');
 const PetProfile = ({ navigation, route }) => {
 
     const { pet_id, name, birth, sex, specie,
-        castrated, race, lost, n_lost, images } = route.params.pet;
+        castrated, race, lost, n_lost, images, characteristic, image_specie } = route.params.pet;
 
     const [loading, setLoading] = useState(false);
     const toast = useToast();
@@ -77,10 +77,16 @@ const PetProfile = ({ navigation, route }) => {
                 {
                     loading ?
                         <ActivityIndicator style={Styles.imgUser} size='large' /> :
-                        <Image
-                            source={iconType(specie)}
-                            style={Styles.imgUser}
-                        />
+                        image_specie ?
+                            <Image
+                                source={{ uri: image_specie }}
+                                style={Styles.imgUser}
+                            />
+                            :
+                            <Image
+                                source={iconType(item.sex ? (item.sex + 0) : 'desconocido')}
+                                style={Styles.imgUser}
+                            />
                 }
                 <View style={Styles.cardData}>
                     <Text numberOfLines={1} style={Styles.nameF}>{name}</Text>
@@ -110,29 +116,8 @@ const PetProfile = ({ navigation, route }) => {
 
             <ScrollView style={Styles.card2} showsVerticalScrollIndicator={false}>
 
-                {
-                    specie || race || birth ?
-                        <RowComponent>
-                            {specie && race ?
-                                <Component
-                                    flex={{ flex: 2 }}
-                                    source={iconType(specie)}
-                                    title='Raza'
-                                    value={nameStringPrayer(race)}
-                                /> : <ViewSpacing />
-                            }
-                            {birth ?
-                                <Component
-                                    flex={{ flex: 1 }}
-                                    title='Edad'
-                                    value={birthToAge(birth)}
-                                /> : null
-                            }
-                        </RowComponent> : null
-                }
-
-
                 <RowComponent>
+
                     <Component
                         flex={{ flex: 2 }}
                         source={iconType(sex)}
@@ -140,20 +125,59 @@ const PetProfile = ({ navigation, route }) => {
                         truncate={true}
                         value={sexAnimal(sex)}
                     />
-                    <Component
-                        flex={{ flex: 1 }}
-                        title='Estado'
-                        value={castratedAnimal(castrated)}
-                    />
-                </RowComponent>
 
-                <RowComponent>
                     <Component
                         flex={{ flex: 2 }}
                         source={iconType('lost')}
                         title='Perdido'
                         truncate={true}
                         value={lost ? 'Si' : 'No'}
+                    />
+                </RowComponent>
+
+                <RowComponent>
+                    {specie ?
+                        <Component
+                            flex={{ flex: 2 }}
+                            title='Especie'
+                            value={nameStringPrayer(specie.name)}
+                        /> : <ViewSpacing />
+                    }
+
+                    {race ?
+                        <Component
+                            flex={{ flex: 2 }}
+                            title='Raza'
+                            value={nameStringPrayer(race.name)}
+                        /> : <ViewSpacing />
+                    }
+
+                </RowComponent>
+
+
+                <RowComponent>
+
+                    <Component
+                        flex={{ flex: 1 }}
+                        title='Estado'
+                        value={castratedAnimal(castrated)}
+                    />
+
+                    {birth ?
+                        <Component
+                            flex={{ flex: 1 }}
+                            title='Edad'
+                            value={birthToAge(birth)}
+                        /> : null
+                    }
+
+                </RowComponent>
+
+                <RowComponent>
+                    <Component
+                        flex={{ flex: 1 }}
+                        title='Características'
+                        value={characteristic ? characteristic : 'Sin características'}
                     />
                 </RowComponent>
 
@@ -233,10 +257,7 @@ const Styles = StyleSheet.create({
     },
     imgUser: {
         width: 75,
-        height: 75,
-        borderRadius: 50,
-        borderColor: '#DCDCDC',
-        borderWidth: 1
+        height: 75
     },
     nameF: {
         fontSize: 15,

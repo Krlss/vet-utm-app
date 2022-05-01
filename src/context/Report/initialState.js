@@ -21,6 +21,7 @@ export const initialState = {
     castrated: null,
     specie: null,
     race: null,
+    characteristic: null,
   },
   photes: [],
 };
