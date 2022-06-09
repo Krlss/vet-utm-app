@@ -2,7 +2,7 @@ import axios from 'axios';
 import { BackHandler } from 'react-native';
 
 var url1 = "http://pacific-island-51597.herokuapp.com/api";
-var url2 = "http://192.168.100.101/api";
+var url2 = "http://192.168.100.101:8000/api";
 
 //http://pacific-island-51597.herokuapp.com/api
 //http://192.168.100.101/api

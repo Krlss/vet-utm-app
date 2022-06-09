@@ -58,7 +58,7 @@ const UserProfile = ({ navigation, loading }) => {
             <ImageBackground source={iconType('bg-image')} style={Styles.imageBg}></ImageBackground >
             <View style={Styles.card}>
                 <Image
-                    source={user_data.profile_photo_url ? { uri: user_data.profile_photo_url } : iconType('user')}
+                    source={user_data.profile_photo_path ? { uri: user_data.profile_photo_path } : iconType('user')}
                     style={Styles.imgUser}
                 />
                 <View style={Styles.cardData}>
@@ -84,7 +84,7 @@ const UserProfile = ({ navigation, loading }) => {
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', marginTop: 5 }}>
                     <Ionicons size={25} name='phone-portrait-outline' style={{ marginRight: 10 }} />
-                    <Text>{`${user_data.phone}`}</Text>
+                    <Text>{`${user_data.phone ?? 'Sin teléfono'}`}</Text>
                 </View>
 
                 <View style={{ flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', marginTop: 5 }}>
